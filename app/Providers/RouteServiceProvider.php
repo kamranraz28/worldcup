@@ -23,9 +23,6 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         $this->routes(function () {
-            Route::middleware('web')
-                ->group(base_path('routes/web.php'));
-
             Route::middleware(['web', 'auth', 'verified', 'is_active'])
                 ->prefix('admin')
                 ->name('admin.')

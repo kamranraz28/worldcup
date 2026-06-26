@@ -15,10 +15,6 @@ class TicketObserver
     public function updated(Ticket $ticket): void
     {
         Cache::tags(['tickets', "event:{$ticket->event_id}"])->flush();
-
-        if ($ticket->wasChanged('status') && $ticket->status === 'redeemed') {
-            $ticket->update(['checked_in_at' => now()]);
-        }
     }
 
     public function deleted(Ticket $ticket): void

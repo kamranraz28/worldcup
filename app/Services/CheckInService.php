@@ -9,18 +9,52 @@ use App\Models\TicketAction;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CheckInService
 {
-    public function scan(string $qrCode, int $eventId, array $options = []): array
+    public function scan(string $qrCode, int $eventId): array
     {
-        $event = Event::findOrFail($eventId);
+        $qrCode = trim($qrCode);
+
+        Log::channel('stack')->info('SCAN_REQUEST', [
+            'qr_code_raw' => $qrCode,
+            'qr_code_bytes' => unpack('H*', $qrCode)[1] ?? '',
+            'qr_code_len' => strlen($qrCode),
+            'event_id' => $eventId,
+        ]);
+
         $ticket = Ticket::where('qr_code', $qrCode)
             ->where('event_id', $eventId)
-            ->with(['customer', 'checkIn'])
+            ->with(['customer'])
             ->first();
 
         if (!$ticket) {
+            Log::channel('stack')->warning('SCAN_NOT_FOUND_EXACT', [
+                'qr_code' => $qrCode,
+                'event_id' => $eventId,
+            ]);
+
+            // try case-insensitive fallback (some scanners return uppercase)
+            $ticket = Ticket::whereRaw('LOWER(qr_code) = ?', [strtolower($qrCode)])
+                ->where('event_id', $eventId)
+                ->with(['customer'])
+                ->first();
+
+            if ($ticket) {
+                Log::channel('stack')->info('SCAN_FOUND_CASE_INSENSITIVE', [
+                    'qr_code' => $qrCode,
+                    'db_qr_code' => $ticket->qr_code,
+                ]);
+            }
+        }
+
+        if (!$ticket) {
+            Log::channel('stack')->error('SCAN_FAILED', [
+                'qr_code' => $qrCode,
+                'event_id' => $eventId,
+            ]);
+
             return [
                 'success' => false,
                 'message' => 'Ticket not found for this event.',
@@ -28,68 +62,50 @@ class CheckInService
             ];
         }
 
-        if ($ticket->checkIn) {
-            $existing = $ticket->checkIn;
-            return [
-                'success' => false,
-                'message' => 'Duplicate scan — this ticket was already checked in at ' . $existing->scanned_at->format('g:i A') . ' by ' . ($existing->scanner ? $existing->scanner->name : 'staff') . '.',
-                'code' => 'DUPLICATE_SCAN',
-                'data' => [
-                    'ticket' => $this->formatTicketData($ticket),
-                    'previous_checkin' => [
-                        'scanned_at' => $existing->scanned_at,
-                        'scanned_by' => $existing->scanner ? $existing->scanner->name : null,
-                        'device_id' => $existing->device_id,
-                    ],
-                ],
-            ];
-        }
+        Log::channel('stack')->info('SCAN_TICKET_FOUND', [
+            'ticket_uuid' => $ticket->uuid,
+            'ticket_qr_code' => $ticket->qr_code,
+            'status' => $ticket->status,
+        ]);
 
-        if ($ticket->status !== 'confirmed') {
+        if ($ticket->status === 'redeemed') {
+            Log::channel('stack')->warning('SCAN_ALREADY_REDEEMED', ['ticket_uuid' => $ticket->uuid]);
             return [
                 'success' => false,
-                'message' => 'Ticket status is "' . $ticket->status . '". Only confirmed tickets can be checked in.',
-                'code' => 'INVALID_STATUS',
+                'message' => 'This ticket has already been redeemed.',
+                'code' => 'ALREADY_REDEEMED',
                 'data' => ['ticket' => $this->formatTicketData($ticket)],
             ];
         }
 
-        if ($ticket->checked_in_at) {
+        if ($ticket->status !== 'confirmed') {
+            Log::channel('stack')->warning('SCAN_INVALID_STATUS', ['ticket_uuid' => $ticket->uuid, 'status' => $ticket->status]);
             return [
                 'success' => false,
-                'message' => 'This ticket was already checked in at ' . Carbon::parse($ticket->checked_in_at)->format('g:i A') . '.',
-                'code' => 'ALREADY_CHECKED_IN',
+                'message' => 'Ticket status is "' . $ticket->status . '". Cannot check in.',
+                'code' => 'INVALID_STATUS',
                 'data' => ['ticket' => $this->formatTicketData($ticket)],
             ];
         }
 
         try {
             DB::beginTransaction();
-
             $now = now();
-            $offlineQueueId = $options['offline_queue_id'] ?? null;
 
             $checkIn = CheckIn::create([
                 'ticket_id' => $ticket->id,
                 'event_id' => $eventId,
                 'customer_id' => $ticket->customer_id,
                 'scanned_by' => auth()->id(),
-                'scan_method' => $options['scan_method'] ?? 'qr',
-                'device_id' => $options['device_id'] ?? null,
-                'offline_queue_id' => $offlineQueueId,
-                'ip_address' => request()->ip(),
-                'location_data' => isset($options['location']) ? json_encode($options['location']) : null,
+                'scan_method' => 'qr',
                 'is_valid' => true,
-                'validation_message' => 'Check-in successful',
                 'scanned_at' => $now,
-                'synced_at' => $offlineQueueId ? $now : null,
             ]);
 
-            $ticket->update([
-                'status' => 'redeemed',
-                'checked_in_at' => $now,
-                'checked_in_by' => auth()->id(),
-            ]);
+            $ticket->status = 'redeemed';
+            $ticket->checked_in_at = $now;
+            $ticket->checked_in_by = auth()->id();
+            $ticket->saveQuietly();
 
             TicketAction::create([
                 'ticket_id' => $ticket->id,
@@ -98,23 +114,23 @@ class CheckInService
                 'action' => 'checked_in',
                 'actor_id' => auth()->id(),
                 'notes' => 'QR check-in via scanner',
-                'ip_address' => request()->ip(),
-                'user_agent' => request()->userAgent(),
             ]);
 
             DB::commit();
+
+            Log::channel('stack')->info('SCAN_SUCCESS', ['ticket_uuid' => $ticket->uuid]);
 
             return [
                 'success' => true,
                 'message' => 'Check-in successful! Welcome ' . ($ticket->customer->first_name ?? '') . '.',
                 'code' => 'CHECKED_IN',
-                'data' => [
-                    'check_in' => $checkIn,
-                    'ticket' => $this->formatTicketData($ticket),
-                ],
+                'data' => ['ticket' => $this->formatTicketData($ticket)],
             ];
         } catch (\Exception $e) {
             DB::rollBack();
+
+            Log::channel('stack')->error('SCAN_EXCEPTION', ['error' => $e->getMessage()]);
+
             return [
                 'success' => false,
                 'message' => 'Check-in failed: ' . $e->getMessage(),
@@ -329,10 +345,10 @@ class CheckInService
 
     public function getEventsForDropdown(): Collection
     {
-        return Event::published()
-            ->upcoming()
-            ->orWhere(function ($q) {
-                $q->whereDate('end_date', '>=', now()->subDay());
+        return Event::where('status', 'published')
+            ->where(function ($q) {
+                $q->where('end_date', '>=', now()->subDay())
+                  ->orWhereNull('end_date');
             })
             ->orderBy('start_date')
             ->get(['id', 'uuid', 'title', 'start_date', 'venue_name']);

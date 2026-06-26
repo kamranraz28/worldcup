@@ -24,7 +24,7 @@ class TicketFactory extends Factory
             'user_id' => null,
             'ticket_type' => fake()->randomElement(['general', 'vip', 'vvip', 'comp', 'staff']),
             'price' => $price,
-            'currency' => 'PKR',
+            'currency' => 'BDT',
             'status' => fake()->randomElement(['reserved', 'confirmed', 'cancelled', 'redeemed', 'expired']),
             'qr_code' => (string) Str::uuid(),
             'qr_code_path' => null,

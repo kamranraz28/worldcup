@@ -13,8 +13,6 @@ class AdminUserSeeder extends Seeder
     {
         $superAdminRole = Role::where('name', 'super-admin')->first();
         $adminRole = Role::where('name', 'admin')->first();
-        $verificationOfficerRole = Role::where('name', 'verification-officer')->first();
-        $eventManagerRole = Role::where('name', 'event-manager')->first();
 
         User::firstOrCreate(
             ['email' => 'superadmin@toffee.com'],
@@ -40,25 +38,15 @@ class AdminUserSeeder extends Seeder
             ]
         );
 
-        User::firstOrCreate(
-            ['email' => 'verification@toffee.com'],
-            [
-                'uuid' => \Illuminate\Support\Str::uuid(),
-                'name' => 'Verification Officer',
-                'password' => Hash::make('password'),
-                'role_id' => $verificationOfficerRole->id,
-                'is_active' => true,
-                'email_verified_at' => now(),
-            ]
-        );
+        $checkinStaffRole = Role::where('name', 'checkin-staff')->first();
 
         User::firstOrCreate(
-            ['email' => 'events@toffee.com'],
+            ['email' => 'scanner@toffee.com'],
             [
                 'uuid' => \Illuminate\Support\Str::uuid(),
-                'name' => 'Event Manager',
+                'name' => 'Scanning Staff',
                 'password' => Hash::make('password'),
-                'role_id' => $eventManagerRole->id,
+                'role_id' => $checkinStaffRole->id,
                 'is_active' => true,
                 'email_verified_at' => now(),
             ]

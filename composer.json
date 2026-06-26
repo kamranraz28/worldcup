@@ -7,8 +7,14 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "bacon/bacon-qr-code": "^3.1",
+        "barryvdh/laravel-dompdf": "^3.1",
+        "chillerlan/php-qrcode": "^6.0",
+        "inertiajs/inertia-laravel": "^3.1",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/sanctum": "^4.3",
+        "laravel/tinker": "^2.10.1",
+        "tightenco/ziggy": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -73,7 +79,6 @@
         }
     },
     "config": {
-        "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {

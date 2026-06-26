@@ -53,7 +53,7 @@ class ReportService
                 'total_tickets' => $totalTickets,
                 'total_revenue' => $totalRevenue,
                 'average_price' => $totalTickets > 0 ? round($totalRevenue / $totalTickets, 2) : 0,
-                'currency' => $tickets->first()->currency ?? 'PKR',
+                'currency' => $tickets->first()->currency ?? 'BDT',
                 'confirmed' => $statusBreakdown->get('confirmed', 0),
                 'pending_approval' => $statusBreakdown->get('pending_approval', 0),
                 'redeemed' => $statusBreakdown->get('redeemed', 0),
@@ -453,7 +453,7 @@ class ReportService
                     fputcsv($output, [
                         $t['uuid'] ?? '', $t['event']['title'] ?? '', ($t['customer']['first_name'] ?? '') . ' ' . ($t['customer']['last_name'] ?? ''),
                         $t['customer']['email'] ?? '', $t['customer']['phone'] ?? '', $t['customer']['nationality'] ?? '',
-                        $t['ticket_type'] ?? '', $t['price'] ?? 0, $t['currency'] ?? 'PKR', $t['status'] ?? '',
+                        $t['ticket_type'] ?? '', $t['price'] ?? 0, $t['currency'] ?? 'BDT', $t['status'] ?? '',
                         $t['registered_at'] ?? '', $t['approved_at'] ?? '', $t['checked_in_at'] ?? '', $t['qr_code'] ?? '',
                     ]);
                 }

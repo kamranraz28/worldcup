@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\SystemConfig;
 use App\Services\CheckInService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class CheckInController extends Controller
@@ -36,6 +38,7 @@ class CheckInController extends Controller
             'pendingSync' => $pendingSync,
             'activeEvent' => $activeEventId,
             'attendance' => $attendance,
+            'scannerBeepEnabled' => SystemConfig::getValue('qr.scanner_beep_enabled', true),
         ]);
     }
 
@@ -44,27 +47,17 @@ class CheckInController extends Controller
         $validated = $request->validate([
             'qr_code' => 'required|string|max:255',
             'event_id' => 'required|integer|exists:events,id',
-            'scan_method' => 'nullable|string|in:qr,manual,nfc',
-            'device_id' => 'nullable|string|max:100',
-            'offline_queue_id' => 'nullable|string|max:100',
-            'location' => 'nullable|array',
-            'location.lat' => 'nullable|numeric',
-            'location.lng' => 'nullable|numeric',
         ]);
 
-        $result = $this->checkInService->scan(
-            $validated['qr_code'],
-            $validated['event_id'],
-            [
-                'scan_method' => $validated['scan_method'] ?? 'qr',
-                'device_id' => $validated['device_id'] ?? null,
-                'offline_queue_id' => $validated['offline_queue_id'] ?? null,
-                'location' => $validated['location'] ?? null,
-            ]
-        );
+        $result = $this->checkInService->scan($validated['qr_code'], $validated['event_id']);
+
+        Log::channel('stack')->info('SCAN_RESPONSE', [
+            'input' => ['qr_code' => $validated['qr_code'], 'event_id' => $validated['event_id']],
+            'output' => $result,
+        ]);
 
         if ($request->wantsJson() || $request->ajax()) {
-            return response()->json($result, $result['success'] ? 200 : ($result['code'] === 'DUPLICATE_SCAN' ? 409 : 422));
+            return response()->json($result, $result['success'] ? 200 : 422);
         }
 
         if ($result['success']) {
@@ -191,6 +184,18 @@ class CheckInController extends Controller
     public function stats()
     {
         return response()->json($this->checkInService->getDailyStats());
+    }
+
+    public function toggleBeep(Request $request)
+    {
+        if (!$request->user() || $request->user()->role?->name !== 'super-admin') {
+            abort(403);
+        }
+
+        $enabled = $request->input('enabled', true);
+        SystemConfig::setValue('qr.scanner_beep_enabled', $enabled ? 'true' : 'false', 'boolean', 'Play a beep sound when QR code is scanned');
+
+        return response()->json(['success' => true, 'enabled' => (bool) $enabled]);
     }
 
     public function batchSync(Request $request)

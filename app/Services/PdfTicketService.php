@@ -15,11 +15,11 @@ class PdfTicketService
             'session:id,title,start_time,end_time,location',
         ]);
 
-        $qrSvg = app(QrCodeService::class)->generate($ticket);
+        $qrTable = app(QrCodeService::class)->generateHtmlTable($ticket);
 
         $pdf = Pdf::loadView('pdf.ticket', [
             'ticket' => $ticket,
-            'qrSvg' => $qrSvg,
+            'qrTable' => $qrTable,
         ]);
 
         $pdf->setPaper('a4', 'portrait');

@@ -120,9 +120,9 @@ class SettingsService
         return [
             'app_name' => ['label' => 'Application Name', 'type' => 'text', 'default' => 'Toffee World Cup 2026', 'description' => 'The name displayed throughout the application'],
             'app_url' => ['label' => 'Application URL', 'type' => 'text', 'default' => url('/'), 'description' => 'Base URL of the application'],
-            'timezone' => ['label' => 'Timezone', 'type' => 'select', 'default' => 'Asia/Karachi', 'options' => ['UTC', 'Asia/Karachi', 'Asia/Dubai', 'Asia/Riyadh', 'America/New_York', 'Europe/London'], 'description' => 'Default timezone for the application'],
+            'timezone' => ['label' => 'Timezone', 'type' => 'select', 'default' => 'Asia/Dhaka', 'options' => ['UTC', 'Asia/Dhaka', 'Asia/Dubai', 'Asia/Riyadh', 'America/New_York', 'Europe/London'], 'description' => 'Default timezone for the application'],
             'locale' => ['label' => 'Locale', 'type' => 'select', 'default' => 'en', 'options' => ['en' => 'English', 'ar' => 'Arabic', 'ur' => 'Urdu'], 'description' => 'Default language'],
-            'currency' => ['label' => 'Currency', 'type' => 'select', 'default' => 'PKR', 'options' => ['PKR', 'USD', 'EUR', 'GBP', 'AED', 'SAR'], 'description' => 'Default currency for ticket pricing'],
+            'currency' => ['label' => 'Currency', 'type' => 'select', 'default' => 'BDT', 'options' => ['BDT', 'USD', 'EUR', 'GBP', 'AED', 'SAR'], 'description' => 'Default currency for ticket pricing'],
             'date_format' => ['label' => 'Date Format', 'type' => 'select', 'default' => 'M d, Y', 'options' => ['M d, Y' => 'Jan 15, 2026', 'd M Y' => '15 Jan 2026', 'Y-m-d' => '2026-01-15', 'd/m/Y' => '15/01/2026'], 'description' => 'Display format for dates'],
             'pagination_per_page' => ['label' => 'Items Per Page', 'type' => 'number', 'default' => '15', 'description' => 'Number of items shown per page in listings'],
             'enable_registration' => ['label' => 'Enable Registration', 'type' => 'boolean', 'default' => 'true', 'description' => 'Allow new user registrations'],

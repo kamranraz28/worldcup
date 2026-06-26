@@ -9,13 +9,23 @@ use App\Models\CustomerVerification;
 use App\Models\Event;
 use App\Models\Ticket;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function __invoke(): Response
+    public function __invoke(): Response|RedirectResponse
     {
+        $role = auth()->user()?->role?->name;
+
+        if ($role === 'customer') {
+            return redirect('/customer/dashboard');
+        }
+
+        if ($role === 'checkin-staff') {
+            return redirect('/check-in');
+        }
         $now = now();
 
         $eventsThisMonth = Event::whereMonth('start_date', $now->month)

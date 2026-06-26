@@ -182,7 +182,7 @@ class RegistrationService
                 $ticketData = [
                     'ticket_type' => $data['ticket_type'] ?? 'general',
                     'price' => $data['price'] ?? 0,
-                    'currency' => $data['currency'] ?? 'PKR',
+                    'currency' => $data['currency'] ?? 'BDT',
                     'status' => $data['status'] ?? 'confirmed',
                     'metadata' => json_encode(['imported' => true, 'import_batch' => (string) Str::uuid()]),
                 ];

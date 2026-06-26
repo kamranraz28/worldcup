@@ -175,6 +175,67 @@ class TicketController extends Controller
         ]);
     }
 
+    public function myTickets(Request $request)
+    {
+        $user = $request->user();
+        $customerId = $user->customer?->id;
+        $customerIds = $customerId ? [$customerId] : [];
+
+        $query = Ticket::with([
+            'event:id,title,start_date,end_date,venue_name,event_type,banner_image',
+            'customer:id,first_name,last_name,email,phone',
+            'session:id,title,location',
+        ])->where(function ($q) use ($user, $customerIds) {
+            $q->where('user_id', $user->id);
+            if (!empty($customerIds)) {
+                $q->orWhereIn('customer_id', $customerIds);
+            }
+        })->latest('registered_at');
+
+        $tickets = $query->paginate(15)->through(function ($ticket) {
+            return [
+                'uuid' => $ticket->uuid,
+                'ticket_type' => $ticket->ticket_type,
+                'price' => $ticket->price,
+                'currency' => $ticket->currency,
+                'status' => $ticket->status,
+                'qr_code' => $ticket->qr_code,
+                'checked_in_at' => $ticket->checked_in_at,
+                'registered_at' => $ticket->registered_at,
+                'approved_at' => $ticket->approved_at,
+                'event' => $ticket->event ? [
+                    'uuid' => $ticket->event->uuid,
+                    'title' => $ticket->event->title,
+                    'start_date' => $ticket->event->start_date,
+                    'end_date' => $ticket->event->end_date,
+                    'venue_name' => $ticket->event->venue_name,
+                    'event_type' => $ticket->event->event_type,
+                    'banner_image' => $ticket->event->banner_image,
+                ] : null,
+                'session' => $ticket->session ? [
+                    'title' => $ticket->session->title,
+                    'location' => $ticket->session->location,
+                ] : null,
+            ];
+        });
+
+        $baseQuery = Ticket::where(function ($q) use ($user, $customerIds) {
+            $q->where('user_id', $user->id);
+            if (!empty($customerIds)) {
+                $q->orWhereIn('customer_id', $customerIds);
+            }
+        });
+
+        return Inertia::render('Tickets/MyTickets', [
+            'tickets' => $tickets,
+            'stats' => [
+                'total' => (clone $baseQuery)->count(),
+                'confirmed' => (clone $baseQuery)->where('status', 'confirmed')->count(),
+                'redeemed' => (clone $baseQuery)->where('status', 'redeemed')->count(),
+            ],
+        ]);
+    }
+
     public function downloadPdf(string $uuid)
     {
         $ticket = Ticket::where('uuid', $uuid)->firstOrFail();

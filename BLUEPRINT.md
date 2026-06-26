@@ -536,7 +536,7 @@ worldcup2026/
 | user_id | BIGINT UNSIGNED | FK -> users.id, NULLABLE | Staff-issued |
 | ticket_type | ENUM('general','vip','vvip','comp','staff') | NOT NULL | |
 | price | DECIMAL(10,2) | DEFAULT 0.00 | |
-| currency | CHAR(3) | DEFAULT 'PKR' | |
+| currency | CHAR(3) | DEFAULT 'BDT' | |
 | status | ENUM('reserved','confirmed','cancelled','redeemed','expired') | DEFAULT 'reserved' | |
 | qr_code | TEXT | NOT NULL | Encoded payload |
 | qr_code_path | VARCHAR(255) | NULLABLE | PDF/PNG path |

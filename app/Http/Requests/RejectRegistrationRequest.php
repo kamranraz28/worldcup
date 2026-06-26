@@ -8,7 +8,7 @@ class RejectRegistrationRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user() ? $this->user()->can('update', \App\Models\Ticket::class) : false;
+        return $this->user() ? $this->user()->hasPermission('tickets.edit') : false;
     }
 
     public function rules(): array

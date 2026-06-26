@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Services\SettingsService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -18,8 +19,6 @@ class SettingsController extends Controller
 
     public function index()
     {
-        $this->authorize('view', \App\Models\SystemConfig::class);
-
         $definitions = $this->settingsService->getGroupDefinitions();
         $settings = [];
 
@@ -35,7 +34,7 @@ class SettingsController extends Controller
 
     public function update(Request $request, string $group)
     {
-        $this->authorize('edit', \App\Models\SystemConfig::class);
+        $this->authorize('edit-settings');
 
         $definitions = $this->settingsService->getGroupDefinitions();
 
@@ -57,7 +56,7 @@ class SettingsController extends Controller
 
     public function testSmtp()
     {
-        $this->authorize('edit', \App\Models\SystemConfig::class);
+        $this->authorize('edit-settings');
 
         $result = $this->settingsService->testSmtp();
 
@@ -66,7 +65,7 @@ class SettingsController extends Controller
 
     public function testSms()
     {
-        $this->authorize('edit', \App\Models\SystemConfig::class);
+        $this->authorize('edit-settings');
 
         $result = $this->settingsService->testSms();
 
@@ -75,7 +74,7 @@ class SettingsController extends Controller
 
     public function toggleMaintenance(Request $request)
     {
-        $this->authorize('edit', \App\Models\SystemConfig::class);
+        $this->authorize('edit-settings');
 
         $enabled = $request->input('enabled', false);
         $this->settingsService->toggleMaintenance($enabled);

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->string('ticket_type', 20);
             $table->decimal('price', 10, 2)->default(0);
-            $table->char('currency', 3)->default('PKR');
+            $table->char('currency', 3)->default('BDT');
             $table->string('status', 20)->default('reserved')->index();
             $table->text('qr_code');
             $table->string('qr_code_path')->nullable();
