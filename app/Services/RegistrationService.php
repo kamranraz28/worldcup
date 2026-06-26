@@ -6,19 +6,28 @@ use App\Models\Event;
 use App\Models\Ticket;
 use App\Models\TicketAction;
 use App\Models\WaitingList;
+use App\Notifications\TicketConfirmation;
 use App\Repositories\Contracts\RegistrationRepositoryInterface;
+use App\Services\PdfTicketService;
+use App\Services\TicketService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
 class RegistrationService
 {
     private $registrationRepository;
+    private $ticketService;
 
-    public function __construct(RegistrationRepositoryInterface $registrationRepository)
-    {
+    public function __construct(
+        RegistrationRepositoryInterface $registrationRepository,
+        TicketService $ticketService
+    ) {
         $this->registrationRepository = $registrationRepository;
+        $this->ticketService = $ticketService;
     }
 
     public function find(string $uuid): ?Ticket
@@ -62,7 +71,7 @@ class RegistrationService
 
     public function approve(Ticket $ticket, string $notes = null): Ticket
     {
-        return DB::transaction(function () use ($ticket, $notes) {
+        $ticket = DB::transaction(function () use ($ticket, $notes) {
             if (!$ticket->canBeApproved()) {
                 throw new \RuntimeException('This registration cannot be approved in its current state.');
             }
@@ -78,6 +87,36 @@ class RegistrationService
 
             return $updated;
         });
+
+        $this->sendApprovalEmail($ticket);
+
+        return $ticket;
+    }
+
+    private function sendApprovalEmail(Ticket $ticket): void
+    {
+        try {
+            $ticket->loadMissing([
+                'event:id,title,start_date,end_date,venue_name,venue_address,event_type,banner_image',
+                'customer:id,first_name,last_name,email,phone,nationality',
+            ]);
+
+            $customer = $ticket->customer;
+            if (!$customer || !$customer->email) {
+                return;
+            }
+
+            $pdfService = app(PdfTicketService::class);
+            $pdfPath = $pdfService->saveToFile($ticket);
+
+            Notification::route('mail', $customer->email)
+                ->notify(new TicketConfirmation($ticket, $pdfPath));
+        } catch (\Exception $e) {
+            Log::error('Failed to send approval email', [
+                'ticket_uuid' => $ticket->uuid,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 
     public function reject(Ticket $ticket, string $reason, string $notes = null): Ticket
