@@ -4,6 +4,8 @@ import StatusBadge from '@/Components/UI/StatusBadge';
 export default function ScanResult({ result, onClose, onRetry }) {
   const isSuccess = result?.code === 'CHECKED_IN';
   const isDuplicate = result?.code === 'DUPLICATE_SCAN';
+  const isOffline = result?.code === 'OFFLINE_QUEUED';
+  const isSessionExpired = result?.code === 'SESSION_EXPIRED';
 
   if (!result) return null;
 

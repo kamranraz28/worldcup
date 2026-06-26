@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useForm } from '@inertiajs/inertia-react';
+import { useForm } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function VerificationReviewForm({ verification }) {

@@ -1,11 +1,11 @@
-import { useForm, Link } from '@inertiajs/inertia-react';
+import { useForm, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import AppLayout from '@/Layouts/AppLayout';
 
 export default function Create({ events, customers }) {
   const form = useForm({
     event_id: '', customer_id: '', event_session_id: '',
-    ticket_type: 'general', price: '', currency: 'PKR', status: 'confirmed',
+    ticket_type: 'general', price: '', currency: 'BDT', status: 'confirmed',
   });
   const handleSubmit = (e) => { e.preventDefault(); form.post('/registrations'); };
   const selectedEvent = events?.find((e) => e.id === Number(form.data.event_id));

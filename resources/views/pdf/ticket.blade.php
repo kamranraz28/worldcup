@@ -74,9 +74,8 @@
             border-bottom: 2px dashed rgba(255,255,255,0.1);
             margin: 30px 0;
         }
-        .qr-section svg {
-            width: 180px;
-            height: 180px;
+        .qr-section table {
+            margin: 0 auto;
         }
         .qr-code-text {
             font-size: 12px;
@@ -145,7 +144,7 @@
                 </div>
                 <div class="detail-block">
                     <div class="label">Price</div>
-                    <div class="value">{{ $ticket->currency ?? 'PKR' }} {{ number_format($ticket->price, 2) }}</div>
+                    <div class="value">{{ $ticket->currency ?? 'BDT' }} {{ number_format($ticket->price, 2) }}</div>
                 </div>
             </div>
 
@@ -175,7 +174,7 @@
             @endif
 
             <div class="qr-section">
-                {!! $qrSvg !!}
+                {!! $qrTable !!}
                 <div class="qr-code-text">{{ $ticket->qr_code }}</div>
             </div>
 

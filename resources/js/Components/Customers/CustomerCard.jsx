@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/inertia-react';
+import { Link } from '@inertiajs/react';
 import StatusBadge from '@/Components/UI/StatusBadge';
 
 export default function CustomerCard({ customer }) {

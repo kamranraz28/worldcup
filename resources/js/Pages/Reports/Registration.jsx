@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/inertia-react';
+import { Link } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import AppLayout from '@/Layouts/AppLayout';
@@ -22,7 +22,7 @@ export default function RegistrationReport({ report, filters, events }) {
   }, [eventFilter, statusFilter, typeFilter, dateFrom, dateTo]);
 
   const s = report?.summary || {};
-  const currency = s.currency || 'PKR';
+  const currency = s.currency || 'BDT';
 
   return (
     <AppLayout>

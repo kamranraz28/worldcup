@@ -1,4 +1,4 @@
-import { useForm, Link } from '@inertiajs/inertia-react';
+import { useForm, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import AppLayout from '@/Layouts/AppLayout';
 import CustomerForm from '@/Components/Customers/CustomerForm';

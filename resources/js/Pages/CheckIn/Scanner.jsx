@@ -1,69 +1,43 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
-import { Link } from '@inertiajs/inertia-react';
+import { useState, useRef, useCallback } from 'react';
+import { Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import AppLayout from '@/Layouts/AppLayout';
 import ScannerCamera from '@/Components/CheckIn/ScannerCamera';
-import ScanResult from '@/Components/CheckIn/ScanResult';
 
-function QueueItem({ item, onRemove }) {
-  return (
-    <div className="flex items-center gap-3 p-2 rounded-lg bg-white/[0.02] border border-white/5 text-xs">
-      <div className="w-6 h-6 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold">
-        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-dark-text truncate font-mono">{item.qr_code}</p>
-        <p className="text-dark-text-secondary">{item.event_title || 'Event'}</p>
-      </div>
-      <span className="text-dark-text-secondary text-[10px]">{new Date(item.scanned_at).toLocaleTimeString()}</span>
-      <button onClick={() => onRemove(item.offline_queue_id)} className="text-red-400 hover:text-red-300">
-        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-  );
-}
-
-export default function Scanner({ events, stats, pendingSync, activeEvent, attendance }) {
+export default function Scanner({ auth, events, stats, activeEvent, attendance, scannerBeepEnabled: initialBeep = true }) {
   const [cameraActive, setCameraActive] = useState(true);
   const [selectedEvent, setSelectedEvent] = useState(activeEvent || (events?.[0]?.id || ''));
   const [manualQr, setManualQr] = useState('');
   const [scanning, setScanning] = useState(false);
   const [lastResult, setLastResult] = useState(null);
-  const [queue, setQueue] = useState([]);
-  const [syncing, setSyncing] = useState(false);
-  const [syncMessage, setSyncMessage] = useState(null);
+  const [scannerBeepEnabled, setScannerBeepEnabled] = useState(initialBeep);
   const scanTimeoutRef = useRef(null);
   const csrfToken = typeof document !== 'undefined' ? document.querySelector('meta[name="csrf-token"]')?.content : '';
 
-  useEffect(() => { loadOfflineQueue(); }, []);
+  const scanUrl = () => window.route ? route('checkin.scan') : '/check-in/scan';
 
-  const loadOfflineQueue = () => { try { const stored = localStorage.getItem('checkin_offline_queue'); if (stored) setQueue(JSON.parse(stored)); } catch (e) { } };
-  const saveOfflineQueue = (items) => { try { localStorage.setItem('checkin_offline_queue', JSON.stringify(items)); } catch (e) { } };
-
-  const performScan = useCallback(async (qrCode, method = 'qr') => {
+  const submitScan = useCallback(async (qrCode) => {
     if (!selectedEvent || scanning) return;
     setScanning(true); setManualQr('');
     try {
-      const res = await fetch('/check-in/scan', {
+      const res = await fetch(scanUrl(), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
-        body: JSON.stringify({ qr_code: qrCode, event_id: Number(selectedEvent), scan_method: method, device_id: 'web-scanner-' + navigator.userAgent?.slice(0, 30) }),
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
+        body: JSON.stringify({ qr_code: qrCode, event_id: Number(selectedEvent) }),
       });
+      if (res.status === 419) {
+        setLastResult({ success: false, code: 'SESSION_EXPIRED', message: 'Session expired. Please refresh.', data: null });
+        if (scannerBeepEnabled) playBeep(false); return;
+      }
       const data = await res.json();
       setLastResult(data);
-      if (res.ok && data.success) { if ('vibrate' in navigator) navigator.vibrate(200); playBeep(true); }
-      else { playBeep(false); }
+      if (res.ok && data.success) { if ('vibrate' in navigator) navigator.vibrate(200); if (scannerBeepEnabled) playBeep(true); }
+      else { if (scannerBeepEnabled) playBeep(false); }
     } catch (e) {
-      const offlineId = 'offline_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-      const newItem = { offline_queue_id: offlineId, qr_code: qrCode, event_id: Number(selectedEvent), scan_method: method, scanned_at: new Date().toISOString(), event_title: events?.find(e => e.id === Number(selectedEvent))?.title || '' };
-      const newQueue = [...queue, newItem]; setQueue(newQueue); saveOfflineQueue(newQueue);
-      setLastResult({ success: false, code: 'OFFLINE_QUEUED', message: 'No connection — queued for sync. ' + (queue.length + 1) + ' items pending.', data: { ticket: { customer: { first_name: 'Offline', last_name: '', initials: '?' } } } });
+      setLastResult({ success: false, code: 'ERROR', message: 'Connection error. Try again.', data: null });
+      if (scannerBeepEnabled) playBeep(false);
     } finally { setScanning(false); }
-  }, [selectedEvent, scanning, csrfToken, queue, events]);
+  }, [selectedEvent, scanning, csrfToken, scannerBeepEnabled]);
 
   const playBeep = (success) => {
     try {
@@ -77,22 +51,16 @@ export default function Scanner({ events, stats, pendingSync, activeEvent, atten
     } catch (e) { }
   };
 
-  const handleScan = useCallback((code) => { if (scanTimeoutRef.current) clearTimeout(scanTimeoutRef.current); scanTimeoutRef.current = setTimeout(() => performScan(code, 'qr'), 300); }, [performScan]);
-  const handleManualSubmit = (e) => { e.preventDefault(); if (manualQr.trim()) performScan(manualQr.trim(), 'manual'); };
+  const handleScan = useCallback((code) => {
+    setManualQr(code);
+    setCameraActive(false);
+    if (scannerBeepEnabled) playBeep(true);
+    if (scanTimeoutRef.current) clearTimeout(scanTimeoutRef.current);
+    scanTimeoutRef.current = setTimeout(() => submitScan(code), 300);
+  }, [submitScan, scannerBeepEnabled]);
 
-  const syncQueue = async () => {
-    if (queue.length === 0) return; setSyncing(true); setSyncMessage(null);
-    try {
-      const res = await fetch('/check-in/sync', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken }, body: JSON.stringify({ items: queue }) });
-      const data = await res.json(); setSyncMessage(`Synced ${data.synced} of ${data.total} items.`);
-      const syncedIds = new Set((data.results || []).filter(r => r.success).map(r => r.offline_queue_id));
-      const remaining = queue.filter(item => !syncedIds.has(item.offline_queue_id));
-      setQueue(remaining); saveOfflineQueue(remaining);
-    } catch (e) { setSyncMessage('Sync failed — try again later.'); }
-    finally { setSyncing(false); }
-  };
+  const handleManualSubmit = (e) => { e.preventDefault(); if (manualQr.trim()) submitScan(manualQr.trim()); };
 
-  const removeQueueItem = (id) => { const remaining = queue.filter(item => item.offline_queue_id !== id); setQueue(remaining); saveOfflineQueue(remaining); };
   const clearResult = () => setLastResult(null);
   const selectedEventObj = events?.find(e => e.id === Number(selectedEvent));
 
@@ -112,7 +80,6 @@ export default function Scanner({ events, stats, pendingSync, activeEvent, atten
             { label: 'Today', value: stats?.today || 0, color: 'text-green-400' },
             { label: 'Valid', value: stats?.valid_today || 0, color: 'text-blue-400' },
             { label: 'Unique', value: stats?.unique_customers_today || 0, color: 'text-amber-400' },
-            { label: 'Pending Sync', value: pendingSync + queue.length, color: 'text-red-400' },
           ].map((s, i) => (
             <motion.div key={s.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="glass-card p-4">
               <p className="text-xs text-neutral-500 dark:text-dark-text-secondary uppercase tracking-wider">{s.label}</p>
@@ -155,35 +122,15 @@ export default function Scanner({ events, stats, pendingSync, activeEvent, atten
               </form>
             </motion.div>
 
-            {queue.length > 0 && (
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                className="glass-card p-4 border-amber-500/20 bg-gradient-to-br from-amber-500/[0.02] to-transparent"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-semibold text-amber-400">Offline Queue ({queue.length})</h3>
-                  <div className="flex gap-2">
-                    <button onClick={syncQueue} disabled={syncing}
-                      className="px-3 py-1.5 rounded-lg bg-amber-500/10 text-amber-400 text-xs font-medium border border-amber-500/20 hover:bg-amber-500/20 disabled:opacity-50 transition-all"
-                    >{syncing ? 'Syncing...' : 'Sync Now'}</button>
-                    <button onClick={() => { setQueue([]); saveOfflineQueue([]); }}
-                      className="px-3 py-1.5 rounded-lg bg-white/[0.03] text-dark-text-secondary text-xs border border-white/10 hover:bg-white/[0.05] transition-all">Clear</button>
-                  </div>
-                </div>
-                {syncMessage && <p className="text-xs text-green-400 mb-2">{syncMessage}</p>}
-                <div className="space-y-1 max-h-40 overflow-y-auto">
-                  {queue.map(item => <QueueItem key={item.offline_queue_id} item={item} onRemove={removeQueueItem} />)}
-                </div>
+            {lastResult && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                className={`glass-card p-4 text-center ${lastResult.success ? 'border-green-500/20' : 'border-red-500/20'}`}>
+                <p className={`text-sm font-medium mb-3 ${lastResult.success ? 'text-green-400' : 'text-red-400'}`}>{lastResult.message}</p>
+                <button onClick={() => { setLastResult(null); setCameraActive(true); }}
+                  className="btn-primary px-6 py-1.5 text-sm">Scan Next</button>
               </motion.div>
             )}
 
-            {lastResult?.code === 'OFFLINE_QUEUED' && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="glass-card p-4 border-amber-500/20 text-center">
-                <p className="text-sm text-amber-400">{lastResult.message}</p>
-              </motion.div>
-            )}
-          </div>
-
-          <div className="lg:col-span-2 space-y-4">
             {attendance && selectedEventObj && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-4">
                 <h3 className="text-xs font-semibold text-neutral-500 dark:text-dark-text-secondary uppercase tracking-wider mb-3">Attendance — {selectedEventObj.title}</h3>
@@ -224,15 +171,32 @@ export default function Scanner({ events, stats, pendingSync, activeEvent, atten
               <ul className="text-xs text-neutral-500 dark:text-dark-text-secondary space-y-1.5">
                 <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-green-400" /> Point camera at QR code on ticket</li>
                 <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-green-400" /> Auto-detects QR codes via native BarcodeDetector</li>
-                <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-amber-400" /> Offline scans are queued locally</li>
-                <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-amber-400" /> Sync pending items when connected</li>
                 <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-blue-400" /> Green = success, Red = failed</li>
               </ul>
+              {auth?.user?.role?.name === 'super-admin' && (
+                <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-white/5">
+                  <label className="flex items-center justify-between cursor-pointer">
+                    <div>
+                      <p className="text-sm font-medium text-neutral-700 dark:text-dark-text">Scanner Beep Sound</p>
+                      <p className="text-xs text-neutral-500">Play beep on QR detection</p>
+                    </div>
+                    <input type="checkbox" checked={scannerBeepEnabled} onChange={(e) => {
+                      const enabled = e.target.checked;
+                      setScannerBeepEnabled(enabled);
+                      fetch(route('checkin.toggle-beep'), {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]')?.content, 'Accept': 'application/json' },
+                        body: JSON.stringify({ enabled }),
+                      });
+                    }} className="sr-only peer" />
+                    <div className="relative w-11 h-6 rounded-full bg-white/[0.08] peer-checked:bg-primary-500 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all" />
+                  </label>
+                </div>
+              )}
             </motion.div>
           </div>
         </div>
       </div>
-      <ScanResult result={lastResult} onClose={clearResult} onRetry={clearResult} />
     </AppLayout>
   );
 }

@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/inertia-react';
+import { Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import AppLayout from '@/Layouts/AppLayout';
 import StatusBadge from '@/Components/UI/StatusBadge';

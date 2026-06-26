@@ -17,12 +17,17 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\CheckInController;
+use App\Http\Controllers\CustomerPortalController;
+use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return inertia('Welcome');
 });
+
+Route::get('browse', [PublicController::class, 'events'])->name('events.public');
+Route::get('browse/{uuid}', [PublicController::class, 'eventDetail'])->name('events.public.show');
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
@@ -55,6 +60,14 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'verified', 'is_active'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
+
+    Route::prefix('customer')->name('customer.')->group(function () {
+        Route::get('dashboard', [CustomerPortalController::class, 'dashboard'])->name('dashboard');
+        Route::get('events/{uuid}/register', [CustomerPortalController::class, 'registerForm'])->name('events.register');
+        Route::post('events/{uuid}/register', [CustomerPortalController::class, 'register'])->name('events.register.store');
+        Route::get('verification', [CustomerPortalController::class, 'verificationForm'])->name('verification');
+        Route::post('verification', [CustomerPortalController::class, 'submitVerification'])->name('verification.store');
+    });
 
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -94,6 +107,7 @@ Route::middleware(['auth', 'verified', 'is_active'])->group(function () {
     Route::get('events/{eventUuid}/waiting-list', [RegistrationController::class, 'waitingList'])->name('registrations.waiting-list');
     Route::post('events/{eventUuid}/waiting-list/notify', [RegistrationController::class, 'notifyWaitingList'])->name('registrations.waiting-list.notify');
 
+    Route::get('my-tickets', [TicketController::class, 'myTickets'])->name('tickets.my');
     Route::get('tickets', [TicketController::class, 'index'])->name('tickets.index');
     Route::get('tickets/{uuid}', [TicketController::class, 'show'])->name('tickets.show');
     Route::get('tickets/{uuid}/download', [TicketController::class, 'downloadPdf'])->name('tickets.download');
@@ -109,6 +123,7 @@ Route::middleware(['auth', 'verified', 'is_active'])->group(function () {
     Route::get('check-in/attendance/{eventId}', [CheckInController::class, 'eventAttendance'])->name('checkin.attendance');
     Route::get('check-in/stats', [CheckInController::class, 'stats'])->name('checkin.stats');
     Route::post('check-in/sync', [CheckInController::class, 'batchSync'])->name('checkin.sync');
+    Route::post('check-in/toggle-beep', [CheckInController::class, 'toggleBeep'])->name('checkin.toggle-beep');
 
     Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('reports/registration', [ReportController::class, 'registration'])->name('reports.registration');

@@ -9,7 +9,7 @@ import MobileMenu from '@/Components/Layout/MobileMenu';
 import FlashMessage from '@/Components/FlashMessage';
 
 export default function AppLayout({ children }) {
-    const { url } = usePage().props;
+    const { url } = usePage();
     const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
         if (typeof localStorage === 'undefined') return false;
         return localStorage.getItem('sidebar_collapsed') === 'true';

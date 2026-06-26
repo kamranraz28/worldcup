@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import { Link, usePage } from '@inertiajs/react';
+import { useState, useRef, useEffect, Fragment } from 'react';
+import { Link, usePage, router } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ThemeSwitcher from './ThemeSwitcher';
 
@@ -159,21 +159,20 @@ export default function Navbar({ onMenuToggle, breadcrumbs }) {
 
                                             <div className="my-1 border-t border-neutral-100 dark:border-white/[0.04]" />
 
-                                            <form method="POST" action="/logout">
-                                                <button type="submit"
-                                                    className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium
-                                                        text-neutral-500 dark:text-dark-text-secondary
-                                                        hover:bg-red-50 dark:hover:bg-red-500/10
-                                                        hover:text-red-600 dark:hover:text-red-400
-                                                        transition-all duration-150 active:scale-[0.98]"
-                                                >
-                                                    <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                                                        <path strokeLinecap="round" strokeLinejoin="round"
-                                                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                                    </svg>
-                                                    Sign out
-                                                </button>
-                                            </form>
+                                            <button
+                                                onClick={() => router.post(route('logout'))}
+                                                className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium
+                                                    text-neutral-500 dark:text-dark-text-secondary
+                                                    hover:bg-red-50 dark:hover:bg-red-500/10
+                                                    hover:text-red-600 dark:hover:text-red-400
+                                                    transition-all duration-150 active:scale-[0.98]"
+                                            >
+                                                <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                                    <path strokeLinecap="round" strokeLinejoin="round"
+                                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                                </svg>
+                                                Sign out
+                                            </button>
                                         </div>
                                     </motion.div>
                                 )}
@@ -200,7 +199,7 @@ function Breadcrumb({ items = [] }) {
                 </svg>
             </Link>
             {items.map((item, i) => (
-                <React.Fragment key={i}>
+                <Fragment key={i}>
                     <svg className="w-3.5 h-3.5 text-neutral-300 dark:text-dark-border" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
@@ -212,7 +211,7 @@ function Breadcrumb({ items = [] }) {
                             {item.label}
                         </Link>
                     )}
-                </React.Fragment>
+                </Fragment>
             ))}
         </nav>
     );

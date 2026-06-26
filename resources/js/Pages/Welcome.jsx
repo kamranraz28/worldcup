@@ -97,7 +97,7 @@ export default function Welcome() {
 
                         <motion.div variants={fadeUp} custom={3}
                             className="flex items-center justify-center gap-4 flex-wrap">
-                            <Link href={route('register')}
+                            <Link href="/browse"
                                 className="btn-primary px-8 py-3.5 text-base">
                                 Browse Events
                             </Link>

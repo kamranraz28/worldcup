@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { router } from '@inertiajs/inertia';
+import { router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import AdminLayout from '@/Layouts/AdminLayout';
 import FlashMessage from '@/Components/FlashMessage';
@@ -35,11 +35,9 @@ function SettingsForm({ group, definition, settings, onSave, saving }) {
               </div>
             ) : field.type === 'select' ? (
               <select value={val} onChange={(e) => handleChange(key, e.target.value)} className={`${inputClass(key)}`}>
-                {(field.options || []).map((opt) => {
-                  const optVal = typeof opt === 'object' ? Object.keys(opt)[0] : opt;
-                  const optLabel = typeof opt === 'object' ? Object.values(opt)[0] : opt;
-                  return <option key={optVal} value={optVal}>{optLabel}</option>;
-                })}
+                {(!field.options ? [] : Array.isArray(field.options) ? field.options.map(o => [o, o]) : Object.entries(field.options)).map(([optVal, optLabel]) => (
+                  <option key={optVal} value={optVal}>{optLabel}</option>
+                ))}
               </select>
             ) : field.type === 'textarea' ? (
               <textarea value={val} onChange={(e) => handleChange(key, e.target.value)} rows={4} className={`${inputClass(key)} resize-none`} />
@@ -77,7 +75,8 @@ export default function Settings({ definitions, settings }) {
   const [saving, setSaving] = useState(false);
   const handleSave = (group, values) => {
     setSaving(true);
-    router.post(`/admin/settings/${group}`, { settings: values }, {
+    const token = document.querySelector('meta[name=csrf-token]')?.content;
+    router.post(`/admin/settings/${group}`, { settings: values, _token: token }, {
       onSuccess: () => setSaving(false), onError: () => setSaving(false), onFinish: () => setSaving(false),
     });
   };

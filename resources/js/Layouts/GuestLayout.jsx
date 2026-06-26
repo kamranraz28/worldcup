@@ -3,7 +3,7 @@ import FlashMessage from '@/Components/FlashMessage';
 
 export default function GuestLayout({ children }) {
     return (
-        <div className="min-h-screen bg-neutral-50 dark:bg-dark-bg flex flex-col selection:bg-primary-500/20">
+        <div className="min-h-screen bg-dark-bg dark flex flex-col selection:bg-primary-500/20">
             {/* Ambient glow */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
                 <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2

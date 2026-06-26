@@ -1,5 +1,5 @@
-import { Link } from '@inertiajs/inertia-react';
-import { useState, useEffect } from 'react';
+import { Link, router } from '@inertiajs/react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import AppLayout from '@/Layouts/AppLayout';
 import StatusBadge from '@/Components/UI/StatusBadge';
@@ -8,14 +8,25 @@ export default function Index({ tickets, filters, stats }) {
   const [search, setSearch] = useState(filters.search || '');
   const [statusFilter, setStatusFilter] = useState(filters.status || '');
   const [typeFilter, setTypeFilter] = useState(filters.type || '');
+  const [approving, setApproving] = useState(null);
+  const initial = useRef(true);
+
+  const approve = (uuid) => {
+    setApproving(uuid);
+    router.post(route('registrations.approve', uuid), {}, {
+      preserveScroll: true,
+      onFinish: () => setApproving(null),
+    });
+  };
 
   useEffect(() => {
+    if (initial.current) { initial.current = false; return; }
     const timeout = setTimeout(() => {
       const params = new URLSearchParams();
       if (search) params.set('search', search);
       if (statusFilter) params.set('status', statusFilter);
       if (typeFilter) params.set('type', typeFilter);
-      window.location.href = `/tickets?${params.toString()}`;
+      router.get(`/tickets?${params.toString()}`);
     }, 400);
     return () => clearTimeout(timeout);
   }, [search, statusFilter, typeFilter]);
@@ -36,7 +47,7 @@ export default function Index({ tickets, filters, stats }) {
           {[
             { label: 'Total', value: stats?.total || 0, color: 'text-dark-text' },
             { label: 'Confirmed', value: stats?.confirmed || 0, color: 'text-green-400' },
-            { label: 'Revenue', value: stats?.total_revenue ? `${tickets?.data?.[0]?.currency || 'PKR'} ${Number(stats.total_revenue).toLocaleString()}` : '—', color: 'text-amber-400' },
+            { label: 'Revenue', value: stats?.total_revenue ? `${tickets?.data?.[0]?.currency || 'BDT'} ${Number(stats.total_revenue).toLocaleString()}` : '—', color: 'text-amber-400' },
             { label: 'Redeemed', value: stats?.redeemed || 0, color: 'text-blue-400' },
           ].map((s, i) => (
             <motion.div key={s.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="glass-card p-4">
@@ -100,6 +111,30 @@ export default function Index({ tickets, filters, stats }) {
                     </p>
                   </div>
                   <span className="text-xs text-neutral-500">{t.currency} {t.price > 0 ? Number(t.price).toFixed(2) : 'Free'}</span>
+                  {t.status === 'confirmed' && (
+                    <a href={`/tickets/${t.uuid}/download`} onClick={(e) => e.stopPropagation()}
+                      className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium
+                        bg-primary-500/10 border border-primary-500/20 text-primary-400 hover:bg-primary-500/20 transition-all"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                      Download
+                    </a>
+                  )}
+                  {t.status === 'pending_approval' && (
+                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); approve(t.uuid); }}
+                      disabled={approving === t.uuid}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium
+                        bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20
+                        disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                    >
+                      {approving === t.uuid ? (
+                        <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                      ) : (
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                      )}
+                      Approve
+                    </button>
+                  )}
                   <svg className="w-4 h-4 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                   </svg>

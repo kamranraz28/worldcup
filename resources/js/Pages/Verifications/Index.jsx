@@ -1,5 +1,5 @@
-import { Link } from '@inertiajs/inertia-react';
-import { useState, useEffect } from 'react';
+import { Link, router } from '@inertiajs/react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import AppLayout from '@/Layouts/AppLayout';
 import StatusBadge from '@/Components/UI/StatusBadge';
@@ -8,14 +8,16 @@ export default function Index({ verifications, filters, stats }) {
   const [search, setSearch] = useState(filters.search || '');
   const [statusFilter, setStatusFilter] = useState(filters.status || '');
   const [typeFilter, setTypeFilter] = useState(filters.type || '');
+  const initial = useRef(true);
 
   useEffect(() => {
+    if (initial.current) { initial.current = false; return; }
     const timeout = setTimeout(() => {
       const params = new URLSearchParams();
       if (search) params.set('search', search);
       if (statusFilter) params.set('status', statusFilter);
       if (typeFilter) params.set('type', typeFilter);
-      window.location.href = `/verifications?${params.toString()}`;
+      router.get(`/verifications?${params.toString()}`);
     }, 400);
     return () => clearTimeout(timeout);
   }, [search, statusFilter, typeFilter]);

@@ -1,6 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { navItems, adminNavItems } from './navigation';
+import { navItems, adminNavItems, customerNavItems } from './navigation';
 
 const sidebarVariants = {
     open: { width: 280, transition: { duration: 0.35, ease: [0.25, 1, 0.5, 1] } },
@@ -8,9 +8,13 @@ const sidebarVariants = {
 };
 
 export default function Sidebar({ collapsed, onToggle, onMobileClose }) {
-    const { url, auth } = usePage().props;
+    const { url } = usePage();
+    const { auth } = usePage().props;
     const permissions = auth.user?.permissions ?? [];
-    const isAdmin = auth.user?.role?.name === 'super-admin' || auth.user?.role?.name === 'admin';
+    const roleName = auth.user?.role?.name;
+    const isAdmin = roleName === 'super-admin' || roleName === 'admin';
+    const isCustomer = roleName === 'customer';
+    const isScanningStaff = roleName === 'checkin-staff';
 
     const filteredNav = navItems.filter(
         (item) => !item.permission || permissions.includes(item.permission)
@@ -19,6 +23,15 @@ export default function Sidebar({ collapsed, onToggle, onMobileClose }) {
     const filteredAdmin = adminNavItems.filter(
         (item) => !item.permission || permissions.includes(item.permission)
     );
+
+    let sideItems;
+    if (isCustomer) {
+        sideItems = customerNavItems;
+    } else if (isScanningStaff) {
+        sideItems = filteredNav.filter(item => item.key === 'checkin');
+    } else {
+        sideItems = filteredNav;
+    }
 
     const isActive = (href) => {
         if (href === '/dashboard') return url === '/dashboard';
@@ -93,7 +106,7 @@ export default function Sidebar({ collapsed, onToggle, onMobileClose }) {
 
                 {/* Navigation */}
                 <nav className="flex-1 overflow-y-auto overflow-x-hidden px-3 py-2 space-y-0.5 scrollbar-thin">
-                    {filteredNav.map((item, i) => (
+                    {sideItems.map((item, i) => (
                         <motion.div
                             key={item.key}
                             initial={{ opacity: 0, x: -12 }}

@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/inertia-react';
+import { Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import AppLayout from '@/Layouts/AppLayout';
@@ -17,6 +17,14 @@ function DetailRow({ icon, label, value }) {
 export default function Show({ ticket, history, qrSvg, pdfExists }) {
   const [emailLoading, setEmailLoading] = useState(false);
   const [smsLoading, setSmsLoading] = useState(false);
+  const [approving, setApproving] = useState(false);
+
+  const approve = () => {
+    setApproving(true);
+    router.post(route('registrations.approve', ticket.uuid), {}, {
+      onFinish: () => setApproving(false),
+    });
+  };
 
   const sendEmail = async () => {
     setEmailLoading(true);
@@ -71,6 +79,20 @@ export default function Show({ ticket, history, qrSvg, pdfExists }) {
                 </div>
               </div>
             </div>
+            {ticket.status === 'pending_approval' && (
+              <button onClick={approve} disabled={approving}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold
+                  bg-green-500 text-white hover:bg-green-400 active:scale-95
+                  disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-green-500/25"
+              >
+                {approving ? (
+                  <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                ) : (
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                )}
+                {approving ? 'Approving...' : 'Approve'}
+              </button>
+            )}
           </div>
         </motion.div>
 
@@ -82,9 +104,9 @@ export default function Show({ ticket, history, qrSvg, pdfExists }) {
                 <div className="w-48 h-48 rounded-2xl border border-neutral-200 dark:border-white/10 bg-white p-2 flex items-center justify-center" dangerouslySetInnerHTML={{ __html: qrSvg }} />
                 <p className="text-xs text-neutral-500 dark:text-dark-text-secondary mt-3 font-mono tracking-wider">{ticket.qr_code}</p>
                 <div className="flex items-center gap-2 mt-4">
-                  <Link href={`/tickets/${ticket.uuid}/download`} className="btn-green h-10 px-5 text-sm inline-flex items-center gap-2 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20 font-medium transition-all">
+                  <a href={`/tickets/${ticket.uuid}/download`} className="btn-green h-10 px-5 text-sm inline-flex items-center gap-2 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20 font-medium transition-all">
                     📄 Download PDF
-                  </Link>
+                  </a>
                   <Link href={`/tickets/${ticket.uuid}/print`} className="btn-ghost h-10 px-5 text-sm inline-flex items-center gap-2">
                     🖨️ Print Ticket
                   </Link>

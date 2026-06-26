@@ -1,6 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { navItems, adminNavItems } from './navigation';
+import { navItems, adminNavItems, customerNavItems } from './navigation';
 
 const drawerVariants = {
     hidden: { x: '-100%', transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } },
@@ -8,12 +8,16 @@ const drawerVariants = {
 };
 
 export default function MobileMenu({ open, onClose }) {
-    const { url, auth } = usePage().props;
+    const { url } = usePage();
+    const { auth } = usePage().props;
     const permissions = auth.user?.permissions ?? [];
+    const isCustomer = auth.user?.role?.name === 'customer';
 
     const filteredNav = navItems.filter(
         (item) => !item.permission || permissions.includes(item.permission)
     );
+
+    const sideItems = isCustomer ? customerNavItems : filteredNav;
 
     const isActive = (href) => {
         if (href === '/dashboard') return url === '/dashboard';
@@ -73,7 +77,7 @@ export default function MobileMenu({ open, onClose }) {
                         </div>
 
                         <nav className="flex-1 overflow-y-auto p-4 space-y-0.5 scrollbar-thin">
-                            {filteredNav.map((item) => (
+                            {sideItems.map((item) => (
                                 <Link
                                     key={item.key}
                                     href={item.href}

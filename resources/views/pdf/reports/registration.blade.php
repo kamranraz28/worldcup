@@ -39,7 +39,7 @@
 
     <div class="summary-grid">
         <div class="summary-card"><div class="label">Total Tickets</div><div class="value">{{ $report['summary']['total_tickets'] ?? 0 }}</div></div>
-        <div class="summary-card"><div class="label">Total Revenue</div><div class="value">{{ $report['summary']['currency'] ?? 'PKR' }} {{ number_format($report['summary']['total_revenue'] ?? 0, 2) }}</div></div>
+        <div class="summary-card"><div class="label">Total Revenue</div><div class="value">{{ $report['summary']['currency'] ?? 'BDT' }} {{ number_format($report['summary']['total_revenue'] ?? 0, 2) }}</div></div>
         <div class="summary-card"><div class="label">Confirmed</div><div class="value" style="color:#22C55E">{{ $report['summary']['confirmed'] ?? 0 }}</div></div>
         <div class="summary-card"><div class="label">Redeemed</div><div class="value" style="color:#818CF8">{{ $report['summary']['redeemed'] ?? 0 }}</div></div>
         <div class="summary-card"><div class="label">Pending</div><div class="value" style="color:#FBBF24">{{ $report['summary']['pending_approval'] ?? 0 }}</div></div>
@@ -53,8 +53,8 @@
         <tr>
             <td style="text-transform:capitalize">{{ $row['type'] }}</td>
             <td>{{ $row['count'] }}</td>
-            <td>{{ $report['summary']['currency'] ?? 'PKR' }} {{ number_format($row['revenue'], 2) }}</td>
-            <td>{{ $report['summary']['currency'] ?? 'PKR' }} {{ number_format($row['avg_price'], 2) }}</td>
+            <td>{{ $report['summary']['currency'] ?? 'BDT' }} {{ number_format($row['revenue'], 2) }}</td>
+            <td>{{ $report['summary']['currency'] ?? 'BDT' }} {{ number_format($row['avg_price'], 2) }}</td>
         </tr>
         @endforeach
     </table>
@@ -67,7 +67,7 @@
             <td>{{ $t['customer']['first_name'] ?? '' }} {{ $t['customer']['last_name'] ?? '' }}</td>
             <td>{{ $t['customer']['email'] ?? '' }}</td>
             <td style="text-transform:capitalize">{{ $t['ticket_type'] ?? '' }}</td>
-            <td>{{ $t['currency'] ?? 'PKR' }} {{ number_format($t['price'] ?? 0, 2) }}</td>
+            <td>{{ $t['currency'] ?? 'BDT' }} {{ number_format($t['price'] ?? 0, 2) }}</td>
             <td><span class="status status-{{ $t['status'] }}">{{ str_replace('_', ' ', $t['status'] ?? '') }}</span></td>
             <td>{{ $t['event']['title'] ?? '' }}</td>
             <td>{{ $t['registered_at'] ? \Carbon\Carbon::parse($t['registered_at'])->format('M d, Y') : '' }}</td>

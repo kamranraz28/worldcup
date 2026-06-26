@@ -57,17 +57,17 @@ export default function ScannerCamera({ onScan, active, eventId }) {
         try {
           const barcodeDetector = new BarcodeDetector({ formats: ['qr_code'] });
           const barcodes = await barcodeDetector.detect(canvas);
-          if (barcodes.length > 0) { const code = barcodes[0].rawValue; if (code && !detecting) { setDetecting(true); onScan(code); setTimeout(() => setDetecting(false), 2000); } }
+          if (barcodes.length > 0) { const code = barcodes[0].rawValue; if (code && !detecting) { setDetecting(true); onScan(code); } }
         } catch (e) {}
       } else {
         try {
           const jsQR = (await import('jsqr')).default;
           const code = jsQR(imageData.data, imageData.width, imageData.height);
-          if (code && code.data && !detecting) { setDetecting(true); onScan(code.data); setTimeout(() => setDetecting(false), 2000); }
+          if (code && code.data && !detecting) { setDetecting(true); onScan(code.data); }
         } catch (e) {}
       }
 
-      if (active) { animFrameRef.current = requestAnimationFrame(detect); }
+      if (active && !detecting) { animFrameRef.current = requestAnimationFrame(detect); }
     };
 
     animFrameRef.current = requestAnimationFrame(detect);
