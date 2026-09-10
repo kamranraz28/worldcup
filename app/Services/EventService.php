@@ -33,9 +33,9 @@ class EventService
         return $this->eventRepository->paginate($filters, $perPage);
     }
 
-    public function create(array $data, ?UploadedFile $banner = null): Event
+    public function create(array $data, ?UploadedFile $banner = null, ?UploadedFile $template = null): Event
     {
-        return DB::transaction(function () use ($data, $banner) {
+        return DB::transaction(function () use ($data, $banner, $template) {
             if ($banner) {
                 $data['banner_image'] = $this->storageService->upload(
                     $banner,
@@ -47,7 +47,23 @@ class EventService
             $data['slug'] = Str::slug($data['title']) . '-' . Str::random(6);
             $data['created_by'] = $data['created_by'] ?? auth()->id();
 
-            return $this->eventRepository->create($data);
+            $event = $this->eventRepository->create($data);
+
+            if ($template) {
+                $templateData = [];
+                $templateData['ticket_template_path'] = $this->storageService->upload(
+                    $template,
+                    'events/templates',
+                    "event-{$event->uuid}-ticket-template"
+                );
+                if (isset($data['qr_x'])) $templateData['qr_x'] = $data['qr_x'];
+                if (isset($data['qr_y'])) $templateData['qr_y'] = $data['qr_y'];
+                if (isset($data['qr_size'])) $templateData['qr_size'] = $data['qr_size'];
+
+                $event->update($templateData);
+            }
+
+            return $event;
         });
     }
 

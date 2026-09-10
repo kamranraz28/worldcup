@@ -18,6 +18,10 @@ export default function Create() {
     end_date: '',
     registration_deadline: '',
     banner_image: null,
+    ticket_template: null,
+    qr_x: '',
+    qr_y: '',
+    qr_size: 40,
     requires_verification: true,
     status: 'draft',
   });

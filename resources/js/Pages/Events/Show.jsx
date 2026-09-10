@@ -1,7 +1,96 @@
 import { Link, usePage } from '@inertiajs/react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import AppLayout from '@/Layouts/AppLayout';
 import GalleryUploader from '@/Components/Events/GalleryUploader';
+import QRPositionPicker from '@/Components/Events/QRPositionPicker';
+
+function TicketTemplateCard({ event }) {
+  const csrf = document.querySelector('meta[name="csrf-token"]')?.content;
+  const [qlX, setQlX] = useState(event.qr_x ?? '');
+  const [qlY, setQlY] = useState(event.qr_y ?? '');
+  const [qlSize, setQlSize] = useState(event.qr_size ?? 40);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    form.qr_x.value = qlX;
+    form.qr_y.value = qlY;
+    form.qr_size.value = qlSize;
+    form.submit();
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.25 }}
+      className="glass-card p-6 space-y-3"
+    >
+      <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Ticket Template (PDF)</h2>
+      <p className="text-xs text-neutral-500 dark:text-dark-text-secondary">
+        Upload a designed ticket PDF for this event. The customer's ticket will be generated from this
+        template with the QR code stamped at the position below. Leave blank to use the default template.
+      </p>
+
+      {event.ticket_template_path && (
+        <div className="flex items-center justify-between p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+          <span className="text-xs text-green-500 font-medium truncate max-w-[220px]">
+            {event.ticket_template_path?.split('/').pop()}
+          </span>
+          <form method="POST" action={`/events/${event.uuid}/ticket-template`} className="inline">
+            <input type="hidden" name="_method" value="DELETE" />
+            <input type="hidden" name="_token" value={csrf} />
+            <button type="submit"
+              className="px-3 py-1.5 rounded-lg border border-red-500/20 text-xs font-medium text-red-400 hover:bg-red-500/10 transition-all">
+              Remove
+            </button>
+          </form>
+        </div>
+      )}
+
+      {event.ticket_template_path && (
+        <div className="space-y-3">
+          <QRPositionPicker
+            pdfUrl={`/storage/${event.ticket_template_path}`}
+            qrX={qlX}
+            qrY={qlY}
+            qrSize={qlSize}
+            onChange={({ qr_x, qr_y, qr_size }) => {
+              if (qr_x !== undefined) setQlX(qr_x);
+              if (qr_y !== undefined) setQlY(qr_y);
+              if (qr_size !== undefined) setQlSize(qr_size);
+            }}
+          />
+          <form method="POST" action={`/events/${event.uuid}/qr-position`} className="flex justify-end">
+            <input type="hidden" name="_token" value={csrf} />
+            <input type="hidden" name="qr_x" value={qlX} />
+            <input type="hidden" name="qr_y" value={qlY} />
+            <input type="hidden" name="qr_size" value={qlSize} />
+            <button type="submit" className="btn-primary h-9 px-4 text-xs">
+              Save Position
+            </button>
+          </form>
+        </div>
+      )}
+
+      <form method="POST" action={`/events/${event.uuid}/ticket-template`} encType="multipart/form-data" onSubmit={onSubmit} className="space-y-3">
+        <input type="hidden" name="_token" value={csrf} />
+        <input type="hidden" name="qr_x" value={qlX} />
+        <input type="hidden" name="qr_y" value={qlY} />
+        <input type="hidden" name="qr_size" value={qlSize} />
+
+        <div className="flex items-center gap-3">
+          <input type="file" name="template" accept="application/pdf"
+            className="flex-1 text-xs text-neutral-500 file:mr-3 file:rounded-lg file:border-0 file:bg-primary-500/10 file:px-4 file:py-2 file:text-xs file:font-medium file:text-primary-500 hover:file:bg-primary-500/20 cursor-pointer" />
+          <button type="submit" className="btn-primary h-9 px-4 text-sm flex-shrink-0">
+            Upload
+          </button>
+        </div>
+      </form>
+    </motion.div>
+  );
+}
 
 const statusConfig = {
   published: { label: 'Published', classes: 'bg-green-500/10 text-green-400 border-green-500/20' },
@@ -203,16 +292,18 @@ export default function Show({ event }) {
                     }`}
                   />
                 </div>
-              )}
+                )}
             </motion.div>
 
+            <TicketTemplateCard event={event} />
+
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15 }}
-              className="glass-card p-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                className="glass-card p-6"
             >
-              <h2 className="text-xs font-semibold text-neutral-500 dark:text-dark-text-secondary uppercase tracking-wider mb-4">Details</h2>
+                <h2 className="text-xs font-semibold text-neutral-500 dark:text-dark-text-secondary uppercase tracking-wider mb-4">Details</h2>
               <div className="space-y-1">
                 <DetailRow icon="📅" label="Start Date" value={`${formatDate(event.start_date)} at ${formatTime(event.start_date)}`} />
                 <DetailRow icon="⏰" label="End Date" value={`${formatDate(event.end_date)} at ${formatTime(event.end_date)}`} />

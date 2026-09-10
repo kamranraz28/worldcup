@@ -1,5 +1,7 @@
 import { Link } from '@inertiajs/react';
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import QRPositionPicker from '@/Components/Events/QRPositionPicker';
 
 const eventTypes = [
   { value: 'live', label: 'Live', icon: '📍' },
@@ -10,11 +12,39 @@ const eventTypes = [
 export default function EventForm({ form, event, isEdit }) {
   const { data, setData, errors, processing } = form;
 
+  const [qrX, setQrX] = useState(event?.qr_x ?? '');
+  const [qrY, setQrY] = useState(event?.qr_y ?? '');
+  const [qrSize, setQrSize] = useState(event?.qr_size ?? 40);
+
   const handleBanner = (e) => { const file = e.target.files[0]; if (!file) return; setData('banner_image', file); };
+
+  const handleTemplate = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setData('ticket_template', file);
+    // Reset QR position when a new template is uploaded
+    setQrX('');
+    setQrY('');
+    setQrSize(40);
+    setData('qr_x', '');
+    setData('qr_y', '');
+    setData('qr_size', 40);
+  };
 
   const bannerPreview = data.banner_image
     ? (typeof data.banner_image === 'string' ? `/storage/${data.banner_image}` : URL.createObjectURL(data.banner_image))
     : null;
+
+  // PDF preview URL: blob URL for new upload, or storage URL for existing template
+  const templatePdfUrl = useMemo(() => {
+    if (!isEdit && data.ticket_template) {
+      return URL.createObjectURL(data.ticket_template);
+    }
+    if (isEdit && event?.ticket_template_path) {
+      return `/storage/${event.ticket_template_path}`;
+    }
+    return null;
+  }, [!isEdit ? data.ticket_template : null, isEdit ? event?.ticket_template_path : null]);
 
   const sectionClass = "glass-card-premium p-6 space-y-6";
   const fieldClass = "w-full input-field";
@@ -159,6 +189,52 @@ export default function EventForm({ form, event, isEdit }) {
               <input type="file" accept="image/*" onChange={handleBanner} className="hidden" />
             </label>
             {errors.banner_image && <p className="text-xs text-red-400">{errors.banner_image}</p>}
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className={sectionClass}>
+            <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Ticket Template (PDF)</h2>
+            <p className="text-xs text-neutral-500 dark:text-dark-text-secondary">
+              Upload a designed ticket PDF. The QR code will be stamped at the position below. Leave blank to use the default template.
+            </p>
+
+            {!isEdit && data.ticket_template && (
+              <div className="flex items-center justify-between p-3 rounded-xl bg-primary-500/10 border border-primary-500/20">
+                <span className="text-xs text-primary-500 font-medium truncate max-w-[220px]">
+                  {data.ticket_template?.name}
+                </span>
+                <button type="button" onClick={() => setData('ticket_template', null)}
+                  className="px-3 py-1.5 rounded-lg border border-red-500/20 text-xs font-medium text-red-400 hover:bg-red-500/10 transition-all">
+                  Remove
+                </button>
+              </div>
+            )}
+
+            {isEdit && event?.ticket_template_path && (
+              <div className="flex items-center justify-between p-3 rounded-xl bg-green-500/10 border border-green-500/20">
+                <span className="text-xs text-green-500 font-medium truncate max-w-[220px]">
+                  {event.ticket_template_path?.split('/').pop()}
+                </span>
+              </div>
+            )}
+
+            <div className="space-y-3">
+              <label className="flex items-center gap-3">
+                <input type="file" accept="application/pdf" onChange={handleTemplate}
+                  className="flex-1 text-xs text-neutral-500 file:mr-3 file:rounded-lg file:border-0 file:bg-primary-500/10 file:px-4 file:py-2 file:text-xs file:font-medium file:text-primary-500 hover:file:bg-primary-500/20 cursor-pointer" />
+              </label>
+
+              <QRPositionPicker
+                pdfUrl={templatePdfUrl}
+                qrX={qrX}
+                qrY={qrY}
+                qrSize={qrSize}
+                onChange={({ qr_x, qr_y, qr_size }) => {
+                  if (qr_x !== undefined) { setQrX(qr_x); setData('qr_x', qr_x); }
+                  if (qr_y !== undefined) { setQrY(qr_y); setData('qr_y', qr_y); }
+                  if (qr_size !== undefined) { setQrSize(qr_size); setData('qr_size', qr_size); }
+                }}
+              />
+            </div>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className={sectionClass}>

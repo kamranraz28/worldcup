@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Ticket;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
+use chillerlan\QRCode\Output\QRGdImagePNG;
 use chillerlan\QRCode\Output\QRMarkupSVG;
 
 class QrCodeService
@@ -19,6 +20,25 @@ class QrCodeService
         ]);
 
         return new QRCode($options);
+    }
+
+    private function createPngQRCode(int $scale = 8): QRCode
+    {
+        $options = new QROptions([
+            'outputInterface' => QRGdImagePNG::class,
+            'outputBase64' => false,
+            'scale' => $scale,
+            'imageTransparent' => false,
+            'drawLightModules' => false,
+            'quietzoneSize' => 2,
+        ]);
+
+        return new QRCode($options);
+    }
+
+    public function generatePngBinary(Ticket $ticket): string
+    {
+        return $this->createPngQRCode()->render($ticket->qr_code);
     }
 
     public function getMatrix(Ticket $ticket): array

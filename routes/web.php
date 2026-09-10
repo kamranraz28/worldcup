@@ -83,6 +83,9 @@ Route::middleware(['auth', 'verified', 'is_active'])->group(function () {
     Route::post('events/{uuid}/gallery', [EventController::class, 'uploadGallery'])->name('events.gallery.upload');
     Route::delete('events/{uuid}/gallery/{galleryId}', [EventController::class, 'deleteGalleryImage'])->name('events.gallery.destroy');
     Route::put('events/{uuid}/gallery/reorder', [EventController::class, 'reorderGallery'])->name('events.gallery.reorder');
+    Route::post('events/{uuid}/ticket-template', [EventController::class, 'uploadTicketTemplate'])->name('events.ticket-template.upload');
+    Route::delete('events/{uuid}/ticket-template', [EventController::class, 'deleteTicketTemplate'])->name('events.ticket-template.destroy');
+    Route::post('events/{uuid}/qr-position', [EventController::class, 'updateQrPosition'])->name('events.qr-position.update');
 
     Route::resource('customers', CustomerController::class)->parameters(['customers' => 'uuid']);
     Route::post('customers/{uuid}/blacklist', [CustomerController::class, 'blacklist'])->name('customers.blacklist');

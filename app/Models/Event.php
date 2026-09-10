@@ -27,6 +27,10 @@ class Event extends Model
         'end_date',
         'registration_deadline',
         'banner_image',
+        'ticket_template_path',
+        'qr_x',
+        'qr_y',
+        'qr_size',
         'status',
         'requires_verification',
         'metadata',
@@ -49,6 +53,9 @@ class Event extends Model
             'end_date' => 'datetime',
             'registration_deadline' => 'datetime',
             'requires_verification' => 'boolean',
+            'qr_x' => 'decimal:2',
+            'qr_y' => 'decimal:2',
+            'qr_size' => 'decimal:2',
             'metadata' => 'json',
         ];
     }

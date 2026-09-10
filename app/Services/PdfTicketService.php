@@ -4,10 +4,31 @@ namespace App\Services;
 
 use App\Models\Ticket;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
+use setasign\Fpdi\Fpdi;
 
 class PdfTicketService
 {
     public function generate(Ticket $ticket): string
+    {
+        $ticket->loadMissing([
+            'event:id,title,start_date,end_date,venue_name,venue_address,event_type,banner_image,ticket_template_path,qr_x,qr_y,qr_size',
+            'customer:id,first_name,last_name,email,phone,nationality',
+            'session:id,title,start_time,end_time,location',
+        ]);
+
+        if ($ticket->event->ticket_template_path) {
+            try {
+                return $this->generateFromTemplate($ticket);
+            } catch (\Throwable $e) {
+                report($e);
+            }
+        }
+
+        return $this->generateDefault($ticket);
+    }
+
+    public function generateDefault(Ticket $ticket): string
     {
         $ticket->loadMissing([
             'event:id,title,start_date,end_date,venue_name,venue_address,event_type,banner_image',
@@ -30,6 +51,44 @@ class PdfTicketService
         ]);
 
         return $pdf->output();
+    }
+
+    public function generateFromTemplate(Ticket $ticket): string
+    {
+        $event = $ticket->event;
+        $templatePath = storage_path('app/public/' . $event->ticket_template_path);
+
+        if (!is_file($templatePath)) {
+            throw new \RuntimeException('Ticket template file not found.');
+        }
+
+        $pdf = new Fpdi('P', 'mm', 'A4');
+        $pageCount = $pdf->setSourceFile($templatePath);
+        $templateId = $pdf->importPage(1);
+        $size = $pdf->getTemplateSize($templateId);
+
+        $pdf->AddPage($size['orientation'], [$size['width'], $size['height']]);
+        $pdf->useTemplate($templateId, 0, 0, $size['width'], $size['height']);
+
+        // Stamp QR code into the reserved area
+        $sizeMm = (float) ($event->qr_size ?: 40);
+
+        $pageWidthMm = $size['orientation'] === 'P' ? $size['width'] : $size['height'];
+        $pageHeightMm = $size['orientation'] === 'P' ? $size['height'] : $size['width'];
+
+        // Default placement: top-right if coordinates not provided
+        $x = $event->qr_x !== null ? (float) $event->qr_x : max(5, min($pageWidthMm - $sizeMm - 5, 25));
+        $y = $event->qr_y !== null ? (float) $event->qr_y : max(5, min($pageHeightMm - $sizeMm - 5, 25));
+
+        $pngBinary = app(QrCodeService::class)->generatePngBinary($ticket);
+        $tmpFile = tempnam(sys_get_temp_dir(), 'qr') . '.png';
+        file_put_contents($tmpFile, $pngBinary);
+
+        $pdf->Image($tmpFile, $x, $y, $sizeMm, $sizeMm, 'PNG');
+
+        @unlink($tmpFile);
+
+        return $pdf->Output('S');
     }
 
     public function saveToFile(Ticket $ticket): string
