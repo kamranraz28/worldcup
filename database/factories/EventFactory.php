@@ -14,14 +14,14 @@ class EventFactory extends Factory
     public function definition(): array
     {
         $title = fake()->randomElement([
-            'FIFA World Cup 2026 Final Viewing Party',
+            'Championship Final Viewing Party',
             'Semi-Final Live Screening',
             'Quarter-Final Fan Zone',
-            'Toffee Champions Trophy Tour',
-            'World Cup Opening Ceremony Watch Party',
+            'Champions Trophy Tour',
+            'Championship Opening Ceremony Watch Party',
             'Football Legends Meet & Greet',
-            'Toffee Fan Park Experience',
-            'World Cup Trophy Photo Opportunity',
+            'Fan Park Experience',
+            'Championship Trophy Photo Opportunity',
         ]) . ' ' . fake()->year();
 
         return [
@@ -31,7 +31,7 @@ class EventFactory extends Factory
             'description' => fake()->paragraphs(3, true),
             'event_type' => fake()->randomElement(['live', 'virtual', 'hybrid']),
             'venue_name' => fake()->randomElement([
-                'Toffee Stadium', 'City Arena', 'Grand Convention Center',
+                'Central Stadium', 'City Arena', 'Grand Convention Center',
                 'Sports Complex', 'Beach Front Arena',
             ]),
             'venue_address' => fake()->address(),

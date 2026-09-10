@@ -10,7 +10,7 @@ export default function PrintTicket({ ticket, qrSvg }) {
       <div className="max-w-3xl mx-auto py-8">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="glass-card overflow-hidden">
           <div className="text-center p-8 bg-gradient-to-b from-primary-500/10 to-transparent border-b border-neutral-100 dark:border-white/[0.06]">
-            <p className="text-xs text-primary-500 font-semibold tracking-widest uppercase mb-2">Toffee — FIFA World Cup 2026</p>
+            <p className="text-xs text-primary-500 font-semibold tracking-widest uppercase mb-2">Event Management System</p>
             <h1 className="text-3xl font-extrabold text-neutral-900 dark:text-white">{ticket.event?.title || 'Event Ticket'}</h1>
             <div className="inline-flex items-center gap-2 mt-3 px-3 py-1 rounded-full border border-green-500/30 bg-green-500/10">
               <span className="w-2 h-2 rounded-full bg-green-400" />
@@ -45,8 +45,8 @@ export default function PrintTicket({ ticket, qrSvg }) {
           </div>
 
           <div className="text-center p-6 border-t border-neutral-100 dark:border-white/[0.06] bg-neutral-50 dark:bg-white/[0.01]">
-            <p className="text-sm font-bold text-primary-500">TOFFEE</p>
-            <p className="text-xs text-neutral-500 mt-1">Official Partner — FIFA World Cup 2026</p>
+            <img src="/images/logo.png" alt="Synergy Interface Ltd" className="h-10 w-auto mx-auto" />
+            <p className="text-xs text-neutral-500 mt-1">Powered by Synergy Interface Ltd.</p>
             <p className="text-xs text-neutral-400 mt-1">Present this ticket with QR code at the venue for entry.</p>
           </div>
         </motion.div>

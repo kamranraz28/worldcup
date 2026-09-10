@@ -127,7 +127,7 @@
 
     .glass-card-premium::before {
         content: '';
-        @apply absolute inset-0 opacity-0 transition-opacity duration-500;
+        @apply absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500;
         background: linear-gradient(135deg, rgba(227,6,19,0.03) 0%, transparent 50%);
     }
 

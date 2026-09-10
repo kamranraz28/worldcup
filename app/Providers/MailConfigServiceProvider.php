@@ -30,8 +30,8 @@ class MailConfigServiceProvider extends ServiceProvider
                 'mail.mailers.smtp.username' => $fetch('mail_username'),
                 'mail.mailers.smtp.password' => $fetch('mail_password'),
                 'mail.mailers.smtp.encryption' => $fetch('mail_encryption', 'tls') ?: null,
-                'mail.from.address' => $fetch('mail_from_address', 'noreply@toffee.com'),
-                'mail.from.name' => $fetch('mail_from_name', 'Toffee World Cup'),
+                'mail.from.address' => $fetch('mail_from_address', 'noreply@example.com'),
+                'mail.from.name' => $fetch('mail_from_name', 'Event Management System'),
             ]);
         } catch (\Exception $e) {
             return;

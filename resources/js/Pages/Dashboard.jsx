@@ -76,7 +76,7 @@ export default function Dashboard({ stats, chartData, recentActivity, upcomingEv
                                     className="text-2xl">👋</motion.span>
                             </div>
                             <p className="text-sm text-neutral-500 dark:text-dark-text-secondary">
-                                {dateStr} &middot; Welcome to the Toffee World Cup HQ
+                                {dateStr} &middot; Welcome to the Event Management System
                             </p>
                         </div>
 

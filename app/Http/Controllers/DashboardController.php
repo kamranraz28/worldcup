@@ -251,7 +251,7 @@ class DashboardController extends Controller
 
         if (empty($activities)) {
             $activities = [
-                ['type' => 'system', 'action' => 'started', 'subject' => 'Platform', 'detail' => 'Toffee World Cup 2026 platform is live', 'time' => 'just now', 'icon' => 'system'],
+                ['type' => 'system', 'action' => 'started', 'subject' => 'Platform', 'detail' => 'Event Management System platform is live', 'time' => 'just now', 'icon' => 'system'],
             ];
         }
 

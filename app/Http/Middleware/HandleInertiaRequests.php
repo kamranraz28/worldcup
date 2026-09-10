@@ -21,11 +21,14 @@ class HandleInertiaRequests extends Middleware
                     'permissions' => $request->user()->role?->permissions?->pluck('name') ?? [],
                 ] : null,
             ],
-            'flash' => [
-                'success' => fn () => $request->session()->get('success'),
-                'error' => fn () => $request->session()->get('error'),
-                'status' => fn () => $request->session()->get('status'),
-            ],
+            'flash' => fn () => array_merge(
+                $request->session()->get('flash', []),
+                array_filter([
+                    'success' => $request->session()->get('success'),
+                    'error' => $request->session()->get('error'),
+                    'status' => $request->session()->get('status'),
+                ]),
+            ),
         ]);
     }
 }

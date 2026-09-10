@@ -2,8 +2,15 @@ import { Link, usePage } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import AppLayout from '@/Layouts/AppLayout';
 
-export default function Dashboard({ stats, customer, events }) {
+export default function Dashboard({ stats, customer, tickets }) {
     const { auth } = usePage().props;
+
+    const statusColor = (status) =>
+        status === 'confirmed' ? 'text-green-400'
+        : status === 'pending_approval' ? 'text-amber-400'
+        : status === 'redeemed' ? 'text-blue-400'
+        : status === 'rejected' || status === 'cancelled' ? 'text-red-400'
+        : 'text-neutral-400';
 
     return (
         <AppLayout>
@@ -46,42 +53,50 @@ export default function Dashboard({ stats, customer, events }) {
                     ))}
                 </div>
 
-
-
-                {events?.length > 0 && (
-                    <div>
-                        <div className="flex items-center justify-between mt-8 mb-3">
-                            <h2 className="text-lg font-bold text-neutral-900 dark:text-white">Available Events</h2>
-                            <Link href="/browse" className="text-sm font-medium text-primary-500 hover:text-primary-400 transition-colors">
-                                View all →
-                            </Link>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {events.map((ev, i) => (
-                                <motion.div key={ev.uuid} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
-                                    <Link href={`/customer/events/${ev.uuid}/register`}
-                                        className="glass-card p-4 block hover:border-primary-500/30 transition-all active:scale-[0.98]"
+                <div>
+                    <div className="flex items-center justify-between mt-8 mb-3">
+                        <h2 className="text-lg font-bold text-neutral-900 dark:text-white">My Bookings</h2>
+                        <Link href={route('tickets.my')} className="text-sm font-medium text-primary-500 hover:text-primary-400 transition-colors">
+                            My Tickets →
+                        </Link>
+                    </div>
+                    {tickets?.data?.length > 0 ? (
+                        <div className="space-y-2">
+                            {tickets.data.map((t, i) => (
+                                <motion.div key={t.uuid} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
+                                    <Link href={route('tickets.show', t.uuid)}
+                                        className="glass-card p-4 flex items-center justify-between gap-4 hover:border-primary-500/30 transition-all active:scale-[0.99] block"
                                     >
-                                        <div className="flex items-center gap-3 mb-2">
+                                        <div className="flex items-center gap-3 min-w-0">
                                             <div className="w-10 h-10 rounded-xl bg-primary-500/10 flex items-center justify-center text-lg flex-shrink-0">
-                                                {ev.event_type === 'virtual' ? '🖥' : ev.event_type === 'physical' ? '📍' : '🏟'}
+                                                🎟
                                             </div>
                                             <div className="min-w-0">
-                                                <h3 className="text-sm font-semibold text-neutral-900 dark:text-white truncate">{ev.title}</h3>
-                                                <p className="text-xs text-dark-text-secondary">{ev.venue_name || 'Online'}</p>
+                                                <h3 className="text-sm font-semibold text-neutral-900 dark:text-white truncate">{t.event?.title || 'Event'}</h3>
+                                                <p className="text-xs text-dark-text-secondary">
+                                                    {t.event?.start_date
+                                                        ? new Date(t.event.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                                                        : 'Date TBD'}
+                                                    {' · '}{t.ticket_type?.toUpperCase()}
+                                                </p>
                                             </div>
                                         </div>
-                                        <p className="text-xs text-dark-text-secondary">
-                                            {new Date(ev.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                        </p>
+                                        <span className={`text-xs font-semibold uppercase tracking-wider flex-shrink-0 ${statusColor(t.status)}`}>
+                                            {t.status === 'pending_approval' ? 'Pending' : t.status === 'redeemed' ? 'Used' : t.status}
+                                        </span>
                                     </Link>
                                 </motion.div>
                             ))}
                         </div>
-                    </div>
-                )}
-
-
+                    ) : (
+                        <div className="glass-card p-8 text-center">
+                            <p className="text-sm text-neutral-500 dark:text-dark-text-secondary">You haven't booked any events yet.</p>
+                            <Link href={route('customer.events')} className="btn-primary h-9 px-5 text-sm inline-flex items-center mt-4">
+                                Browse Events
+                            </Link>
+                        </div>
+                    )}
+                </div>
             </div>
         </AppLayout>
     );

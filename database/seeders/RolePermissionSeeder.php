@@ -13,8 +13,8 @@ class RolePermissionSeeder extends Seeder
         $roles = [
             ['name' => 'super-admin', 'display_name' => 'Super Admin', 'description' => 'Full system access', 'is_system' => true],
             ['name' => 'admin', 'display_name' => 'Admin', 'description' => 'Administrative access', 'is_system' => true],
-            ['name' => 'checkin-staff', 'display_name' => 'Scanning Staff', 'description' => 'Scan and verify tickets at venue', 'is_system' => false],
-            ['name' => 'customer', 'display_name' => 'Customer', 'description' => 'Self-service account', 'is_system' => true],
+            ['name' => 'checkin-staff', 'display_name' => 'Scanner', 'description' => 'Scan and verify tickets at venue', 'is_system' => false],
+            ['name' => 'customer', 'display_name' => 'Guest / Consumer', 'description' => 'Browse events, book tickets and get their ticket', 'is_system' => true],
         ];
 
         $moduleActions = [

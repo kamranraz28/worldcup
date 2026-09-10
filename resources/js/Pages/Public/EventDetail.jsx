@@ -20,14 +20,8 @@ function PublicLayout({ children }) {
 
             <nav className="relative z-10 flex items-center justify-between px-6 py-5 max-w-7xl mx-auto">
                 <Link href="/" className="flex items-center gap-2.5 group">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center shadow-lg shadow-primary-500/25 group-hover:shadow-xl group-hover:shadow-primary-500/35 transition-all duration-300">
-                        <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                        </svg>
-                    </div>
                     <div>
-                        <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">TOFFEE</span>
-                        <span className="text-[9px] font-semibold tracking-widest uppercase text-primary-400/80 bg-primary-500/15 px-1.5 py-0.5 rounded ml-2">WC 2026</span>
+                        <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">EVENT MANAGEMENT SYSTEM</span>
                     </div>
                 </Link>
                 <div className="flex items-center gap-3">

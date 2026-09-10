@@ -70,7 +70,7 @@ export default function Scanner({ auth, events, stats, activeEvent, attendance, 
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">QR Scanner</h1>
-            <p className="text-sm text-neutral-500 dark:text-dark-text-secondary mt-1">Scan tickets for entry — FIFA World Cup 2026</p>
+            <p className="text-sm text-neutral-500 dark:text-dark-text-secondary mt-1">Scan tickets for entry</p>
           </div>
           <Link href="/check-in/history" className="btn-secondary h-10 px-5 text-sm">History</Link>
         </motion.div>

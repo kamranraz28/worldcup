@@ -9,26 +9,26 @@ class EventObserver
 {
     public function created(Event $event): void
     {
-        Cache::tags(['events'])->flush();
+        Cache::flush();
     }
 
     public function updated(Event $event): void
     {
-        Cache::tags(['events'])->flush();
+        Cache::flush();
     }
 
     public function deleted(Event $event): void
     {
-        Cache::tags(['events'])->flush();
+        Cache::flush();
     }
 
     public function restored(Event $event): void
     {
-        Cache::tags(['events'])->flush();
+        Cache::flush();
     }
 
     public function forceDeleted(Event $event): void
     {
-        Cache::tags(['events'])->flush();
+        Cache::flush();
     }
 }

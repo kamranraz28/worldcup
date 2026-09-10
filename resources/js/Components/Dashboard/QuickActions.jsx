@@ -10,13 +10,6 @@ const actions = [
         bg: 'bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400',
     },
     {
-        label: 'New Campaign',
-        href: '/campaigns/create',
-        icon: 'M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z',
-        color: 'from-amber-500 to-amber-600',
-        bg: 'bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400',
-    },
-    {
         label: 'Verify Customer',
         href: '/verifications/pending',
         icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',

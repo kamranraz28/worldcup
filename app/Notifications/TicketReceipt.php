@@ -40,6 +40,6 @@ class TicketReceipt extends Notification
             ->line('📅 **Date:** ' . now()->format('F j, Y'))
             ->line('')
             ->line('Thank you for your purchase!')
-            ->salutation('— The Toffee Team');
+            ->salutation('— Event Management System Team');
     }
 }

@@ -14,13 +14,13 @@ class CampaignFactory extends Factory
     public function definition(): array
     {
         $title = fake()->randomElement([
-            'World Cup Loyalty Rewards',
+            'Loyalty Rewards',
             'Refer a Friend – Win Tickets',
             'Match Predictor Challenge',
             'Ultimate Fan Contest',
             'Photo of the Day Competition',
             'Trivia Championship',
-            'Toffee Points Booster',
+            'Points Booster',
             'Early Bird Special',
         ]);
 

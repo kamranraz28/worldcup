@@ -62,6 +62,24 @@ class CustomerPortalController extends Controller
             ->whereNotIn('status', ['cancelled', 'rejected'])
             ->pluck('event_id');
 
+        return Inertia::render('Customer/Dashboard', [
+            'tickets' => $tickets,
+            'verifications' => $verifications,
+            'stats' => $stats,
+            'customer' => $customer,
+        ]);
+    }
+
+    public function events(Request $request)
+    {
+        $user = $request->user();
+        $customer = $user->customer;
+
+        $registeredEventIds = Ticket::where('user_id', $user->id)
+            ->orWhere(fn ($q) => $customer ? $q->where('customer_id', $customer->id) : $q)
+            ->whereNotIn('status', ['cancelled', 'rejected'])
+            ->pluck('event_id');
+
         $events = Event::where('status', 'published')
             ->where(function ($q) {
                 $q->where('end_date', '>=', now())
@@ -69,13 +87,9 @@ class CustomerPortalController extends Controller
             })
             ->whereNotIn('id', $registeredEventIds)
             ->orderBy('start_date')
-            ->get(['id', 'uuid', 'title', 'start_date', 'end_date', 'venue_name', 'event_type', 'banner_image']);
+            ->get(['id', 'uuid', 'title', 'start_date', 'end_date', 'venue_name', 'event_type', 'banner_image', 'ticket_price', 'max_capacity']);
 
-        return Inertia::render('Customer/Dashboard', [
-            'tickets' => $tickets,
-            'verifications' => $verifications,
-            'stats' => $stats,
-            'customer' => $customer,
+        return Inertia::render('Customer/Events', [
             'events' => $events,
         ]);
     }

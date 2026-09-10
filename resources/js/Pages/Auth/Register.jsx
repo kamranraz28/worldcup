@@ -31,7 +31,7 @@ export default function Register() {
                     Create account
                 </h1>
                 <p className="text-sm text-neutral-500 dark:text-dark-text-secondary mt-1">
-                    Join the Toffee World Cup experience
+                    Join the Event Management System
                 </p>
             </div>
 

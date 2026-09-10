@@ -125,9 +125,10 @@
     </style>
 </head>
 <body>
+    @php($logoBase64 = base64_encode(file_get_contents(public_path('images/logo.png'))))
     <div class="ticket-container">
         <div class="ticket-header">
-            <div class="subtitle">Toffee — FIFA World Cup 2026</div>
+            <div class="subtitle">Event Management System</div>
             <h1>{{ $ticket->event->title ?? 'Event Ticket' }}</h1>
             <span class="status-badge">{{ ucfirst($ticket->status) }}</span>
         </div>
@@ -199,8 +200,8 @@
         </div>
 
         <div class="ticket-footer">
-            <p class="brand">⚽ TOFFEE</p>
-            <p>Official Partner — FIFA World Cup 2026</p>
+            <p><img src="data:image/png;base64,{{ $logoBase64 }}" style="height: 28px;" alt="Synergy Interface Ltd" /></p>
+            <p>Powered by Synergy Interface Ltd.</p>
             <p>This is your official e-ticket. Present the QR code at the venue for entry.</p>
         </div>
     </div>

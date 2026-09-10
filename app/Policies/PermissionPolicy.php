@@ -9,26 +9,26 @@ class PermissionPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->hasPermission('roles.view');
+        return $user->role?->name === 'super-admin';
     }
 
     public function view(User $user, Permission $permission): bool
     {
-        return $user->hasPermission('roles.view');
+        return $user->role?->name === 'super-admin';
     }
 
     public function create(User $user): bool
     {
-        return $user->hasPermission('roles.create');
+        return $user->role?->name === 'super-admin';
     }
 
     public function update(User $user, Permission $permission): bool
     {
-        return $user->hasPermission('roles.edit');
+        return $user->role?->name === 'super-admin';
     }
 
     public function delete(User $user, Permission $permission): bool
     {
-        return $user->hasPermission('roles.delete');
+        return $user->role?->name === 'super-admin';
     }
 }

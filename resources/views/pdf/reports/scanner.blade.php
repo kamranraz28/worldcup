@@ -25,7 +25,7 @@
 <body>
     <div class="header">
         <div>
-            <div class="subtitle">Toffee — FIFA World Cup 2026</div>
+            <div class="subtitle">Event Management System</div>
             <h1>Scanner Report</h1>
         </div>
         <div class="meta">
@@ -64,7 +64,7 @@
     </table>
 
     <div class="footer">
-        <p style="color:#E30613;font-weight:700;font-size:11px;">TOFFEE — Official Partner FIFA World Cup 2026</p>
+        <p style="color:#38bdf8;font-weight:700;font-size:11px;">EVENT MANAGEMENT SYSTEM — Powered by Synergy Interface Ltd.</p>
     </div>
 </body>
 </html>

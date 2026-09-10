@@ -9,21 +9,21 @@ class TicketObserver
 {
     public function created(Ticket $ticket): void
     {
-        Cache::tags(['tickets', "event:{$ticket->event_id}"])->flush();
+        Cache::flush();
     }
 
     public function updated(Ticket $ticket): void
     {
-        Cache::tags(['tickets', "event:{$ticket->event_id}"])->flush();
+        Cache::flush();
     }
 
     public function deleted(Ticket $ticket): void
     {
-        Cache::tags(['tickets', "event:{$ticket->event_id}"])->flush();
+        Cache::flush();
     }
 
     public function forceDeleted(Ticket $ticket): void
     {
-        Cache::tags(['tickets', "event:{$ticket->event_id}"])->flush();
+        Cache::flush();
     }
 }

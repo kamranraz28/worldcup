@@ -21,7 +21,9 @@ export default function Sidebar({ collapsed, onToggle, onMobileClose }) {
     );
 
     const filteredAdmin = adminNavItems.filter(
-        (item) => !item.permission || permissions.includes(item.permission)
+        (item) =>
+            (!item.permission || permissions.includes(item.permission)) &&
+            (!item.superAdminOnly || roleName === 'super-admin')
     );
 
     let sideItems;
@@ -58,13 +60,10 @@ export default function Sidebar({ collapsed, onToggle, onMobileClose }) {
                 {/* Logo */}
                 <div className="flex-shrink-0 h-16 flex items-center px-5 border-b border-neutral-100/60 dark:border-white/[0.04]">
                     <Link href="/dashboard" className="flex items-center gap-2.5 min-w-0 group">
-                        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600
-                            flex items-center justify-center flex-shrink-0 shadow-lg shadow-primary-500/25
-                            group-hover:shadow-xl group-hover:shadow-primary-500/35 transition-all duration-300">
-                            <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                            </svg>
-                        </div>
+                        {!isCustomer && (
+                            <img src="/images/logo.png" alt="Synergy Interface Ltd"
+                                className="h-11 w-auto flex-shrink-0 dark:brightness-0 dark:invert group-hover:scale-105 transition-transform duration-300" />
+                        )}
                         <AnimatePresence mode="wait">
                             {!collapsed && (
                                 <motion.div
@@ -73,14 +72,8 @@ export default function Sidebar({ collapsed, onToggle, onMobileClose }) {
                                     exit={{ opacity: 0 }}
                                     className="flex items-center gap-2 min-w-0"
                                 >
-                                    <span className="text-lg font-extrabold tracking-tight bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-white/80 bg-clip-text text-transparent">
-                                        TOFFEE
-                                    </span>
-                                    <span className="text-[9px] font-semibold tracking-widest uppercase
-                                        text-primary-500 dark:text-primary-400
-                                        bg-primary-500/10 dark:bg-primary-500/15
-                                        px-1.5 py-0.5 rounded">
-                                        WC 2026
+                                    <span className="text-sm font-extrabold tracking-tight bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-white/80 bg-clip-text text-transparent truncate">
+                                        Event Management System
                                     </span>
                                 </motion.div>
                             )}

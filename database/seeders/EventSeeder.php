@@ -12,9 +12,9 @@ class EventSeeder extends Seeder
     {
         $events = [
             [
-                'title' => 'FIFA World Cup 2026 Opening Ceremony',
+                'title' => 'Grand Opening Ceremony',
                 'event_type' => 'live',
-                'venue_name' => 'Toffee Stadium',
+                'venue_name' => 'Central Stadium',
                 'venue_address' => '123 Arena Boulevard, New York, NY',
                 'max_capacity' => 50000,
                 'ticket_price' => 299.99,
@@ -30,7 +30,7 @@ class EventSeeder extends Seeder
             [
                 'title' => 'VIP Networking Gala',
                 'event_type' => 'live',
-                'venue_name' => 'Grand Ballroom, Toffee Tower',
+                'venue_name' => 'Grand Ballroom, City Tower',
                 'venue_address' => '456 Luxury Avenue, New York, NY',
                 'max_capacity' => 500,
                 'ticket_price' => 999.99,
@@ -43,7 +43,7 @@ class EventSeeder extends Seeder
             [
                 'title' => 'Live Watch Party: Semi-Finals',
                 'event_type' => 'live',
-                'venue_name' => 'Toffee Arena',
+                'venue_name' => 'City Arena',
                 'venue_address' => '789 Fan Zone Road, New York, NY',
                 'max_capacity' => 15000,
                 'ticket_price' => 49.99,
@@ -67,9 +67,9 @@ class EventSeeder extends Seeder
                 'requires_verification' => false,
             ],
             [
-                'title' => 'Toffee Championship Finals',
+                'title' => 'Championship Finals',
                 'event_type' => 'live',
-                'venue_name' => 'Toffee National Stadium',
+                'venue_name' => 'National Stadium',
                 'venue_address' => '100 Champions Way, New York, NY',
                 'max_capacity' => 75000,
                 'ticket_price' => 599.99,
@@ -82,7 +82,7 @@ class EventSeeder extends Seeder
             [
                 'title' => 'Hybrid Workshop: Football Analytics',
                 'event_type' => 'hybrid',
-                'venue_name' => 'Toffee Innovation Lab',
+                'venue_name' => 'Innovation Lab',
                 'venue_address' => '321 Tech Park, New York, NY',
                 'max_capacity' => 200,
                 'ticket_price' => 149.99,
@@ -95,7 +95,7 @@ class EventSeeder extends Seeder
             [
                 'title' => 'Past Tournament Highlights',
                 'event_type' => 'live',
-                'venue_name' => 'Toffee Cinema',
+                'venue_name' => 'City Cinema',
                 'venue_address' => '555 Replay Street, New York, NY',
                 'max_capacity' => 300,
                 'ticket_price' => 0,
@@ -108,7 +108,7 @@ class EventSeeder extends Seeder
             [
                 'title' => 'Cancelled: Beach Football Festival',
                 'event_type' => 'live',
-                'venue_name' => 'Toffee Beach Arena',
+                'venue_name' => 'Beach Arena',
                 'venue_address' => '777 Ocean Drive, New York, NY',
                 'max_capacity' => 5000,
                 'ticket_price' => 79.99,

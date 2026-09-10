@@ -45,16 +45,8 @@ export default function Welcome() {
                 {/* Nav */}
                 <nav className="relative z-10 flex items-center justify-between px-6 py-5 max-w-7xl mx-auto">
                     <Link href="/" className="flex items-center gap-2.5 group">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600
-                            flex items-center justify-center shadow-lg shadow-primary-500/25
-                            group-hover:shadow-xl group-hover:shadow-primary-500/35 transition-all duration-300">
-                            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                            </svg>
-                        </div>
                         <div>
-                            <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">TOFFEE</span>
-                            <span className="text-[9px] font-semibold tracking-widest uppercase text-primary-400/80 bg-primary-500/15 px-1.5 py-0.5 rounded ml-2">WC 2026</span>
+                            <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">EVENT MANAGEMENT SYSTEM</span>
                         </div>
                     </Link>
                     <div className="flex items-center gap-3">
@@ -80,18 +72,18 @@ export default function Welcome() {
                         <motion.div variants={fadeUp} custom={0}
                             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06] mb-8">
                             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                            <span className="text-xs font-medium text-white/50 tracking-wide uppercase">FIFA World Cup 2026</span>
+                            <span className="text-xs font-medium text-white/50 tracking-wide uppercase">Event Management System</span>
                         </motion.div>
 
                         <motion.h1 variants={fadeUp} custom={1}
                             className="text-5xl sm:text-7xl lg:text-8xl font-extrabold tracking-tight text-white leading-none mb-6">
-                            The Stadium<br />
-                            <span className="text-gradient-primary">Is Calling</span>
+                            Every Event.<br />
+                            <span className="text-gradient-primary">One Platform.</span>
                         </motion.h1>
 
                         <motion.p variants={fadeUp} custom={2}
                             className="text-lg sm:text-xl text-white/30 max-w-2xl mx-auto mb-12 leading-relaxed">
-                            Toffee presents the official FIFA World Cup 2026 experience.
+                            Register, book your ticket and get in with a scan.
                             Secure your seat. Feel the energy.
                         </motion.p>
 
@@ -120,7 +112,7 @@ export default function Welcome() {
                         className="grid grid-cols-3 gap-8 sm:gap-20 mt-24">
                         {[
                             { value: '50+', label: 'Events' },
-                            { value: '10,000+', label: 'Fans' },
+                            { value: '10,000+', label: 'Guests' },
                             { value: '4,500+', label: 'Seats' },
                         ].map((stat) => (
                             <div key={stat.label} className="text-center">

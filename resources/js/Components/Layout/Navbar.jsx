@@ -97,7 +97,7 @@ export default function Navbar({ onMenuToggle, breadcrumbs }) {
                                         <div className="overflow-y-auto max-h-[380px] p-2 space-y-1">
                                             <NotificationItem title="Verification Approved" description="Ahmed Khan's identity verification was approved." time="2 min ago" unread />
                                             <NotificationItem title="Ticket Confirmed" description="Your Semi-Final viewing party ticket is confirmed." time="1 hour ago" unread />
-                                            <NotificationItem title="New Campaign" description="World Cup Loyalty Rewards is now active. Join now!" time="3 hours ago" />
+                                            <NotificationItem title="New Campaign" description="Loyalty Rewards is now active. Join now!" time="3 hours ago" />
                                             <NotificationItem title="Event Reminder" description="Quarter-Final Live Screening starts in 24 hours." time="5 hours ago" />
                                             <NotificationItem title="Check-in Alert" description="842 fans checked in today. Great turnout!" time="8 hours ago" />
                                         </div>

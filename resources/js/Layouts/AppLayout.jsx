@@ -84,7 +84,6 @@ function generateBreadcrumbs(url) {
         customers: 'Customers',
         verifications: 'Verifications',
         tickets: 'Tickets',
-        campaigns: 'Campaigns',
         reports: 'Reports',
         admin: 'Administration',
         users: 'Users',

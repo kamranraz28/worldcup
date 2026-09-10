@@ -19,23 +19,25 @@ Route::resource('users', UserController::class)
 
 Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
 
-Route::resource('roles', RoleController::class)->names([
-    'index' => 'roles.index',
-    'create' => 'roles.create',
-    'store' => 'roles.store',
-    'edit' => 'roles.edit',
-    'update' => 'roles.update',
-    'destroy' => 'roles.destroy',
-]);
+Route::middleware('role:super-admin')->group(function () {
+    Route::resource('roles', RoleController::class)->names([
+        'index' => 'roles.index',
+        'create' => 'roles.create',
+        'store' => 'roles.store',
+        'edit' => 'roles.edit',
+        'update' => 'roles.update',
+        'destroy' => 'roles.destroy',
+    ]);
 
-Route::resource('permissions', PermissionController::class)->names([
-    'index' => 'permissions.index',
-    'create' => 'permissions.create',
-    'store' => 'permissions.store',
-    'edit' => 'permissions.edit',
-    'update' => 'permissions.update',
-    'destroy' => 'permissions.destroy',
-]);
+    Route::resource('permissions', PermissionController::class)->names([
+        'index' => 'permissions.index',
+        'create' => 'permissions.create',
+        'store' => 'permissions.store',
+        'edit' => 'permissions.edit',
+        'update' => 'permissions.update',
+        'destroy' => 'permissions.destroy',
+    ]);
+});
 
 Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
 Route::post('settings/{group}', [SettingsController::class, 'update'])->name('settings.update');

@@ -18,19 +18,12 @@ export default function GuestLayout({ children }) {
                 <div className="w-full max-w-md">
                     <div className="text-center mb-8">
                         <Link href="/" className="inline-flex items-center gap-3 group">
-                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600
-                                flex items-center justify-center shadow-lg shadow-primary-500/25
-                                group-hover:shadow-xl group-hover:shadow-primary-500/35 transition-all duration-300">
-                                <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                                </svg>
-                            </div>
                             <div className="text-left">
                                 <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-primary-500 to-primary-400 bg-clip-text text-transparent block leading-none">
-                                    TOFFEE
+                                    Event Management System
                                 </span>
                                 <span className="text-[9px] font-semibold tracking-widest uppercase text-neutral-400 dark:text-dark-text-secondary">
-                                    FIFA World Cup 2026
+                                    By Synergy Interface Ltd.
                                 </span>
                             </div>
                         </Link>
@@ -41,7 +34,7 @@ export default function GuestLayout({ children }) {
                     </div>
 
                     <p className="text-center text-xs text-neutral-400 dark:text-dark-text-secondary mt-6">
-                        &copy; {new Date().getFullYear()} Toffee. All rights reserved.
+                        &copy; {new Date().getFullYear()} Synergy Interface Ltd. All rights reserved.
                     </p>
                 </div>
             </div>

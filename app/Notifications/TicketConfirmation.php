@@ -45,8 +45,8 @@ class TicketConfirmation extends Notification
             ->line('Please find your e-ticket attached. You can also download it anytime from your dashboard.')
             ->action('View Ticket', url('/tickets/' . $this->ticket->uuid))
             ->line('')
-            ->line('Thank you for choosing Toffee!')
-            ->salutation('— The Toffee Team');
+            ->line('Thank you for choosing Event Management System!')
+            ->salutation('— Event Management System Team');
 
         if ($this->pdfPath) {
             $mail->attach(storage_path('app/public/' . $this->pdfPath), [

@@ -63,6 +63,7 @@ Route::middleware(['auth', 'verified', 'is_active'])->group(function () {
 
     Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('dashboard', [CustomerPortalController::class, 'dashboard'])->name('dashboard');
+        Route::get('events', [CustomerPortalController::class, 'events'])->name('events');
         Route::get('events/{uuid}/register', [CustomerPortalController::class, 'registerForm'])->name('events.register');
         Route::post('events/{uuid}/register', [CustomerPortalController::class, 'register'])->name('events.register.store');
         Route::get('verification', [CustomerPortalController::class, 'verificationForm'])->name('verification');

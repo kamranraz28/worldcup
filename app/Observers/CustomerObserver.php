@@ -9,26 +9,26 @@ class CustomerObserver
 {
     public function created(Customer $customer): void
     {
-        Cache::tags(['customers'])->flush();
+        Cache::flush();
     }
 
     public function updated(Customer $customer): void
     {
-        Cache::tags(['customers'])->flush();
+        Cache::flush();
     }
 
     public function deleted(Customer $customer): void
     {
-        Cache::tags(['customers'])->flush();
+        Cache::flush();
     }
 
     public function restored(Customer $customer): void
     {
-        Cache::tags(['customers'])->flush();
+        Cache::flush();
     }
 
     public function forceDeleted(Customer $customer): void
     {
-        Cache::tags(['customers'])->flush();
+        Cache::flush();
     }
 }

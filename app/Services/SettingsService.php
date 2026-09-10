@@ -118,7 +118,7 @@ class SettingsService
     private function getGeneralFields(): array
     {
         return [
-            'app_name' => ['label' => 'Application Name', 'type' => 'text', 'default' => 'Toffee World Cup 2026', 'description' => 'The name displayed throughout the application'],
+            'app_name' => ['label' => 'Application Name', 'type' => 'text', 'default' => 'Event Management System', 'description' => 'The name displayed throughout the application'],
             'app_url' => ['label' => 'Application URL', 'type' => 'text', 'default' => url('/'), 'description' => 'Base URL of the application'],
             'timezone' => ['label' => 'Timezone', 'type' => 'select', 'default' => 'Asia/Dhaka', 'options' => ['UTC', 'Asia/Dhaka', 'Asia/Dubai', 'Asia/Riyadh', 'America/New_York', 'Europe/London'], 'description' => 'Default timezone for the application'],
             'locale' => ['label' => 'Locale', 'type' => 'select', 'default' => 'en', 'options' => ['en' => 'English', 'ar' => 'Arabic', 'ur' => 'Urdu'], 'description' => 'Default language'],
@@ -132,14 +132,14 @@ class SettingsService
     private function getBrandFields(): array
     {
         return [
-            'primary_color' => ['label' => 'Primary Color', 'type' => 'color', 'default' => '#E30613', 'description' => 'Main brand color (Toffee Red)'],
+            'primary_color' => ['label' => 'Primary Color', 'type' => 'color', 'default' => '#E30613', 'description' => 'Main brand color'],
             'secondary_color' => ['label' => 'Secondary Color', 'type' => 'color', 'default' => '#FFD54F', 'description' => 'Secondary brand color (Gold)'],
             'accent_color' => ['label' => 'Accent Color', 'type' => 'color', 'default' => '#16A34A', 'description' => 'Accent color (Football Green)'],
-            'company_name' => ['label' => 'Company Name', 'type' => 'text', 'default' => 'Toffee', 'description' => 'Your company or organization name'],
+            'company_name' => ['label' => 'Company Name', 'type' => 'text', 'default' => 'Synergy Interface Ltd.', 'description' => 'Your company or organization name'],
             'company_logo' => ['label' => 'Company Logo URL', 'type' => 'text', 'default' => '', 'description' => 'URL or path to your logo image'],
             'favicon' => ['label' => 'Favicon URL', 'type' => 'text', 'default' => '', 'description' => 'URL to favicon image'],
-            'footer_text' => ['label' => 'Footer Text', 'type' => 'text', 'default' => 'Toffee — Official Partner FIFA World Cup 2026', 'description' => 'Text displayed in page footers'],
-            'copyright' => ['label' => 'Copyright', 'type' => 'text', 'default' => '© 2026 Toffee. All rights reserved.', 'description' => 'Copyright notice'],
+            'footer_text' => ['label' => 'Footer Text', 'type' => 'text', 'default' => 'Event Management System — Powered by Synergy Interface Ltd.', 'description' => 'Text displayed in page footers'],
+            'copyright' => ['label' => 'Copyright', 'type' => 'text', 'default' => '© ' . date('Y') . ' Synergy Interface Ltd. All rights reserved.', 'description' => 'Copyright notice'],
         ];
     }
 
@@ -152,8 +152,8 @@ class SettingsService
             'mail_username' => ['label' => 'SMTP Username', 'type' => 'text', 'default' => '', 'description' => 'SMTP authentication username'],
             'mail_password' => ['label' => 'SMTP Password', 'type' => 'password', 'default' => '', 'description' => 'SMTP authentication password'],
             'mail_encryption' => ['label' => 'Encryption', 'type' => 'select', 'default' => 'tls', 'options' => ['tls' => 'TLS', 'ssl' => 'SSL', '' => 'None'], 'description' => 'SMTP encryption protocol'],
-            'mail_from_address' => ['label' => 'From Address', 'type' => 'email', 'default' => 'noreply@toffee.com', 'description' => 'Default sender email address'],
-            'mail_from_name' => ['label' => 'From Name', 'type' => 'text', 'default' => 'Toffee World Cup', 'description' => 'Default sender name'],
+            'mail_from_address' => ['label' => 'From Address', 'type' => 'email', 'default' => 'noreply@example.com', 'description' => 'Default sender email address'],
+            'mail_from_name' => ['label' => 'From Name', 'type' => 'text', 'default' => 'Event Management System', 'description' => 'Default sender name'],
         ];
     }
 
@@ -163,7 +163,7 @@ class SettingsService
             'sms_driver' => ['label' => 'SMS Driver', 'type' => 'select', 'default' => 'nexmo', 'options' => ['nexmo' => 'Vonage/Nexmo', 'twilio' => 'Twilio', 'log' => 'Log'], 'description' => 'SMS service provider'],
             'nexmo_key' => ['label' => 'Vonage API Key', 'type' => 'text', 'default' => '', 'description' => 'Vonage/Nexmo API key'],
             'nexmo_secret' => ['label' => 'Vonage API Secret', 'type' => 'password', 'default' => '', 'description' => 'Vonage/Nexmo API secret'],
-            'nexmo_from' => ['label' => 'SMS From Number', 'type' => 'text', 'default' => 'Toffee', 'description' => 'Sender ID or phone number'],
+            'nexmo_from' => ['label' => 'SMS From Number', 'type' => 'text', 'default' => 'EMS', 'description' => 'Sender ID or phone number'],
             'twilio_sid' => ['label' => 'Twilio SID', 'type' => 'text', 'default' => '', 'description' => 'Twilio Account SID'],
             'twilio_token' => ['label' => 'Twilio Auth Token', 'type' => 'password', 'default' => '', 'description' => 'Twilio authentication token'],
             'twilio_from' => ['label' => 'Twilio From Number', 'type' => 'text', 'default' => '', 'description' => 'Twilio phone number'],
@@ -206,7 +206,7 @@ class SettingsService
             'qr_foreground_color' => ['label' => 'Foreground Color', 'type' => 'color', 'default' => '#E30613', 'description' => 'QR code dot color'],
             'qr_background_color' => ['label' => 'Background Color', 'type' => 'color', 'default' => '#FFFFFF', 'description' => 'QR code background color'],
             'qr_error_correction' => ['label' => 'Error Correction', 'type' => 'select', 'default' => 'M', 'options' => ['L' => 'Low (7%)', 'M' => 'Medium (15%)', 'Q' => 'Quartile (25%)', 'H' => 'High (30%)'], 'description' => 'QR code error correction level'],
-            'qr_include_logo' => ['label' => 'Include Logo', 'type' => 'boolean', 'default' => 'false', 'description' => 'Embed Toffee logo in center of QR code'],
+            'qr_include_logo' => ['label' => 'Include Logo', 'type' => 'boolean', 'default' => 'false', 'description' => 'Embed company logo in center of QR code'],
             'qr_logo_size' => ['label' => 'Logo Size (px)', 'type' => 'number', 'default' => '40', 'description' => 'Size of the embedded logo in pixels'],
             'qr_margin' => ['label' => 'Margin', 'type' => 'number', 'default' => '2', 'description' => 'QR code margin in modules'],
             'qr_format' => ['label' => 'QR Format', 'type' => 'select', 'default' => 'svg', 'options' => ['svg' => 'SVG', 'png' => 'PNG'], 'description' => 'Output format for generated QR codes'],

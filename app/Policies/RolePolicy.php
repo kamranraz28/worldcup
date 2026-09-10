@@ -9,26 +9,22 @@ class RolePolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->hasPermission('roles.view');
+        return $user->role?->name === 'super-admin';
     }
 
     public function view(User $user, Role $role): bool
     {
-        return $user->hasPermission('roles.view');
+        return $user->role?->name === 'super-admin';
     }
 
     public function create(User $user): bool
     {
-        return $user->hasPermission('roles.create');
+        return $user->role?->name === 'super-admin';
     }
 
     public function update(User $user, Role $role): bool
     {
-        if ($role->is_system) {
-            return $user->hasPermission('roles.edit') && $user->role?->name === 'super-admin';
-        }
-
-        return $user->hasPermission('roles.edit');
+        return $user->role?->name === 'super-admin';
     }
 
     public function delete(User $user, Role $role): bool
@@ -41,6 +37,6 @@ class RolePolicy
             return false;
         }
 
-        return $user->hasPermission('roles.delete');
+        return $user->role?->name === 'super-admin';
     }
 }

@@ -51,18 +51,10 @@ export default function MobileMenu({ open, onClose }) {
                     >
                         <div className="flex-shrink-0 h-16 flex items-center justify-between px-5 border-b border-neutral-100 dark:border-white/[0.04]">
                             <Link href="/dashboard" className="flex items-center gap-2.5" onClick={onClose}>
-                                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600
-                                    flex items-center justify-center shadow-lg shadow-primary-500/25">
-                                    <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                                    </svg>
-                                </div>
+                                {!isCustomer && <img src="/images/logo.png" alt="Synergy Interface Ltd" className="h-10 w-auto dark:brightness-0 dark:invert" />}
                                 <div>
                                     <span className="text-lg font-extrabold tracking-tight bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-white/80 bg-clip-text text-transparent">
-                                        TOFFEE
-                                    </span>
-                                    <span className="text-[9px] font-semibold tracking-widest uppercase text-primary-500 bg-primary-500/10 px-1.5 py-0.5 rounded ml-2">
-                                        WC 2026
+                                        Event Management System
                                     </span>
                                 </div>
                             </Link>

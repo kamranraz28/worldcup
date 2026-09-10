@@ -54,11 +54,11 @@ class RoleController extends Controller
             ->with('success', "Role {$role->display_name} created successfully.");
     }
 
-    public function edit(Role $role): Response
+    public function edit(Role $role): Response|RedirectResponse
     {
         if ($role->is_system) {
             return redirect()->route('admin.roles.index')
-                ->with('error', 'System roles cannot be edited.');
+                ->with('flash', ['error' => 'System roles cannot be edited.']);
         }
 
         $permissions = Permission::all()->groupBy('group');
@@ -75,7 +75,7 @@ class RoleController extends Controller
     {
         if ($role->is_system) {
             return redirect()->route('admin.roles.index')
-                ->with('error', 'System roles cannot be edited.');
+                ->with('flash', ['error' => 'System roles cannot be edited.']);
         }
 
         $role->update($request->safe()->only(['name', 'display_name', 'description']));
@@ -92,12 +92,12 @@ class RoleController extends Controller
     {
         if ($role->is_system) {
             return redirect()->route('admin.roles.index')
-                ->with('error', 'System roles cannot be deleted.');
+                ->with('flash', ['error' => 'System roles cannot be deleted.']);
         }
 
         if ($role->users()->count() > 0) {
             return redirect()->route('admin.roles.index')
-                ->with('error', 'Cannot delete role with assigned users.');
+                ->with('flash', ['error' => 'Cannot delete role with assigned users.']);
         }
 
         $role->permissions()->detach();

@@ -15,7 +15,7 @@ class AdminUserSeeder extends Seeder
         $adminRole = Role::where('name', 'admin')->first();
 
         User::firstOrCreate(
-            ['email' => 'superadmin@toffee.com'],
+            ['email' => 'superadmin@synergyinterface.com'],
             [
                 'uuid' => \Illuminate\Support\Str::uuid(),
                 'name' => 'Super Admin',
@@ -27,7 +27,7 @@ class AdminUserSeeder extends Seeder
         );
 
         User::firstOrCreate(
-            ['email' => 'admin@toffee.com'],
+            ['email' => 'admin@synergyinterface.com'],
             [
                 'uuid' => \Illuminate\Support\Str::uuid(),
                 'name' => 'Admin User',
@@ -41,10 +41,10 @@ class AdminUserSeeder extends Seeder
         $checkinStaffRole = Role::where('name', 'checkin-staff')->first();
 
         User::firstOrCreate(
-            ['email' => 'scanner@toffee.com'],
+            ['email' => 'scanner@synergyinterface.com'],
             [
                 'uuid' => \Illuminate\Support\Str::uuid(),
-                'name' => 'Scanning Staff',
+                'name' => 'Scanner',
                 'password' => Hash::make('password'),
                 'role_id' => $checkinStaffRole->id,
                 'is_active' => true,
