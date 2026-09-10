@@ -3,6 +3,7 @@ import { Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import AppLayout from '@/Layouts/AppLayout';
 import ScannerCamera from '@/Components/CheckIn/ScannerCamera';
+import speak from '@/Utils/speak';
 
 export default function Scanner({ auth, events, stats, activeEvent, attendance, scannerBeepEnabled: initialBeep = true }) {
   const [cameraActive, setCameraActive] = useState(true);
@@ -11,6 +12,9 @@ export default function Scanner({ auth, events, stats, activeEvent, attendance, 
   const [scanning, setScanning] = useState(false);
   const [lastResult, setLastResult] = useState(null);
   const [scannerBeepEnabled, setScannerBeepEnabled] = useState(initialBeep);
+  const [voiceEnabled, setVoiceEnabled] = useState(() => {
+    try { return localStorage.getItem('scanner_voice') !== 'off'; } catch (e) { return true; }
+  });
   const scanTimeoutRef = useRef(null);
   const csrfToken = typeof document !== 'undefined' ? document.querySelector('meta[name="csrf-token"]')?.content : '';
 
@@ -27,17 +31,21 @@ export default function Scanner({ auth, events, stats, activeEvent, attendance, 
       });
       if (res.status === 419) {
         setLastResult({ success: false, code: 'SESSION_EXPIRED', message: 'Session expired. Please refresh.', data: null });
-        if (scannerBeepEnabled) playBeep(false); return;
+        if (scannerBeepEnabled) playBeep(false);
+        if (voiceEnabled) speak('Session expired. Please refresh.');
+        return;
       }
       const data = await res.json();
       setLastResult(data);
+      if (voiceEnabled && data.message) speak(data.message);
       if (res.ok && data.success) { if ('vibrate' in navigator) navigator.vibrate(200); if (scannerBeepEnabled) playBeep(true); }
       else { if (scannerBeepEnabled) playBeep(false); }
     } catch (e) {
       setLastResult({ success: false, code: 'ERROR', message: 'Connection error. Try again.', data: null });
       if (scannerBeepEnabled) playBeep(false);
+      if (voiceEnabled) speak('Connection error. Try again.');
     } finally { setScanning(false); }
-  }, [selectedEvent, scanning, csrfToken, scannerBeepEnabled]);
+  }, [selectedEvent, scanning, csrfToken, scannerBeepEnabled, voiceEnabled]);
 
   const playBeep = (success) => {
     try {
@@ -172,7 +180,23 @@ export default function Scanner({ auth, events, stats, activeEvent, attendance, 
                 <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-green-400" /> Point camera at QR code on ticket</li>
                 <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-green-400" /> Auto-detects QR codes via native BarcodeDetector</li>
                 <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-blue-400" /> Green = success, Red = failed</li>
+                <li className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-purple-400" /> The result message is spoken aloud</li>
               </ul>
+              <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-white/5">
+                <label className="flex items-center justify-between cursor-pointer">
+                  <div>
+                    <p className="text-sm font-medium text-neutral-700 dark:text-dark-text">Voice Announcements</p>
+                    <p className="text-xs text-neutral-500">Speak the result message aloud</p>
+                  </div>
+                  <input type="checkbox" checked={voiceEnabled} onChange={(e) => {
+                    const enabled = e.target.checked;
+                    setVoiceEnabled(enabled);
+                    try { localStorage.setItem('scanner_voice', enabled ? 'on' : 'off'); } catch (err) { }
+                    if (enabled) speak('Voice announcements enabled.');
+                  }} className="sr-only peer" />
+                  <div className="relative w-11 h-6 rounded-full bg-white/[0.08] peer-checked:bg-primary-500 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all" />
+                </label>
+              </div>
               {auth?.user?.role?.name === 'super-admin' && (
                 <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-white/5">
                   <label className="flex items-center justify-between cursor-pointer">
