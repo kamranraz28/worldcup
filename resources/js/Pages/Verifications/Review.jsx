@@ -9,7 +9,7 @@ export default function Review({ verifications, filters, stats }) {
       <div className="space-y-8">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center gap-3 text-sm text-neutral-400 mb-4">
-            <Link href="/verifications" className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Verifications</Link>
+            <Link href={appUrl("/verifications")} className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Verifications</Link>
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
@@ -35,7 +35,7 @@ export default function Review({ verifications, filters, stats }) {
         {verifications?.data?.length > 0 ? (
           <div className="space-y-2">
             {verifications.data.map((v, i) => (
-              <Link key={v.uuid} href={`/verifications/${v.uuid}`}>
+              <Link key={v.uuid} href={appUrl(`/verifications/${v.uuid}`)}>
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}
                   className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${
                     v.status === 'flagged' ? 'border-purple-500/20 bg-purple-500/[0.02] hover:bg-purple-500/[0.05]' :
@@ -79,7 +79,7 @@ export default function Review({ verifications, filters, stats }) {
         {verifications?.last_page > 1 && (
           <div className="flex items-center justify-center gap-2 pb-8">
             {Array.from({ length: verifications.last_page }, (_, i) => i + 1).map((page) => (
-              <Link key={page} href={`/verifications-review?page=${page}`}
+              <Link key={page} href={appUrl(`/verifications-review?page=${page}`)}
                 className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-all ${page === verifications.current_page ? 'bg-primary-500/20 text-primary-400 border border-primary-500/30' : 'text-neutral-400 border border-neutral-200 dark:border-white/10 hover:bg-white/[0.03]'}`}
               >{page}</Link>
             ))}

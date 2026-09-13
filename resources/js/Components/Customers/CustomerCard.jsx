@@ -30,7 +30,7 @@ export default function CustomerCard({ customer }) {
         </div>
       )}
 
-      <Link href={`/customers/${customer.uuid}`} className="absolute inset-0 z-10" aria-label="View customer" />
+      <Link href={appUrl(`/customers/${customer.uuid}`)} className="absolute inset-0 z-10" aria-label="View customer" />
     </div>
   );
 }

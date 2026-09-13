@@ -58,11 +58,11 @@ function SettingsForm({ group, definition, settings, onSave, saving }) {
           {saving ? 'Saving...' : 'Save Settings'}
         </button>
         {group === 'smtp' && (
-          <button type="button" onClick={() => fetch('/admin/settings/test-smtp', { method: 'POST', headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]')?.content } }).then(r => r.json()).then(d => alert(d.message))}
+          <button type="button" onClick={() => fetch(appUrl('/admin/settings/test-smtp'), { method: 'POST', headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]')?.content } }).then(r => r.json()).then(d => alert(d.message))}
             className="btn-secondary h-10 px-4 text-sm">Test Connection</button>
         )}
         {group === 'sms' && (
-          <button type="button" onClick={() => fetch('/admin/settings/test-sms', { method: 'POST', headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]')?.content } }).then(r => r.json()).then(d => alert(d.message))}
+          <button type="button" onClick={() => fetch(appUrl('/admin/settings/test-sms'), { method: 'POST', headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]')?.content } }).then(r => r.json()).then(d => alert(d.message))}
             className="btn-secondary h-10 px-4 text-sm">Test SMS</button>
         )}
       </div>
@@ -76,7 +76,7 @@ export default function Settings({ definitions, settings }) {
   const handleSave = (group, values) => {
     setSaving(true);
     const token = document.querySelector('meta[name=csrf-token]')?.content;
-    router.post(`/admin/settings/${group}`, { settings: values, _token: token }, {
+    router.post(appUrl(`/admin/settings/${group}`), { settings: values, _token: token }, {
       onSuccess: () => setSaving(false), onError: () => setSaving(false), onFinish: () => setSaving(false),
     });
   };
@@ -132,9 +132,9 @@ export default function Settings({ definitions, settings }) {
           >
             <h3 className="text-sm font-semibold text-amber-400 mb-3">Maintenance Mode Quick Actions</h3>
             <div className="flex items-center gap-3">
-              <button onClick={() => { if (confirm('Enable maintenance mode? Users will be locked out.')) { router.post('/admin/settings/toggle-maintenance', { enabled: true }); } }}
+              <button onClick={() => { if (confirm('Enable maintenance mode? Users will be locked out.')) { router.post(appUrl('/admin/settings/toggle-maintenance'), { enabled: true }); } }}
                 className="px-4 py-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium hover:bg-amber-500/20 transition-all">Enable Maintenance</button>
-              <button onClick={() => { router.post('/admin/settings/toggle-maintenance', { enabled: false }); }}
+              <button onClick={() => { router.post(appUrl('/admin/settings/toggle-maintenance'), { enabled: false }); }}
                 className="px-4 py-2 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-medium hover:bg-green-500/20 transition-all">Disable Maintenance</button>
             </div>
           </motion.div>

@@ -38,7 +38,7 @@ function TicketTemplateCard({ event }) {
           <span className="text-xs text-green-500 font-medium truncate max-w-[220px]">
             {event.ticket_template_path?.split('/').pop()}
           </span>
-          <form method="POST" action={`/events/${event.uuid}/ticket-template`} className="inline">
+          <form method="POST" action={appUrl(`/events/${event.uuid}/ticket-template`)} className="inline">
             <input type="hidden" name="_method" value="DELETE" />
             <input type="hidden" name="_token" value={csrf} />
             <button type="submit"
@@ -52,7 +52,7 @@ function TicketTemplateCard({ event }) {
       {event.ticket_template_path && (
         <div className="space-y-3">
           <QRPositionPicker
-            pdfUrl={`/storage/${event.ticket_template_path}`}
+            pdfUrl={appUrl(`/storage/${event.ticket_template_path}`)}
             qrX={qlX}
             qrY={qlY}
             qrSize={qlSize}
@@ -62,7 +62,7 @@ function TicketTemplateCard({ event }) {
               if (qr_size !== undefined) setQlSize(qr_size);
             }}
           />
-          <form method="POST" action={`/events/${event.uuid}/qr-position`} className="flex justify-end">
+          <form method="POST" action={appUrl(`/events/${event.uuid}/qr-position`)} className="flex justify-end">
             <input type="hidden" name="_token" value={csrf} />
             <input type="hidden" name="qr_x" value={qlX} />
             <input type="hidden" name="qr_y" value={qlY} />
@@ -74,7 +74,7 @@ function TicketTemplateCard({ event }) {
         </div>
       )}
 
-      <form method="POST" action={`/events/${event.uuid}/ticket-template`} encType="multipart/form-data" onSubmit={onSubmit} className="space-y-3">
+      <form method="POST" action={appUrl(`/events/${event.uuid}/ticket-template`)} encType="multipart/form-data" onSubmit={onSubmit} className="space-y-3">
         <input type="hidden" name="_token" value={csrf} />
         <input type="hidden" name="qr_x" value={qlX} />
         <input type="hidden" name="qr_y" value={qlY} />
@@ -135,7 +135,7 @@ export default function Show({ event }) {
       <div className="space-y-8">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center gap-3 text-sm text-neutral-400 mb-4">
-            <Link href="/events" className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Events</Link>
+            <Link href={appUrl("/events")} className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Events</Link>
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
@@ -162,7 +162,7 @@ export default function Show({ event }) {
 
             <div className="flex items-center gap-2">
               {canPublish && (
-                <form method="POST" action={`/events/${event.uuid}/publish`} className="inline">
+                <form method="POST" action={appUrl(`/events/${event.uuid}/publish`)} className="inline">
                   <input type="hidden" name="_token" value={document.querySelector('meta[name="csrf-token"]')?.content} />
                   <button type="submit"
                     className="px-4 py-2 rounded-xl bg-gradient-to-r from-green-600 to-green-500 text-sm font-semibold text-white shadow-lg shadow-green-500/25 hover:from-green-500 hover:to-green-400 transition-all">
@@ -171,7 +171,7 @@ export default function Show({ event }) {
                 </form>
               )}
               {canCancel && (
-                <form method="POST" action={`/events/${event.uuid}/cancel`} className="inline">
+                <form method="POST" action={appUrl(`/events/${event.uuid}/cancel`)} className="inline">
                   <input type="hidden" name="_token" value={document.querySelector('meta[name="csrf-token"]')?.content} />
                   <button type="submit" onClick={(e) => { if (!confirm('Cancel this event?')) e.preventDefault(); }}
                     className="px-4 py-2 rounded-xl border border-red-500/20 text-sm font-medium text-red-400 hover:bg-red-500/10 transition-all">
@@ -179,7 +179,7 @@ export default function Show({ event }) {
                   </button>
                 </form>
               )}
-              <form method="POST" action={`/events/${event.uuid}/duplicate`} className="inline">
+              <form method="POST" action={appUrl(`/events/${event.uuid}/duplicate`)} className="inline">
                 <input type="hidden" name="_token" value={document.querySelector('meta[name="csrf-token"]')?.content} />
                 <button type="submit"
                   className="px-4 py-2 rounded-xl border border-neutral-200 dark:border-white/[0.06] text-sm font-medium text-neutral-500 dark:text-dark-text-secondary hover:bg-neutral-100 dark:hover:bg-white/[0.03] transition-all">
@@ -187,7 +187,7 @@ export default function Show({ event }) {
                 </button>
               </form>
               <Link
-                href={`/events/${event.uuid}/edit`}
+                href={appUrl(`/events/${event.uuid}/edit`)}
                 className="px-4 py-2 rounded-xl btn-primary text-sm"
               >
                 Edit Event
@@ -217,7 +217,7 @@ export default function Show({ event }) {
                 transition={{ delay: 0.15 }}
                 className="rounded-2xl overflow-hidden border border-neutral-200 dark:border-white/[0.06]"
               >
-                <img src={`/storage/${event.banner_image}`} alt={event.title} className="w-full h-64 object-cover" />
+                <img src={appUrl(`/storage/${event.banner_image}`)} alt={event.title} className="w-full h-64 object-cover" />
               </motion.div>
             )}
 
@@ -344,7 +344,7 @@ export default function Show({ event }) {
             >
               <h2 className="text-xs font-semibold text-neutral-500 dark:text-dark-text-secondary uppercase tracking-wider mb-4">Quick Actions</h2>
               <div className="space-y-2">
-                <Link href={`/events/${event.uuid}/edit`}
+                <Link href={appUrl(`/events/${event.uuid}/edit`)}
                   className="flex items-center gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.02] hover:bg-neutral-100 dark:hover:bg-white/[0.04] border border-neutral-100 dark:border-white/[0.04] transition-all">
                   <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -358,7 +358,7 @@ export default function Show({ event }) {
                   </svg>
                   <span className="text-sm text-neutral-700 dark:text-dark-text">View Public Page</span>
                 </div>
-                <Link href="/events"
+                <Link href={appUrl("/events")}
                   className="flex items-center gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.02] hover:bg-neutral-100 dark:hover:bg-white/[0.04] border border-neutral-100 dark:border-white/[0.04] transition-all">
                   <svg className="w-4 h-4 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />

@@ -13,7 +13,7 @@ export default function Index({ customers, filters, stats }) {
     const params = new URLSearchParams();
     if (search) params.set('search', search);
     if (statusFilter) params.set('status', statusFilter);
-    window.location.href = `/customers?${params.toString()}`;
+    window.location.href = appUrl(`/customers?${params.toString()}`);
   };
 
   return (
@@ -28,7 +28,7 @@ export default function Index({ customers, filters, stats }) {
             </p>
           </div>
           <Link
-            href="/customers/create"
+            href={appUrl("/customers/create")}
             className="inline-flex items-center gap-2 btn-primary h-10 px-5 text-sm"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -123,7 +123,7 @@ export default function Index({ customers, filters, stats }) {
               </p>
               {!search && (
                 <Link
-                  href="/customers/create"
+                  href={appUrl("/customers/create")}
                   className="inline-flex items-center gap-2 btn-primary h-10 px-5 text-sm"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -141,7 +141,7 @@ export default function Index({ customers, filters, stats }) {
             {Array.from({ length: customers.last_page }, (_, i) => i + 1).map((page) => (
               <Link
                 key={page}
-                href={`/customers?page=${page}`}
+                href={appUrl(`/customers?page=${page}`)}
                 className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-all
                   ${page === customers.current_page
                     ? 'bg-primary-500/20 text-primary-400 border border-primary-500/30'

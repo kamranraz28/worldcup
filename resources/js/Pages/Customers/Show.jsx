@@ -24,7 +24,7 @@ export default function Show({ customer, duplicates, eligibility, history, verif
       <div className="space-y-8">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center gap-3 text-sm text-neutral-400 mb-4">
-            <Link href="/customers" className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Customers</Link>
+            <Link href={appUrl("/customers")} className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Customers</Link>
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
@@ -46,8 +46,8 @@ export default function Show({ customer, duplicates, eligibility, history, verif
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Link href={`/customers/${customer.uuid}/edit`} className="btn-primary h-10 px-5 text-sm">Edit</Link>
-              <Link href={`/customers/${customer.uuid}/eligibility`} className="btn-secondary h-10 px-5 text-sm">Eligibility</Link>
+              <Link href={appUrl(`/customers/${customer.uuid}/edit`)} className="btn-primary h-10 px-5 text-sm">Edit</Link>
+              <Link href={appUrl(`/customers/${customer.uuid}/eligibility`)} className="btn-secondary h-10 px-5 text-sm">Eligibility</Link>
             </div>
           </div>
         </motion.div>
@@ -59,7 +59,7 @@ export default function Show({ customer, duplicates, eligibility, history, verif
               {verifications?.length > 0 ? (
                 <div className="space-y-3">
                   {verifications.map((v) => (
-                    <Link key={v.uuid} href={`/verifications/${v.uuid}`}
+                    <Link key={v.uuid} href={appUrl(`/verifications/${v.uuid}`)}
                       className="flex items-center gap-4 p-4 rounded-xl bg-neutral-50 dark:bg-white/[0.02] border border-neutral-200 dark:border-white/[0.04] hover:bg-neutral-100 dark:hover:bg-white/[0.04] transition-all"
                     >
                       <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold ${
@@ -100,7 +100,7 @@ export default function Show({ customer, duplicates, eligibility, history, verif
                 </div>
                 <div className="space-y-2">
                   {duplicates.map((dup) => (
-                    <Link key={dup.uuid} href={`/customers/${dup.uuid}`}
+                    <Link key={dup.uuid} href={appUrl(`/customers/${dup.uuid}`)}
                       className="flex items-center gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.02] border border-amber-500/10 hover:bg-neutral-100 dark:hover:bg-white/[0.04] transition-all"
                     >
                       <span className="text-sm text-neutral-700 dark:text-dark-text">{dup.first_name} {dup.last_name}</span>
@@ -150,7 +150,7 @@ export default function Show({ customer, duplicates, eligibility, history, verif
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass-card p-6 space-y-2">
               <h2 className="text-xs font-semibold text-neutral-500 dark:text-dark-text-secondary uppercase tracking-wider mb-4">Actions</h2>
-              <Link href={`/customers/${customer.uuid}/eligibility`}
+              <Link href={appUrl(`/customers/${customer.uuid}/eligibility`)}
                 className="flex items-center gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.02] hover:bg-neutral-100 dark:hover:bg-white/[0.04] border border-neutral-200 dark:border-white/[0.04] transition-all"
               >
                 <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -158,7 +158,7 @@ export default function Show({ customer, duplicates, eligibility, history, verif
                 </svg>
                 <span className="text-sm text-neutral-700 dark:text-dark-text">Check Eligibility</span>
               </Link>
-              <Link href={`/verifications?search=${customer.email}`}
+              <Link href={appUrl(`/verifications?search=${customer.email}`)}
                 className="flex items-center gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.02] hover:bg-neutral-100 dark:hover:bg-white/[0.04] border border-neutral-200 dark:border-white/[0.04] transition-all"
               >
                 <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -167,7 +167,7 @@ export default function Show({ customer, duplicates, eligibility, history, verif
                 <span className="text-sm text-neutral-700 dark:text-dark-text">All Verifications</span>
               </Link>
               {isBlacklisted ? (
-                <form method="POST" action={`/customers/${customer.uuid}/blacklist`} className="inline">
+                <form method="POST" action={appUrl(`/customers/${customer.uuid}/blacklist`)} className="inline">
                   <input type="hidden" name="_token" value={document.querySelector('meta[name="csrf-token"]')?.content} />
                   <input type="hidden" name="_method" value="DELETE" />
                   <button type="submit"

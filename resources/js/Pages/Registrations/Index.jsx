@@ -13,7 +13,7 @@ export default function Index({ registrations, filters, stats, events }) {
       const params = new URLSearchParams();
       if (search) params.set('search', search);
       if (statusFilter) params.set('status', statusFilter);
-      window.location.href = `/registrations?${params.toString()}`;
+      window.location.href = appUrl(`/registrations?${params.toString()}`);
     }, 400);
     return () => clearTimeout(timeout);
   }, [search, statusFilter]);
@@ -29,9 +29,9 @@ export default function Index({ registrations, filters, stats, events }) {
             <p className="text-sm text-neutral-500 dark:text-dark-text-secondary mt-1">Manage event registrations and approvals</p>
           </div>
           <div className="flex items-center gap-2">
-            <Link href="/registrations-import" className="btn-secondary h-10 px-4 text-sm">Import</Link>
-            <a href="/registrations-export/csv" className="btn-secondary h-10 px-4 text-sm">Export CSV</a>
-            <Link href="/registrations/create" className="btn-primary h-10 px-5 text-sm inline-flex items-center gap-2">
+            <Link href={appUrl("/registrations-import")} className="btn-secondary h-10 px-4 text-sm">Import</Link>
+            <a href={appUrl("/registrations-export/csv")} className="btn-secondary h-10 px-4 text-sm">Export CSV</a>
+            <Link href={appUrl("/registrations/create")} className="btn-primary h-10 px-5 text-sm inline-flex items-center gap-2">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
               </svg>
@@ -78,7 +78,7 @@ export default function Index({ registrations, filters, stats, events }) {
         {registrations?.data?.length > 0 ? (
           <div className="space-y-2">
             {registrations.data.map((r, i) => (
-              <Link key={r.uuid} href={`/registrations/${r.uuid}`}>
+              <Link key={r.uuid} href={appUrl(`/registrations/${r.uuid}`)}>
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.02 }}
                   className="flex items-center gap-4 p-4 rounded-xl glass-card hover:bg-white/[0.05] transition-all"
                 >
@@ -114,14 +114,14 @@ export default function Index({ registrations, filters, stats, events }) {
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-1">No registrations found</h3>
-            <Link href="/registrations/create" className="mt-4 btn-primary h-10 px-5 text-sm inline-flex items-center gap-2">Create Registration</Link>
+            <Link href={appUrl("/registrations/create")} className="mt-4 btn-primary h-10 px-5 text-sm inline-flex items-center gap-2">Create Registration</Link>
           </div>
         )}
 
         {registrations?.last_page > 1 && (
           <div className="flex items-center justify-center gap-2 pb-8">
             {Array.from({ length: registrations.last_page }, (_, i) => i + 1).map((page) => (
-              <Link key={page} href={`/registrations?page=${page}`}
+              <Link key={page} href={appUrl(`/registrations?page=${page}`)}
                 className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-all ${page === registrations.current_page ? 'bg-primary-500/20 text-primary-400 border border-primary-500/30' : 'text-neutral-400 border border-neutral-200 dark:border-white/10 hover:bg-white/[0.03]'}`}
               >{page}</Link>
             ))}

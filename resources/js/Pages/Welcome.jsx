@@ -44,7 +44,7 @@ export default function Welcome() {
 
                 {/* Nav */}
                 <nav className="relative z-10 flex items-center justify-between px-6 py-5 max-w-7xl mx-auto">
-                    <Link href="/" className="flex items-center gap-2.5 group">
+                    <Link href={appUrl("/")} className="flex items-center gap-2.5 group">
                         <div>
                             <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">EVENT MANAGEMENT SYSTEM</span>
                         </div>
@@ -89,7 +89,7 @@ export default function Welcome() {
 
                         <motion.div variants={fadeUp} custom={3}
                             className="flex items-center justify-center gap-4 flex-wrap">
-                            <Link href="/browse"
+                            <Link href={appUrl("/browse")}
                                 className="btn-primary px-8 py-3.5 text-base">
                                 Browse Events
                             </Link>

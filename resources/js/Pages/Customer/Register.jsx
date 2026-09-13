@@ -27,7 +27,7 @@ export default function Register({ event, ticketTypes }) {
         <AppLayout>
             <div className="max-w-2xl mx-auto space-y-6">
                 <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
-                    <Link href={`/browse/${event.uuid}`} className="text-sm text-neutral-500 dark:text-dark-text-secondary hover:text-neutral-700 dark:hover:text-white transition-colors inline-flex items-center gap-1 mb-3">
+                    <Link href={appUrl(`/browse/${event.uuid}`)} className="text-sm text-neutral-500 dark:text-dark-text-secondary hover:text-neutral-700 dark:hover:text-white transition-colors inline-flex items-center gap-1 mb-3">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                         </svg>
@@ -109,7 +109,7 @@ export default function Register({ event, ticketTypes }) {
                                 </span>
                             ) : 'Get Your Ticket'}
                         </button>
-                        <Link href={`/browse/${event.uuid}`} className="text-sm text-neutral-500 dark:text-dark-text-secondary hover:text-neutral-700 dark:hover:text-white transition-colors">
+                        <Link href={appUrl(`/browse/${event.uuid}`)} className="text-sm text-neutral-500 dark:text-dark-text-secondary hover:text-neutral-700 dark:hover:text-white transition-colors">
                             Cancel
                         </Link>
                     </div>

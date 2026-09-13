@@ -67,7 +67,7 @@ export default function EventCard({ event }) {
           </div>
         )}
       </div>
-      <a href={`/events/${event.uuid}`} className="absolute inset-0 z-20" aria-label={`View ${event.title}`} />
+      <a href={appUrl(`/events/${event.uuid}`)} className="absolute inset-0 z-20" aria-label={`View ${event.title}`} />
     </motion.div>
   );
 }

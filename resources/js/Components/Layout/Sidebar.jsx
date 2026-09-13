@@ -59,9 +59,9 @@ export default function Sidebar({ collapsed, onToggle, onMobileClose }) {
             <div className="relative z-10 flex flex-col h-full">
                 {/* Logo */}
                 <div className="flex-shrink-0 h-16 flex items-center px-5 border-b border-neutral-100/60 dark:border-white/[0.04]">
-                    <Link href="/dashboard" className="flex items-center gap-2.5 min-w-0 group">
+                    <Link href={appUrl("/dashboard")} className="flex items-center gap-2.5 min-w-0 group">
                         {!isCustomer && (
-                            <img src="/images/logo.png" alt="Synergy Interface Ltd"
+                            <img src={appUrl("/images/logo.png")} alt="Synergy Interface Ltd"
                                 className="h-11 w-auto flex-shrink-0 dark:brightness-0 dark:invert group-hover:scale-105 transition-transform duration-300" />
                         )}
                         <AnimatePresence mode="wait">

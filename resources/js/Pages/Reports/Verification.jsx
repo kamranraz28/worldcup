@@ -16,7 +16,7 @@ export default function VerificationReport({ report, filters, events }) {
     if (typeFilter) params.set('verification_type', typeFilter);
     if (dateFrom) params.set('date_from', dateFrom);
     if (dateTo) params.set('date_to', dateTo);
-    window.location.href = `/reports/verification?${params.toString()}`;
+    window.location.href = appUrl(`/reports/verification?${params.toString()}`);
   }, [statusFilter, typeFilter, dateFrom, dateTo]);
 
   const s = report?.summary || {};
@@ -27,7 +27,7 @@ export default function VerificationReport({ report, filters, events }) {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3 text-sm text-neutral-400 mb-2">
-              <Link href="/reports" className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Reports</Link>
+              <Link href={appUrl("/reports")} className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Reports</Link>
               <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
@@ -36,8 +36,8 @@ export default function VerificationReport({ report, filters, events }) {
             <h1 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">Verification Report</h1>
           </div>
           <div className="flex gap-2">
-            <a href={`/reports/export/verification/csv${window.location.search}`} className="btn-secondary h-10 px-4 text-sm">Export CSV</a>
-            <a href={`/reports/export/verification/pdf${window.location.search}`} className="btn-secondary h-10 px-4 text-sm">Export PDF</a>
+            <a href={appUrl(`/reports/export/verification/csv${window.location.search}`)} className="btn-secondary h-10 px-4 text-sm">Export CSV</a>
+            <a href={appUrl(`/reports/export/verification/pdf${window.location.search}`)} className="btn-secondary h-10 px-4 text-sm">Export PDF</a>
             <button onClick={() => window.print()} className="btn-secondary h-10 px-4 text-sm">Print</button>
           </div>
         </div>

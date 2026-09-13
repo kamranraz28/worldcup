@@ -12,14 +12,14 @@ export default function GalleryUploader({ eventId, gallery, onUpload, onDelete }
     const formData = new FormData();
     formData.append('image', file);
     try {
-      await fetch(`/events/${eventId}/gallery`, { method: 'POST', body: formData, headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content } });
+      await fetch(appUrl(`/events/${eventId}/gallery`), { method: 'POST', body: formData, headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content } });
       if (onUpload) onUpload();
     } finally { setUploading(false); e.target.value = ''; }
   };
 
   const handleDelete = async (galleryId) => {
     if (!confirm('Remove this image from gallery?')) return;
-    await fetch(`/events/${eventId}/gallery/${galleryId}`, { method: 'DELETE', headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content } });
+    await fetch(appUrl(`/events/${eventId}/gallery/${galleryId}`), { method: 'DELETE', headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content } });
     if (onDelete) onDelete();
   };
 
@@ -60,7 +60,7 @@ export default function GalleryUploader({ eventId, gallery, onUpload, onDelete }
           {gallery.map((image, index) => (
             <motion.div key={image.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: index * 0.05 }}
               className="group relative aspect-square rounded-xl overflow-hidden border border-neutral-200 dark:border-white/10 bg-neutral-50 dark:bg-white/[0.03] card-premium">
-              <img src={`/storage/${image.image_path}`} alt={image.caption || ''} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <img src={appUrl(`/storage/${image.image_path}`)} alt={image.caption || ''} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-3">
                 <button onClick={() => handleDelete(image.id)}
                   className="p-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/40 transition-all active:scale-90">

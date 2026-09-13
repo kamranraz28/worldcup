@@ -17,7 +17,7 @@ export default function Index({ verifications, filters, stats }) {
       if (search) params.set('search', search);
       if (statusFilter) params.set('status', statusFilter);
       if (typeFilter) params.set('type', typeFilter);
-      router.get(`/verifications?${params.toString()}`);
+      router.get(appUrl(`/verifications?${params.toString()}`));
     }, 400);
     return () => clearTimeout(timeout);
   }, [search, statusFilter, typeFilter]);
@@ -32,7 +32,7 @@ export default function Index({ verifications, filters, stats }) {
             <h1 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">Verifications</h1>
             <p className="text-sm text-neutral-500 dark:text-dark-text-secondary mt-1">Review and manage identity verifications</p>
           </div>
-          <Link href="/verifications-review" className="btn-primary h-10 px-5 text-sm inline-flex items-center gap-2">
+          <Link href={appUrl("/verifications-review")} className="btn-primary h-10 px-5 text-sm inline-flex items-center gap-2">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -85,7 +85,7 @@ export default function Index({ verifications, filters, stats }) {
         {verifications?.data?.length > 0 ? (
           <div className="space-y-2">
             {verifications.data.map((v, i) => (
-              <Link key={v.uuid} href={`/verifications/${v.uuid}`}>
+              <Link key={v.uuid} href={appUrl(`/verifications/${v.uuid}`)}>
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.02 }}
                   className="flex items-center gap-4 p-4 rounded-xl glass-card hover:bg-white/[0.05] transition-all"
                 >
@@ -129,7 +129,7 @@ export default function Index({ verifications, filters, stats }) {
         {verifications?.last_page > 1 && (
           <div className="flex items-center justify-center gap-2 pb-8">
             {Array.from({ length: verifications.last_page }, (_, i) => i + 1).map((page) => (
-              <Link key={page} href={`/verifications?page=${page}`}
+              <Link key={page} href={appUrl(`/verifications?page=${page}`)}
                 className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-all ${page === verifications.current_page ? 'bg-primary-500/20 text-primary-400 border border-primary-500/30' : 'text-neutral-400 border border-neutral-200 dark:border-white/10 hover:bg-white/[0.03]'}`}
               >{page}</Link>
             ))}

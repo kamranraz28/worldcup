@@ -8,11 +8,11 @@ export default function Eligibility({ customer, checks, duplicates }) {
       <div className="space-y-8 max-w-3xl mx-auto">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center gap-3 text-sm text-neutral-400 mb-4">
-            <Link href="/customers" className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Customers</Link>
+            <Link href={appUrl("/customers")} className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Customers</Link>
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
-            <Link href={`/customers/${customer.uuid}`} className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">{customer.first_name} {customer.last_name}</Link>
+            <Link href={appUrl(`/customers/${customer.uuid}`)} className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">{customer.first_name} {customer.last_name}</Link>
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
@@ -62,7 +62,7 @@ export default function Eligibility({ customer, checks, duplicates }) {
             <h2 className="text-lg font-semibold text-amber-400 mb-4">Potential Duplicates</h2>
             <div className="space-y-2">
               {duplicates.map((dup) => (
-                <Link key={dup.uuid} href={`/customers/${dup.uuid}`}
+                <Link key={dup.uuid} href={appUrl(`/customers/${dup.uuid}`)}
                   className="flex items-center justify-between p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.02] border border-amber-500/10 hover:bg-neutral-100 dark:hover:bg-white/[0.04] transition-all"
                 >
                   <span className="text-sm text-neutral-700 dark:text-dark-text">{dup.first_name} {dup.last_name}</span>
@@ -74,7 +74,7 @@ export default function Eligibility({ customer, checks, duplicates }) {
         )}
 
         <div className="flex justify-center pb-8">
-          <Link href={`/customers/${customer.uuid}`} className="btn-primary h-10 px-6 text-sm">Back to Customer</Link>
+          <Link href={appUrl(`/customers/${customer.uuid}`)} className="btn-primary h-10 px-6 text-sm">Back to Customer</Link>
         </div>
       </div>
     </AppLayout>

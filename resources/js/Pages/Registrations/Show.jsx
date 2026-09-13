@@ -29,7 +29,7 @@ export default function Show({ registration, actions, waitingList }) {
     if (action === 'approve') formData.append('notes', notes);
     else if (action === 'reject') { formData.append('reason', rejectReason); formData.append('notes', notes); }
     else if (action === 'cancel') { formData.append('reason', cancelReason); }
-    await fetch(`/registrations/${registration.uuid}/${action}`, {
+    await fetch(appUrl(`/registrations/${registration.uuid}/${action}`), {
       method: 'POST',
       body: formData,
       headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content },
@@ -48,7 +48,7 @@ export default function Show({ registration, actions, waitingList }) {
       <div className="space-y-8">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center gap-3 text-sm text-neutral-400 mb-4">
-            <Link href="/registrations" className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Registrations</Link>
+            <Link href={appUrl("/registrations")} className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Registrations</Link>
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
@@ -73,7 +73,7 @@ export default function Show({ registration, actions, waitingList }) {
               </div>
             </div>
             {customer && (
-              <Link href={`/customers/${customer.uuid}`} className="btn-secondary h-10 px-5 text-sm">View Customer</Link>
+              <Link href={appUrl(`/customers/${customer.uuid}`)} className="btn-secondary h-10 px-5 text-sm">View Customer</Link>
             )}
           </div>
         </motion.div>
@@ -155,7 +155,7 @@ export default function Show({ registration, actions, waitingList }) {
             {event && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="glass-card p-6">
                 <h2 className="text-xs font-semibold text-neutral-500 dark:text-dark-text-secondary uppercase tracking-wider mb-4">Event</h2>
-                <Link href={`/events/${event.uuid}`} className="block p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.02] border border-neutral-200 dark:border-white/[0.04] hover:bg-neutral-100 dark:hover:bg-white/[0.04] transition-all">
+                <Link href={appUrl(`/events/${event.uuid}`)} className="block p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.02] border border-neutral-200 dark:border-white/[0.04] hover:bg-neutral-100 dark:hover:bg-white/[0.04] transition-all">
                   <p className="text-sm font-medium text-neutral-700 dark:text-dark-text">{event.title}</p>
                   <p className="text-xs text-neutral-500 mt-1">{new Date(event.start_date).toLocaleDateString()}</p>
                   {event.venue_name && <p className="text-xs text-neutral-500 mt-0.5">{event.venue_name}</p>}
@@ -166,7 +166,7 @@ export default function Show({ registration, actions, waitingList }) {
             {customer && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass-card p-6">
                 <h2 className="text-xs font-semibold text-neutral-500 dark:text-dark-text-secondary uppercase tracking-wider mb-4">Customer</h2>
-                <Link href={`/customers/${customer.uuid}`} className="flex items-center gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.02] border border-neutral-200 dark:border-white/[0.04] hover:bg-neutral-100 dark:hover:bg-white/[0.04] transition-all">
+                <Link href={appUrl(`/customers/${customer.uuid}`)} className="flex items-center gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.02] border border-neutral-200 dark:border-white/[0.04] hover:bg-neutral-100 dark:hover:bg-white/[0.04] transition-all">
                   <div className="w-9 h-9 rounded-xl bg-primary-500/10 flex items-center justify-center text-sm font-bold text-primary-400">
                     {(customer.first_name?.charAt(0) || '') + (customer.last_name?.charAt(0) || '')}
                   </div>

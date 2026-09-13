@@ -14,24 +14,24 @@ const paths = {
 };
 
 export const navItems = [
-    { key: 'dashboard', label: 'Dashboard', href: '/dashboard', icon: paths.dashboard, permission: null },
-    { key: 'events', label: 'Events', href: '/events', icon: paths.events, permission: 'events.view' },
-    { key: 'customers', label: 'Customers', href: '/customers', icon: paths.customers, permission: 'customers.view' },
-    { key: 'verifications', label: 'Verifications', href: '/verifications', icon: paths.verifications, permission: 'verifications.view' },
-    { key: 'checkin', label: 'Scan In', href: '/check-in', icon: paths.checkin, permission: 'checkins.scan' },
-    { key: 'tickets', label: 'Tickets', href: '/tickets', icon: paths.tickets, permission: 'tickets.view' },
-    { key: 'reports', label: 'Reports', href: '/reports', icon: paths.reports, permission: 'reports.view' },
+    { key: 'dashboard', label: 'Dashboard', href: appUrl('/dashboard'), icon: paths.dashboard, permission: null },
+    { key: 'events', label: 'Events', href: appUrl('/events'), icon: paths.events, permission: 'events.view' },
+    { key: 'customers', label: 'Customers', href: appUrl('/customers'), icon: paths.customers, permission: 'customers.view' },
+    { key: 'verifications', label: 'Verifications', href: appUrl('/verifications'), icon: paths.verifications, permission: 'verifications.view' },
+    { key: 'checkin', label: 'Scan In', href: appUrl('/check-in'), icon: paths.checkin, permission: 'checkins.scan' },
+    { key: 'tickets', label: 'Tickets', href: appUrl('/tickets'), icon: paths.tickets, permission: 'tickets.view' },
+    { key: 'reports', label: 'Reports', href: appUrl('/reports'), icon: paths.reports, permission: 'reports.view' },
 ];
 
 export const customerNavItems = [
-    { key: 'customer-dashboard', label: 'Dashboard', href: '/customer/dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
-    { key: 'customer-events', label: 'Events', href: '/customer/events', icon: paths.events },
-    { key: 'my-tickets', label: 'My Tickets', href: '/my-tickets', icon: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4' },
+    { key: 'customer-dashboard', label: 'Dashboard', href: appUrl('/customer/dashboard'), icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+    { key: 'customer-events', label: 'Events', href: appUrl('/customer/events'), icon: paths.events },
+    { key: 'my-tickets', label: 'My Tickets', href: appUrl('/my-tickets'), icon: 'M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4' },
 ];
 
 export const adminNavItems = [
-    { key: 'users', label: 'Users', href: '/admin/users', icon: paths.profile, permission: 'users.view' },
-    { key: 'roles', label: 'Roles', href: '/admin/roles', icon: paths.administration, permission: 'roles.view', superAdminOnly: true },
-    { key: 'permissions', label: 'Permissions', href: '/admin/permissions', icon: paths.administration, permission: 'roles.view', superAdminOnly: true },
-    { key: 'settings', label: 'Settings', href: '/admin/settings', icon: paths.administration, permission: 'configs.edit' },
+    { key: 'users', label: 'Users', href: appUrl('/admin/users'), icon: paths.profile, permission: 'users.view' },
+    { key: 'roles', label: 'Roles', href: appUrl('/admin/roles'), icon: paths.administration, permission: 'roles.view', superAdminOnly: true },
+    { key: 'permissions', label: 'Permissions', href: appUrl('/admin/permissions'), icon: paths.administration, permission: 'roles.view', superAdminOnly: true },
+    { key: 'settings', label: 'Settings', href: appUrl('/admin/settings'), icon: paths.administration, permission: 'configs.edit' },
 ];

@@ -4,14 +4,14 @@ import AppLayout from '@/Layouts/AppLayout';
 
 export default function Import({ events }) {
   const form = useForm({ event_id: '', status: 'confirmed', import_file: null });
-  const handleSubmit = (e) => { e.preventDefault(); form.post('/registrations-import'); };
+  const handleSubmit = (e) => { e.preventDefault(); form.post(appUrl('/registrations-import')); };
 
   return (
     <AppLayout>
       <div className="max-w-2xl mx-auto space-y-8">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center gap-3 text-sm text-neutral-400 mb-4">
-            <Link href="/registrations" className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Registrations</Link>
+            <Link href={appUrl("/registrations")} className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Registrations</Link>
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
@@ -75,7 +75,7 @@ export default function Import({ events }) {
           </motion.div>
 
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex items-center justify-end gap-4 pt-6 pb-8">
-            <Link href="/registrations" className="btn-secondary h-10 px-6 text-sm">Cancel</Link>
+            <Link href={appUrl("/registrations")} className="btn-secondary h-10 px-6 text-sm">Cancel</Link>
             <button type="submit" disabled={form.processing} className="btn-primary h-10 px-6 text-sm">
               {form.processing ? 'Importing...' : 'Import Registrations'}
             </button>

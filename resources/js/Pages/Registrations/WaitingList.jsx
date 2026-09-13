@@ -12,7 +12,7 @@ export default function WaitingList({ event, waitingList }) {
     setIsNotifying(true);
     const formData = new FormData();
     formData.append('count', notifyCount);
-    await fetch(`/events/${event.uuid}/waiting-list/notify`, {
+    await fetch(appUrl(`/events/${event.uuid}/waiting-list/notify`), {
       method: 'POST', body: formData,
       headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content },
     });
@@ -25,7 +25,7 @@ export default function WaitingList({ event, waitingList }) {
       <div className="space-y-8">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center gap-3 text-sm text-neutral-400 mb-4">
-            <Link href="/registrations" className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Registrations</Link>
+            <Link href={appUrl("/registrations")} className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Registrations</Link>
             <span className="text-neutral-500">·</span>
             <span className="text-neutral-500 dark:text-dark-text-secondary">Waiting List</span>
           </div>
@@ -39,7 +39,7 @@ export default function WaitingList({ event, waitingList }) {
                 <p className="text-xs text-neutral-500">Capacity</p>
                 <p className="text-sm font-medium text-neutral-700 dark:text-dark-text">{event.confirmed_count || 0} / {event.max_capacity || '∞'}</p>
               </div>
-              <Link href={`/events/${event.uuid}`} className="btn-secondary h-10 px-4 text-sm">View Event</Link>
+              <Link href={appUrl(`/events/${event.uuid}`)} className="btn-secondary h-10 px-4 text-sm">View Event</Link>
             </div>
           </div>
         </motion.div>

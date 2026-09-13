@@ -62,7 +62,7 @@ export default function MyTickets({ tickets, stats }) {
 
                                 <div className="flex items-center gap-2 flex-shrink-0">
                                     <a
-                                        href={t.status === 'confirmed' ? `/tickets/${t.uuid}/download` : '#'}
+                                        href={t.status === 'confirmed' ? appUrl(`/tickets/${t.uuid}/download`) : '#'}
                                         className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all
                                             ${t.status === 'confirmed'
                                                 ? 'bg-primary-500 text-white hover:bg-primary-400 active:scale-95'
@@ -75,7 +75,7 @@ export default function MyTickets({ tickets, stats }) {
                                         Download
                                     </a>
                                     <span
-                                        onClick={t.status === 'confirmed' ? () => router.visit(`/tickets/${t.uuid}`) : undefined}
+                                        onClick={t.status === 'confirmed' ? () => router.visit(appUrl(`/tickets/${t.uuid}`)) : undefined}
                                         className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all
                                             ${t.status === 'confirmed'
                                                 ? 'text-neutral-600 dark:text-dark-text-secondary hover:bg-neutral-100 dark:hover:bg-white/[0.04] active:scale-95 cursor-pointer'
@@ -103,7 +103,7 @@ export default function MyTickets({ tickets, stats }) {
                 {tickets?.last_page > 1 && (
                     <div className="flex items-center justify-center gap-2 pb-8">
                         {Array.from({ length: tickets.last_page }, (_, i) => i + 1).map((page) => (
-                            <Link key={page} href={`/my-tickets?page=${page}`}
+                            <Link key={page} href={appUrl(`/my-tickets?page=${page}`)}
                                 className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-all ${page === tickets.current_page ? 'bg-primary-500/20 text-primary-400 border border-primary-500/30' : 'text-neutral-400 border border-neutral-200 dark:border-white/10 hover:bg-white/[0.03]'}`}
                             >{page}</Link>
                         ))}

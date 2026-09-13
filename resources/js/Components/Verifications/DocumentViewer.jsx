@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function DocumentViewer({ label, imagePath }) {
   if (!imagePath) return null;
 
-  const url = `/storage/${imagePath}`;
+  const url = appUrl(`/storage/${imagePath}`);
 
   return (
     <div className="group relative rounded-xl overflow-hidden border border-white/10 bg-white/[0.03]">

@@ -16,6 +16,7 @@ use App\Repositories\Eloquent\CustomerRepository;
 use App\Repositories\Eloquent\CustomerVerificationRepository;
 use App\Repositories\Eloquent\EventRepository;
 use App\Repositories\Eloquent\RegistrationRepository;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        URL::forceRootUrl(config('app.url'));
+
         Event::observe(EventObserver::class);
         Ticket::observe(TicketObserver::class);
         Customer::observe(CustomerObserver::class);

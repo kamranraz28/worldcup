@@ -32,7 +32,7 @@ export default function EventForm({ form, event, isEdit }) {
   };
 
   const bannerPreview = data.banner_image
-    ? (typeof data.banner_image === 'string' ? `/storage/${data.banner_image}` : URL.createObjectURL(data.banner_image))
+    ? (typeof data.banner_image === 'string' ? appUrl(`/storage/${data.banner_image}`) : URL.createObjectURL(data.banner_image))
     : null;
 
   // PDF preview URL: blob URL for new upload, or storage URL for existing template
@@ -41,7 +41,7 @@ export default function EventForm({ form, event, isEdit }) {
       return URL.createObjectURL(data.ticket_template);
     }
     if (isEdit && event?.ticket_template_path) {
-      return `/storage/${event.ticket_template_path}`;
+      return appUrl(`/storage/${event.ticket_template_path}`);
     }
     return null;
   }, [!isEdit ? data.ticket_template : null, isEdit ? event?.ticket_template_path : null]);
@@ -253,7 +253,7 @@ export default function EventForm({ form, event, isEdit }) {
 
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
         className="flex items-center justify-end gap-4 pb-8">
-        <Link href={event ? `/events/${event.uuid}` : '/events'} className="btn-secondary h-10 px-6 text-sm">Cancel</Link>
+        <Link href={event ? appUrl(`/events/${event.uuid}`) : appUrl('/events')} className="btn-secondary h-10 px-6 text-sm">Cancel</Link>
         <button type="submit" disabled={processing} className="btn-primary h-10 px-6 text-sm">
           {processing ? (
             <span className="flex items-center gap-2">

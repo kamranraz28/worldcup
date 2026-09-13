@@ -15,7 +15,7 @@ export default function VerificationReviewForm({ verification }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    form.post(`/verifications/${verification.uuid}/review`);
+    form.post(appUrl(`/verifications/${verification.uuid}/review`));
   };
 
   const actionConfig = {

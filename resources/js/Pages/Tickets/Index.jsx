@@ -26,7 +26,7 @@ export default function Index({ tickets, filters, stats }) {
       if (search) params.set('search', search);
       if (statusFilter) params.set('status', statusFilter);
       if (typeFilter) params.set('type', typeFilter);
-      router.get(`/tickets?${params.toString()}`);
+      router.get(appUrl(`/tickets?${params.toString()}`));
     }, 400);
     return () => clearTimeout(timeout);
   }, [search, statusFilter, typeFilter]);
@@ -88,7 +88,7 @@ export default function Index({ tickets, filters, stats }) {
         {tickets?.data?.length > 0 ? (
           <div className="space-y-2">
             {tickets.data.map((t, i) => (
-              <Link key={t.uuid} href={`/tickets/${t.uuid}`}>
+              <Link key={t.uuid} href={appUrl(`/tickets/${t.uuid}`)}>
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.02 }}
                   className="flex items-center gap-4 p-4 rounded-xl glass-card hover:bg-white/[0.05] transition-all"
                 >
@@ -112,7 +112,7 @@ export default function Index({ tickets, filters, stats }) {
                   </div>
                   <span className="text-xs text-neutral-500">{t.currency} {t.price > 0 ? Number(t.price).toFixed(2) : 'Free'}</span>
                   {t.status === 'confirmed' && (
-                    <a href={`/tickets/${t.uuid}/download`} onClick={(e) => e.stopPropagation()}
+                    <a href={appUrl(`/tickets/${t.uuid}/download`)} onClick={(e) => e.stopPropagation()}
                       className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium
                         bg-primary-500/10 border border-primary-500/20 text-primary-400 hover:bg-primary-500/20 transition-all"
                     >
@@ -157,7 +157,7 @@ export default function Index({ tickets, filters, stats }) {
         {tickets?.last_page > 1 && (
           <div className="flex items-center justify-center gap-2 pb-8">
             {Array.from({ length: tickets.last_page }, (_, i) => i + 1).map((page) => (
-              <Link key={page} href={`/tickets?page=${page}`}
+              <Link key={page} href={appUrl(`/tickets?page=${page}`)}
                 className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-all ${page === tickets.current_page ? 'bg-primary-500/20 text-primary-400 border border-primary-500/30' : 'text-neutral-400 border border-neutral-200 dark:border-white/10 hover:bg-white/[0.03]'}`}
               >{page}</Link>
             ))}

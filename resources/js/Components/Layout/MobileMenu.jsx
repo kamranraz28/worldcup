@@ -50,8 +50,8 @@ export default function MobileMenu({ open, onClose }) {
                             flex flex-col"
                     >
                         <div className="flex-shrink-0 h-16 flex items-center justify-between px-5 border-b border-neutral-100 dark:border-white/[0.04]">
-                            <Link href="/dashboard" className="flex items-center gap-2.5" onClick={onClose}>
-                                {!isCustomer && <img src="/images/logo.png" alt="Synergy Interface Ltd" className="h-10 w-auto dark:brightness-0 dark:invert" />}
+                            <Link href={appUrl("/dashboard")} className="flex items-center gap-2.5" onClick={onClose}>
+                                {!isCustomer && <img src={appUrl("/images/logo.png")} alt="Synergy Interface Ltd" className="h-10 w-auto dark:brightness-0 dark:invert" />}
                                 <div>
                                     <span className="text-lg font-extrabold tracking-tight bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-white/80 bg-clip-text text-transparent">
                                         Event Management System

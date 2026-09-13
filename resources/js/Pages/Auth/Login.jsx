@@ -50,7 +50,7 @@ export default function Login({ status, canResetPassword }) {
                 <div className="relative z-10 flex flex-col w-full h-full">
                     {/* Top header - Synergy Interface Ltd logo */}
                     <div className="flex items-center justify-between px-10 py-8">
-                        <Link href="/" className="flex items-center gap-3 group w-fit">
+                        <Link href={appUrl("/")} className="flex items-center gap-3 group w-fit">
                             <div>
                                 <span className="text-xl font-extrabold tracking-tight text-white">Event Management System</span>
                             </div>
@@ -109,7 +109,7 @@ export default function Login({ status, canResetPassword }) {
             <div className="flex-1 flex items-center justify-center px-6 py-12 bg-dark-bg dark">
                 <div className="w-full max-w-md">
                     <div className="lg:hidden text-center mb-8">
-                        <Link href="/" className="inline-flex items-center gap-3 group">
+                        <Link href={appUrl("/")} className="inline-flex items-center gap-3 group">
                             <div className="text-left">
                                 <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-primary-500 to-primary-400 bg-clip-text text-transparent block leading-none">Event Management System</span>
                                 <span className="text-[9px] font-semibold tracking-widest uppercase text-neutral-400 dark:text-dark-text-secondary">By Synergy Interface Ltd.</span>

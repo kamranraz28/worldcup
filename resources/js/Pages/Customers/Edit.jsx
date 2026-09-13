@@ -11,18 +11,18 @@ export default function Edit({ customer }) {
     nationality: customer.nationality || '', document_type: customer.document_type || '',
     document_number: customer.document_number || '',
   });
-  const handleSubmit = (e) => { e.preventDefault(); form.post(`/customers/${customer.uuid}`, { _method: 'patch' }); };
+  const handleSubmit = (e) => { e.preventDefault(); form.post(appUrl(`/customers/${customer.uuid}`), { _method: 'patch' }); };
 
   return (
     <AppLayout>
       <div className="space-y-8">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center gap-3 text-sm text-neutral-400 mb-4">
-            <Link href="/customers" className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Customers</Link>
+            <Link href={appUrl("/customers")} className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Customers</Link>
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
-            <Link href={`/customers/${customer.uuid}`} className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">{customer.first_name} {customer.last_name}</Link>
+            <Link href={appUrl(`/customers/${customer.uuid}`)} className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">{customer.first_name} {customer.last_name}</Link>
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>

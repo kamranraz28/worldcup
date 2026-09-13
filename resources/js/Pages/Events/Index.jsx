@@ -16,7 +16,7 @@ export default function Index({ events, filters, stats }) {
     if (search) params.set('search', search);
     if (statusFilter) params.set('status', statusFilter);
     if (typeFilter) params.set('event_type', typeFilter);
-    window.location.href = `/events?${params.toString()}`;
+    window.location.href = appUrl(`/events?${params.toString()}`);
   };
 
   const totalEvents = stats?.total ?? 0;
@@ -33,7 +33,7 @@ export default function Index({ events, filters, stats }) {
             </p>
           </div>
           <Link
-            href="/events/create"
+            href={appUrl("/events/create")}
             className="inline-flex items-center gap-2 btn-primary h-10 px-5 text-sm"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -136,7 +136,7 @@ export default function Index({ events, filters, stats }) {
               </p>
               {!search && (
                 <Link
-                  href="/events/create"
+                  href={appUrl("/events/create")}
                   className="inline-flex items-center gap-2 btn-primary h-10 px-5 text-sm"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -154,7 +154,7 @@ export default function Index({ events, filters, stats }) {
             {Array.from({ length: events.last_page }, (_, i) => i + 1).map((page) => (
               <Link
                 key={page}
-                href={`/events?page=${page}`}
+                href={appUrl(`/events?page=${page}`)}
                 className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-all
                   ${page === events.current_page
                     ? 'bg-primary-500/20 text-primary-400 border border-primary-500/30'

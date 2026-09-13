@@ -4,21 +4,21 @@ import { motion } from 'framer-motion';
 const actions = [
     {
         label: 'Create Event',
-        href: '/events/create',
+        href: appUrl('/events/create'),
         icon: 'M12 4v16m8-8H4',
         color: 'from-primary-500 to-primary-600',
         bg: 'bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400',
     },
     {
         label: 'Verify Customer',
-        href: '/verifications/pending',
+        href: appUrl('/verifications/pending'),
         icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
         color: 'from-green-500 to-green-600',
         bg: 'bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400',
     },
     {
         label: 'View Reports',
-        href: '/reports',
+        href: appUrl('/reports'),
         icon: 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
         color: 'from-blue-500 to-blue-600',
         bg: 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400',

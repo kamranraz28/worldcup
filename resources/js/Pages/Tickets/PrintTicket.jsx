@@ -45,7 +45,7 @@ export default function PrintTicket({ ticket, qrSvg }) {
           </div>
 
           <div className="text-center p-6 border-t border-neutral-100 dark:border-white/[0.06] bg-neutral-50 dark:bg-white/[0.01]">
-            <img src="/images/logo.png" alt="Synergy Interface Ltd" className="h-10 w-auto mx-auto" />
+            <img src={appUrl("/images/logo.png")} alt="Synergy Interface Ltd" className="h-10 w-auto mx-auto" />
             <p className="text-xs text-neutral-500 mt-1">Powered by Synergy Interface Ltd.</p>
             <p className="text-xs text-neutral-400 mt-1">Present this ticket with QR code at the venue for entry.</p>
           </div>

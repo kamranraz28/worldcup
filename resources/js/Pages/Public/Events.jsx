@@ -21,13 +21,13 @@ function PublicLayout({ children }) {
             ))}
 
             <nav className="relative z-10 flex items-center justify-between px-6 py-5 max-w-7xl mx-auto">
-                <Link href="/" className="flex items-center gap-2.5 group">
+                <Link href={appUrl("/")} className="flex items-center gap-2.5 group">
                     <div>
                         <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">EVENT MANAGEMENT SYSTEM</span>
                     </div>
                 </Link>
                 <div className="flex items-center gap-3">
-                    <Link href="/browse" className="px-4 py-2 text-sm font-medium text-primary-400 hover:text-primary-300 transition-colors">Events</Link>
+                    <Link href={appUrl("/browse")} className="px-4 py-2 text-sm font-medium text-primary-400 hover:text-primary-300 transition-colors">Events</Link>
                     {auth?.user ? (
                         <Link href={route('customer.dashboard')} className="px-4 py-2 text-sm font-medium text-white/60 hover:text-white transition-colors">
                             My Dashboard
@@ -102,7 +102,7 @@ export default function Events({ events, filters, eventTypes }) {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {events.data.map((event, i) => (
                             <motion.div key={event.uuid} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
-                                <Link href={`/browse/${event.uuid}`}
+                                <Link href={appUrl(`/browse/${event.uuid}`)}
                                     className="group block bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden
                                         hover:bg-white/[0.05] hover:border-white/[0.1] hover:-translate-y-0.5
                                         active:translate-y-0 active:scale-[0.98]
@@ -110,7 +110,7 @@ export default function Events({ events, filters, eventTypes }) {
                                 >
                                     <div className="aspect-[16/9] bg-white/[0.02] relative overflow-hidden">
                                         {event.banner_image ? (
-                                            <img src={`/storage/${event.banner_image}`} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                            <img src={appUrl(`/storage/${event.banner_image}`)} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center">
                                                 <svg className="w-12 h-12 text-white/5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
@@ -162,7 +162,7 @@ export default function Events({ events, filters, eventTypes }) {
                 {events?.last_page > 1 && (
                     <div className="flex items-center justify-center gap-2 mt-10">
                         {Array.from({ length: events.last_page }, (_, i) => i + 1).map(page => (
-                            <Link key={page} href={`/browse?page=${page}&search=${search}&event_type=${typeFilter}`}
+                            <Link key={page} href={appUrl(`/browse?page=${page}&search=${search}&event_type=${typeFilter}`)}
                                 className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-all ${page === events.current_page ? 'bg-primary-500/20 text-primary-400 border border-primary-500/30' : 'text-white/30 border border-white/[0.08] hover:bg-white/[0.04]'}`}
                             >{page}</Link>
                         ))}

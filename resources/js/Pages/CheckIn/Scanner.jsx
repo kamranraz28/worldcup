@@ -18,7 +18,7 @@ export default function Scanner({ auth, events, stats, activeEvent, attendance, 
   const scanTimeoutRef = useRef(null);
   const csrfToken = typeof document !== 'undefined' ? document.querySelector('meta[name="csrf-token"]')?.content : '';
 
-  const scanUrl = () => window.route ? route('checkin.scan') : '/check-in/scan';
+  const scanUrl = () => window.route ? route('checkin.scan') : appUrl('/check-in/scan');
 
   const submitScan = useCallback(async (qrCode) => {
     if (!selectedEvent || scanning) return;
@@ -80,7 +80,7 @@ export default function Scanner({ auth, events, stats, activeEvent, attendance, 
             <h1 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">QR Scanner</h1>
             <p className="text-sm text-neutral-500 dark:text-dark-text-secondary mt-1">Scan tickets for entry</p>
           </div>
-          <Link href="/check-in/history" className="btn-secondary h-10 px-5 text-sm">History</Link>
+          <Link href={appUrl("/check-in/history")} className="btn-secondary h-10 px-5 text-sm">History</Link>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

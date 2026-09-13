@@ -32,7 +32,7 @@ export default function UpcomingEvents({ events }) {
                     transition={{ delay: i * 0.06, duration: 0.3, ease: 'easeOut' }}
                 >
                     <Link
-                        href={`/events/${event.uuid || event.id}`}
+                        href={appUrl(`/events/${event.uuid || event.id}`)}
                         className="group block card-premium-hover p-4"
                     >
                         <div className="flex items-start gap-3">

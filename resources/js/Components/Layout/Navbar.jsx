@@ -150,10 +150,10 @@ export default function Navbar({ onMenuToggle, breadcrumbs }) {
                                             shadow-soft-xl dark:shadow-dark-xl overflow-hidden z-50"
                                     >
                                         <div className="p-2 space-y-1">
-                                            <UserMenuItem href="/profile" icon="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                            <UserMenuItem href={appUrl("/profile")} icon="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
                                                 Profile
                                             </UserMenuItem>
-                                            <UserMenuItem href="/profile" icon="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                                            <UserMenuItem href={appUrl("/profile")} icon="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
                                                 Settings
                                             </UserMenuItem>
 
@@ -192,7 +192,7 @@ export default function Navbar({ onMenuToggle, breadcrumbs }) {
 function Breadcrumb({ items = [] }) {
     return (
         <nav className="hidden sm:flex items-center gap-1.5 text-sm" aria-label="Breadcrumb">
-            <Link href="/dashboard" className="text-neutral-400 dark:text-dark-text-secondary hover:text-neutral-600
+            <Link href={appUrl("/dashboard")} className="text-neutral-400 dark:text-dark-text-secondary hover:text-neutral-600
                 dark:hover:text-white/70 transition-colors">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />

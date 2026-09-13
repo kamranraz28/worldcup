@@ -19,13 +19,13 @@ function PublicLayout({ children }) {
             ))}
 
             <nav className="relative z-10 flex items-center justify-between px-6 py-5 max-w-7xl mx-auto">
-                <Link href="/" className="flex items-center gap-2.5 group">
+                <Link href={appUrl("/")} className="flex items-center gap-2.5 group">
                     <div>
                         <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">EVENT MANAGEMENT SYSTEM</span>
                     </div>
                 </Link>
                 <div className="flex items-center gap-3">
-                    <Link href="/browse" className="px-4 py-2 text-sm font-medium text-primary-400 hover:text-primary-300 transition-colors">Events</Link>
+                    <Link href={appUrl("/browse")} className="px-4 py-2 text-sm font-medium text-primary-400 hover:text-primary-300 transition-colors">Events</Link>
                     {auth?.user ? (
                         <Link href={route('customer.dashboard')} className="px-4 py-2 text-sm font-medium text-white/60 hover:text-white transition-colors">My Dashboard</Link>
                     ) : (
@@ -65,7 +65,7 @@ export default function EventDetail({ event, isFull, availableSpots, userRegiste
         <PublicLayout>
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20">
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-                    <Link href="/browse" className="inline-flex items-center gap-1.5 text-sm text-white/40 hover:text-white/70 transition-colors mb-6">
+                    <Link href={appUrl("/browse")} className="inline-flex items-center gap-1.5 text-sm text-white/40 hover:text-white/70 transition-colors mb-6">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                         </svg>
@@ -74,7 +74,7 @@ export default function EventDetail({ event, isFull, availableSpots, userRegiste
 
                     <div className="aspect-[21/9] bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden relative mb-8">
                         {event.banner_image ? (
-                            <img src={`/storage/${event.banner_image}`} alt={event.title} className="w-full h-full object-cover" />
+                            <img src={appUrl(`/storage/${event.banner_image}`)} alt={event.title} className="w-full h-full object-cover" />
                         ) : (
                             <div className="w-full h-full flex items-center justify-center">
                                 <svg className="w-24 h-24 text-white/5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>

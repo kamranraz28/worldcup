@@ -28,7 +28,7 @@ export default function Show({ ticket, history, qrSvg, pdfExists }) {
 
   const sendEmail = async () => {
     setEmailLoading(true);
-    await fetch(`/tickets/${ticket.uuid}/email`, {
+    await fetch(appUrl(`/tickets/${ticket.uuid}/email`), {
       method: 'POST',
       headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content },
     });
@@ -38,7 +38,7 @@ export default function Show({ ticket, history, qrSvg, pdfExists }) {
 
   const sendSms = async () => {
     setSmsLoading(true);
-    await fetch(`/tickets/${ticket.uuid}/sms`, {
+    await fetch(appUrl(`/tickets/${ticket.uuid}/sms`), {
       method: 'POST',
       headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content },
     });
@@ -53,7 +53,7 @@ export default function Show({ ticket, history, qrSvg, pdfExists }) {
       <div className="space-y-8">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center gap-3 text-sm text-neutral-400 mb-4">
-            <Link href="/tickets" className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Tickets</Link>
+            <Link href={appUrl("/tickets")} className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Tickets</Link>
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
@@ -104,10 +104,10 @@ export default function Show({ ticket, history, qrSvg, pdfExists }) {
                 <div className="w-48 h-48 rounded-2xl border border-neutral-200 dark:border-white/10 bg-white p-2 flex items-center justify-center" dangerouslySetInnerHTML={{ __html: qrSvg }} />
                 <p className="text-xs text-neutral-500 dark:text-dark-text-secondary mt-3 font-mono tracking-wider">{ticket.qr_code}</p>
                 <div className="flex items-center gap-2 mt-4">
-                  <a href={`/tickets/${ticket.uuid}/download`} className="btn-green h-10 px-5 text-sm inline-flex items-center gap-2 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20 font-medium transition-all">
+                  <a href={appUrl(`/tickets/${ticket.uuid}/download`)} className="btn-green h-10 px-5 text-sm inline-flex items-center gap-2 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20 font-medium transition-all">
                     📄 Download PDF
                   </a>
-                  <Link href={`/tickets/${ticket.uuid}/print`} className="btn-ghost h-10 px-5 text-sm inline-flex items-center gap-2">
+                  <Link href={appUrl(`/tickets/${ticket.uuid}/print`)} className="btn-ghost h-10 px-5 text-sm inline-flex items-center gap-2">
                     🖨️ Print Ticket
                   </Link>
                 </div>
@@ -161,7 +161,7 @@ export default function Show({ ticket, history, qrSvg, pdfExists }) {
             {ticket.event && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="glass-card p-6">
                 <h2 className="text-xs font-semibold text-neutral-500 dark:text-dark-text-secondary uppercase tracking-wider mb-4">Event</h2>
-                <Link href={`/events/${ticket.event.uuid}`} className="block p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.02] border border-neutral-200 dark:border-white/[0.04] hover:bg-neutral-100 dark:hover:bg-white/[0.04] transition-all">
+                <Link href={appUrl(`/events/${ticket.event.uuid}`)} className="block p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.02] border border-neutral-200 dark:border-white/[0.04] hover:bg-neutral-100 dark:hover:bg-white/[0.04] transition-all">
                   <p className="text-sm font-medium text-neutral-700 dark:text-dark-text">{ticket.event.title}</p>
                   <p className="text-xs text-neutral-500 mt-1">{ticket.event.start_date ? new Date(ticket.event.start_date).toLocaleDateString() : 'TBD'}</p>
                   {ticket.event.venue_name && <p className="text-xs text-neutral-500 mt-0.5">{ticket.event.venue_name}</p>}
@@ -172,7 +172,7 @@ export default function Show({ ticket, history, qrSvg, pdfExists }) {
             {ticket.customer && (
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass-card p-6">
                 <h2 className="text-xs font-semibold text-neutral-500 dark:text-dark-text-secondary uppercase tracking-wider mb-4">Customer</h2>
-                <Link href={`/customers/${ticket.customer.uuid}`} className="flex items-center gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.02] border border-neutral-200 dark:border-white/[0.04] hover:bg-neutral-100 dark:hover:bg-white/[0.04] transition-all">
+                <Link href={appUrl(`/customers/${ticket.customer.uuid}`)} className="flex items-center gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-white/[0.02] border border-neutral-200 dark:border-white/[0.04] hover:bg-neutral-100 dark:hover:bg-white/[0.04] transition-all">
                   <div className="w-9 h-9 rounded-xl bg-primary-500/10 flex items-center justify-center text-sm font-bold text-primary-400">
                     {(ticket.customer.first_name?.charAt(0) || '') + (ticket.customer.last_name?.charAt(0) || '')}
                   </div>

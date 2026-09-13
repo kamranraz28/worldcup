@@ -82,7 +82,7 @@ export default function CustomerForm({ form, customer }) {
 
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
         className="flex items-center justify-end gap-4 pb-8">
-        <Link href={customer ? `/customers/${customer.uuid}` : '/customers'} className="btn-secondary h-10 px-6 text-sm">Cancel</Link>
+        <Link href={customer ? appUrl(`/customers/${customer.uuid}`) : appUrl('/customers')} className="btn-secondary h-10 px-6 text-sm">Cancel</Link>
         <button type="submit" disabled={processing} className="btn-primary h-10 px-6 text-sm">
           {processing ? (
             <span className="flex items-center gap-2">

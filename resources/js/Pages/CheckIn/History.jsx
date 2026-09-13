@@ -19,7 +19,7 @@ export default function CheckInHistory({ checkIns, filters, events, stats }) {
       if (dateFrom) params.set('date_from', dateFrom);
       if (dateTo) params.set('date_to', dateTo);
       if (validFilter) params.set('is_valid', validFilter);
-      window.location.href = `/check-in/history?${params.toString()}`;
+      window.location.href = appUrl(`/check-in/history?${params.toString()}`);
     }, 400);
     return () => clearTimeout(timeout);
   }, [search, eventFilter, dateFrom, dateTo, validFilter]);
@@ -34,7 +34,7 @@ export default function CheckInHistory({ checkIns, filters, events, stats }) {
             <h1 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white">Check-In History</h1>
             <p className="text-sm text-neutral-500 dark:text-dark-text-secondary mt-1">View all scanned tickets and attendance records</p>
           </div>
-          <Link href="/check-in" className="btn-primary h-10 px-5 text-sm inline-flex items-center gap-2">
+          <Link href={appUrl("/check-in")} className="btn-primary h-10 px-5 text-sm inline-flex items-center gap-2">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
             </svg>
@@ -84,7 +84,7 @@ export default function CheckInHistory({ checkIns, filters, events, stats }) {
             {checkIns.data.map((c, i) => (
               <motion.div key={c.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.01 }}
                 className="flex items-center gap-4 p-4 rounded-xl glass-card hover:bg-white/[0.05] transition-all cursor-pointer"
-                onClick={() => window.location.href = `/check-in/history/${c.id}`}
+                onClick={() => window.location.href = appUrl(`/check-in/history/${c.id}`)}
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold ${c.is_valid ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -115,14 +115,14 @@ export default function CheckInHistory({ checkIns, filters, events, stats }) {
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-1">No check-in records found</h3>
-            <Link href="/check-in" className="mt-4 btn-primary h-10 px-5 text-sm inline-flex items-center gap-2">Go to Scanner</Link>
+            <Link href={appUrl("/check-in")} className="mt-4 btn-primary h-10 px-5 text-sm inline-flex items-center gap-2">Go to Scanner</Link>
           </div>
         )}
 
         {checkIns?.last_page > 1 && (
           <div className="flex items-center justify-center gap-2 pb-8">
             {Array.from({ length: checkIns.last_page }, (_, i) => i + 1).map((page) => (
-              <Link key={page} href={`/check-in/history?page=${page}${eventFilter ? '&event_id=' + eventFilter : ''}${search ? '&search=' + search : ''}`}
+              <Link key={page} href={appUrl(`/check-in/history?page=${page}${eventFilter ? '&event_id=' + eventFilter : ''}${search ? '&search=' + search : ''}`)}
                 className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-all ${page === checkIns.current_page ? 'bg-primary-500/20 text-primary-400 border border-primary-500/30' : 'text-neutral-400 border border-neutral-200 dark:border-white/10 hover:bg-white/[0.03]'}`}
               >{page}</Link>
             ))}

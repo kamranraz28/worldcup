@@ -14,7 +14,7 @@ export default function Show({ verification }) {
       <div className="space-y-8">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center gap-3 text-sm text-neutral-400 mb-4">
-            <Link href="/verifications" className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Verifications</Link>
+            <Link href={appUrl("/verifications")} className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Verifications</Link>
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
@@ -36,14 +36,14 @@ export default function Show({ verification }) {
                 <div className="flex items-center gap-3 mt-1">
                   <StatusBadge status={verification.status} size="md" />
                   {customer && (
-                    <Link href={`/customers/${customer.uuid}`} className="text-sm font-medium text-primary-500 hover:text-primary-400 transition-colors">
+                    <Link href={appUrl(`/customers/${customer.uuid}`)} className="text-sm font-medium text-primary-500 hover:text-primary-400 transition-colors">
                       {customer.first_name} {customer.last_name}
                     </Link>
                   )}
                 </div>
               </div>
             </div>
-            <Link href={`/customers/${customer?.uuid}`} className="btn-secondary h-10 px-5 text-sm">View Customer</Link>
+            <Link href={appUrl(`/customers/${customer?.uuid}`)} className="btn-secondary h-10 px-5 text-sm">View Customer</Link>
           </div>
         </motion.div>
 

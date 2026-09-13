@@ -10,7 +10,7 @@ export default function BlacklistForm({ customer, onSubmit }) {
     const formData = new FormData();
     formData.append('reason', reason);
     if (durationDays) formData.append('duration_days', durationDays);
-    fetch(`/customers/${customer.uuid}/blacklist`, {
+    fetch(appUrl(`/customers/${customer.uuid}/blacklist`), {
       method: 'POST', body: formData,
       headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content },
     }).then(() => { setIsOpen(false); if (onSubmit) onSubmit(); });

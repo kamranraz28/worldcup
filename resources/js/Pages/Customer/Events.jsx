@@ -15,7 +15,7 @@ export default function Events({ events }) {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {events.map((ev, i) => (
                             <motion.div key={ev.uuid} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
-                                <Link href={`/customer/events/${ev.uuid}/register`}
+                                <Link href={appUrl(`/customer/events/${ev.uuid}/register`)}
                                     className="glass-card p-4 block hover:border-primary-500/30 transition-all active:scale-[0.98]"
                                 >
                                     <div className="flex items-center gap-3 mb-3">

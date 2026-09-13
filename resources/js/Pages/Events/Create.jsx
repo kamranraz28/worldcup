@@ -28,7 +28,7 @@ export default function Create() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    form.post('/events');
+    form.post(appUrl('/events'));
   };
 
   return (
@@ -36,7 +36,7 @@ export default function Create() {
       <div className="space-y-8">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center gap-3 text-sm text-neutral-400 mb-4">
-            <Link href="/events" className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Events</Link>
+            <Link href={appUrl("/events")} className="hover:text-neutral-300 dark:hover:text-dark-text transition-colors">Events</Link>
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
