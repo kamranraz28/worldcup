@@ -4,9 +4,10 @@ import { motion } from 'framer-motion';
 import AppLayout from '@/Layouts/AppLayout';
 
 export default function Register({ event, ticketTypes }) {
-    const { errors } = usePage().props;
+    const { errors, auth } = usePage().props;
     const [ticketType, setTicketType] = useState('general');
     const [sessionId, setSessionId] = useState('');
+    const [phone, setPhone] = useState(auth?.user?.phone || '');
     const [submitting, setSubmitting] = useState(false);
 
     const fmtDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) : '';
@@ -18,6 +19,7 @@ export default function Register({ event, ticketTypes }) {
         router.post(route('customer.events.register.store', event.uuid), {
             ticket_type: ticketType,
             event_session_id: sessionId || undefined,
+            phone: phone || undefined,
         }, {
             onFinish: () => setSubmitting(false),
         });
@@ -53,9 +55,21 @@ export default function Register({ event, ticketTypes }) {
                         </div>
                         <div>
                             <p className="text-xs text-neutral-400 dark:text-dark-text-secondary">Price</p>
-                            <p className="font-medium text-neutral-900 dark:text-white">{event.ticket_price > 0 ? `BDT ${Number(event.ticket_price).toLocaleString()}` : 'Free'}</p>
+                            <p className="font-medium text-neutral-900 dark:text-white">
+                                {event.ticket_price > 0 ? `BDT ${Number(event.ticket_price).toLocaleString()}` : 'Free'}
+                                {event.is_early_booking && <span className="ml-2 text-[11px] font-semibold text-emerald-500">Early booking</span>}
+                            </p>
+                            {event.is_early_booking && event.regular_price > 0 && (
+                                <p className="text-[11px] text-neutral-400 dark:text-dark-text-secondary line-through">BDT {Number(event.regular_price).toLocaleString()}</p>
+                            )}
+                            {event.early_booking_deadline && !event.is_early_booking && (
+                                <p className="text-[11px] text-neutral-400 dark:text-dark-text-secondary">Early booking ended</p>
+                            )}
                         </div>
                     </div>
+                    {event.registration_deadline && (
+                        <p className="text-xs text-neutral-400 dark:text-dark-text-secondary mt-3">Booking closes {fmtDate(event.registration_deadline)}</p>
+                    )}
                 </div>
 
                 <form onSubmit={submit} className="space-y-6">
@@ -71,6 +85,18 @@ export default function Register({ event, ticketTypes }) {
                             ))}
                         </div>
                         {errors?.ticket_type && <p className="text-xs text-red-500">{errors.ticket_type}</p>}
+                        <div>
+                            <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1.5">Phone Number</label>
+                            <input
+                                type="tel"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                placeholder="e.g. 01712345678"
+                                className="input-field w-full"
+                            />
+                            {errors?.phone && <p className="text-xs text-red-500">{errors.phone}</p>}
+                            <p className="text-xs text-neutral-500 dark:text-dark-text-secondary mt-1">Confirm your contact number for the ticket.</p>
+                        </div>
                     </div>
 
                     {event.sessions?.length > 0 && (
@@ -107,12 +133,17 @@ export default function Register({ event, ticketTypes }) {
                                     </svg>
                                     Submitting...
                                 </span>
-                            ) : 'Get Your Ticket'}
+                            ) : (event.ticket_price > 0 ? 'Pay & Get Ticket' : 'Get Your Ticket')}
                         </button>
                         <Link href={appUrl(`/browse/${event.uuid}`)} className="text-sm text-neutral-500 dark:text-dark-text-secondary hover:text-neutral-700 dark:hover:text-white transition-colors">
                             Cancel
                         </Link>
                     </div>
+                    {event.ticket_price > 0 && (
+                        <p className="text-xs text-neutral-500 dark:text-dark-text-secondary">
+                            You will be redirected to the secure ShurjoPay gateway. Your ticket is booked instantly after payment.
+                        </p>
+                    )}
                 </form>
             </div>
         </AppLayout>

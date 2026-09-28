@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Event;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -50,7 +51,7 @@ class EventFactory extends Factory
                 'food_allowed' => fake()->boolean(),
                 'age_restriction' => fake()->randomElement([null, 12, 16, 18, 21]),
             ]),
-            'created_by' => User::factory(),
+            'created_by' => User::query()->where('role_id', Role::where('name', 'super-admin')->first()?->id)->first()?->id,
         ];
     }
 

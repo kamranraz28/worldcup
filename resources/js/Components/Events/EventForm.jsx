@@ -103,11 +103,21 @@ export default function EventForm({ form, event, isEdit }) {
                 {errors.end_date && <p className="mt-1 text-xs text-red-400">{errors.end_date}</p>}
               </div>
             </div>
-            <div>
-              <label className={labelClass}>Registration Deadline</label>
-              <input type="datetime-local" value={data.registration_deadline} onChange={(e) => setData('registration_deadline', e.target.value)}
-                className={`${fieldClass} ${errors.registration_deadline ? errorClass : ''}`} />
-              {errors.registration_deadline && <p className="mt-1 text-xs text-red-400">{errors.registration_deadline}</p>}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className={labelClass}>Booking Last Date (Registration Deadline)</label>
+                <input type="datetime-local" value={data.registration_deadline} onChange={(e) => setData('registration_deadline', e.target.value)}
+                  className={`${fieldClass} ${errors.registration_deadline ? errorClass : ''}`} />
+                {errors.registration_deadline && <p className="mt-1 text-xs text-red-400">{errors.registration_deadline}</p>}
+                <p className="mt-1 text-xs text-neutral-400 dark:text-dark-text-secondary">No bookings are accepted after this date.</p>
+              </div>
+              <div>
+                <label className={labelClass}>Early Booking Deadline</label>
+                <input type="datetime-local" value={data.early_booking_deadline || ''} onChange={(e) => setData('early_booking_deadline', e.target.value)}
+                  className={`${fieldClass} ${errors.early_booking_deadline ? errorClass : ''}`} />
+                {errors.early_booking_deadline && <p className="mt-1 text-xs text-red-400">{errors.early_booking_deadline}</p>}
+                <p className="mt-1 text-xs text-neutral-400 dark:text-dark-text-secondary">Bookings on or before this get the early price.</p>
+              </div>
             </div>
           </motion.div>
 
@@ -143,10 +153,17 @@ export default function EventForm({ form, event, isEdit }) {
                 {errors.max_capacity && <p className="mt-1 text-xs text-red-400">{errors.max_capacity}</p>}
               </div>
               <div>
-                <label className={labelClass}>Ticket Price ($)</label>
+                <label className={labelClass}>Regular Ticket Price (BDT)</label>
                 <input type="number" step="0.01" value={data.ticket_price || ''} onChange={(e) => setData('ticket_price', e.target.value)}
                   className={`${fieldClass} ${errors.ticket_price ? errorClass : ''}`} placeholder="0.00 for free" min="0" />
                 {errors.ticket_price && <p className="mt-1 text-xs text-red-400">{errors.ticket_price}</p>}
+                <p className="mt-1 text-xs text-neutral-400 dark:text-dark-text-secondary">Price charged after the early booking deadline.</p>
+              </div>
+              <div>
+                <label className={labelClass}>Early Booking Price (BDT)</label>
+                <input type="number" step="0.01" value={data.early_booking_price || ''} onChange={(e) => setData('early_booking_price', e.target.value)}
+                  className={`${fieldClass} ${errors.early_booking_price ? errorClass : ''}`} placeholder="Optional — lower price before the early deadline" min="0" />
+                {errors.early_booking_price && <p className="mt-1 text-xs text-red-400">{errors.early_booking_price}</p>}
               </div>
             </div>
           </motion.div>

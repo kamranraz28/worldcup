@@ -61,29 +61,37 @@ export default function MyTickets({ tickets, stats }) {
                                 </div>
 
                                 <div className="flex items-center gap-2 flex-shrink-0">
-                                    <a
-                                        href={t.status === 'confirmed' ? appUrl(`/tickets/${t.uuid}/download`) : '#'}
-                                        className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all
-                                            ${t.status === 'confirmed'
-                                                ? 'bg-primary-500 text-white hover:bg-primary-400 active:scale-95'
-                                                : 'bg-neutral-300 dark:bg-white/[0.05] text-neutral-400 dark:text-dark-text-secondary cursor-not-allowed'
-                                            }`}
-                                    >
-                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                        </svg>
-                                        Download
-                                    </a>
-                                    <span
-                                        onClick={t.status === 'confirmed' ? () => router.visit(appUrl(`/tickets/${t.uuid}`)) : undefined}
-                                        className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all
-                                            ${t.status === 'confirmed'
-                                                ? 'text-neutral-600 dark:text-dark-text-secondary hover:bg-neutral-100 dark:hover:bg-white/[0.04] active:scale-95 cursor-pointer'
-                                                : 'text-neutral-300 dark:text-dark-text-secondary/40 cursor-not-allowed'
-                                            }`}
+                                    {t.status === 'reserved' ? (
+                                        <a
+                                            href={appUrl(`/payment/initiate/${t.uuid}`)}
+                                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all bg-amber-500 text-white hover:bg-amber-400 active:scale-95"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                            </svg>
+                                            Pay Now
+                                        </a>
+                                    ) : (
+                                        <a
+                                            href={t.status === 'confirmed' ? appUrl(`/tickets/${t.uuid}/download`) : '#'}
+                                            className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all
+                                                ${t.status === 'confirmed'
+                                                    ? 'bg-primary-500 text-white hover:bg-primary-400 active:scale-95'
+                                                    : 'bg-neutral-300 dark:bg-white/[0.05] text-neutral-400 dark:text-dark-text-secondary cursor-not-allowed'
+                                                }`}
+                                        >
+                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                            </svg>
+                                            Download
+                                        </a>
+                                    )}
+                                    <Link
+                                        href={appUrl(`/tickets/${t.uuid}`)}
+                                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all text-neutral-600 dark:text-dark-text-secondary hover:bg-neutral-100 dark:hover:bg-white/[0.04] active:scale-95"
                                     >
                                         View
-                                    </span>
+                                    </Link>
                                 </div>
                             </motion.div>
                         ))}

@@ -16,9 +16,29 @@ export default function Scanner({ auth, events, stats, activeEvent, attendance, 
     try { return localStorage.getItem('scanner_voice') !== 'off'; } catch (e) { return true; }
   });
   const scanTimeoutRef = useRef(null);
-  const csrfToken = typeof document !== 'undefined' ? document.querySelector('meta[name="csrf-token"]')?.content : '';
+  const csrfTokenRef = useRef(document.querySelector('meta[name="csrf-token"]')?.content);
 
   const scanUrl = () => window.route ? route('checkin.scan') : appUrl('/check-in/scan');
+
+  const getCsrfHeaders = () => {
+    const headers = { 'Content-Type': 'application/json', 'Accept': 'application/json' };
+    const cookieToken = document.cookie.split('; ').find(c => c.startsWith('XSRF-TOKEN='))?.split('=')[1];
+    if (cookieToken) headers['X-XSRF-TOKEN'] = decodeURIComponent(cookieToken);
+    if (csrfTokenRef.current) headers['X-CSRF-TOKEN'] = csrfTokenRef.current;
+    return headers;
+  };
+
+  const refreshCsrfToken = async () => {
+    try {
+      const html = await (await fetch(window.location.href, { headers: { 'Cache-Control': 'no-cache' }, credentials: 'same-origin' })).text();
+      const match = html.match(/<meta[^>]*name="csrf-token"[^>]*content="([^"]+)"/);
+      if (match) {
+        csrfTokenRef.current = match[1];
+        return true;
+      }
+    } catch (e) { }
+    return false;
+  };
 
   const submitScan = useCallback(async (qrCode) => {
     if (!selectedEvent || scanning) return;
@@ -26,10 +46,26 @@ export default function Scanner({ auth, events, stats, activeEvent, attendance, 
     try {
       const res = await fetch(scanUrl(), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
+        headers: getCsrfHeaders(),
         body: JSON.stringify({ qr_code: qrCode, event_id: Number(selectedEvent) }),
       });
       if (res.status === 419) {
+        const recovered = await refreshCsrfToken();
+        const retry = recovered
+          ? await fetch(scanUrl(), {
+              method: 'POST',
+              headers: getCsrfHeaders(),
+              body: JSON.stringify({ qr_code: qrCode, event_id: Number(selectedEvent) }),
+            })
+          : null;
+        if (retry && retry.status !== 419) {
+          const retryData = await retry.json();
+          setLastResult(retryData);
+          if (voiceEnabled && retryData.message) speak(retryData.message);
+          if (retry.ok && retryData.success) { if ('vibrate' in navigator) navigator.vibrate(200); if (scannerBeepEnabled) playBeep(true); }
+          else { if (scannerBeepEnabled) playBeep(false); }
+          return;
+        }
         setLastResult({ success: false, code: 'SESSION_EXPIRED', message: 'Session expired. Please refresh.', data: null });
         if (scannerBeepEnabled) playBeep(false);
         if (voiceEnabled) speak('Session expired. Please refresh.');
@@ -45,7 +81,7 @@ export default function Scanner({ auth, events, stats, activeEvent, attendance, 
       if (scannerBeepEnabled) playBeep(false);
       if (voiceEnabled) speak('Connection error. Try again.');
     } finally { setScanning(false); }
-  }, [selectedEvent, scanning, csrfToken, scannerBeepEnabled, voiceEnabled]);
+  }, [selectedEvent, scanning, scannerBeepEnabled, voiceEnabled]);
 
   const playBeep = (success) => {
     try {

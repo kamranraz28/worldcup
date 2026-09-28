@@ -101,16 +101,32 @@ export default function Show({ ticket, history, qrSvg, pdfExists }) {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="glass-card p-6">
               <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-4">QR Code</h2>
               <div className="flex flex-col items-center">
-                <div className="w-48 h-48 rounded-2xl border border-neutral-200 dark:border-white/10 bg-white p-2 flex items-center justify-center" dangerouslySetInnerHTML={{ __html: qrSvg }} />
+                {['confirmed', 'redeemed'].includes(ticket.status) ? (
+                  <div className="w-48 h-48 rounded-2xl border border-neutral-200 dark:border-white/10 bg-white p-2 flex items-center justify-center" dangerouslySetInnerHTML={{ __html: qrSvg }} />
+                ) : (
+                  <div className="w-48 h-48 rounded-2xl border border-dashed border-neutral-300 dark:border-white/10 flex flex-col items-center justify-center text-center px-4">
+                    <span className="text-3xl mb-2">🔒</span>
+                    <p className="text-xs text-neutral-500 dark:text-dark-text-secondary">QR code unlocks after payment confirmation</p>
+                  </div>
+                )}
                 <p className="text-xs text-neutral-500 dark:text-dark-text-secondary mt-3 font-mono tracking-wider">{ticket.qr_code}</p>
                 <div className="flex items-center gap-2 mt-4">
-                  <a href={appUrl(`/tickets/${ticket.uuid}/download`)} className="btn-green h-10 px-5 text-sm inline-flex items-center gap-2 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20 font-medium transition-all">
-                    📄 Download PDF
-                  </a>
+                  {ticket.status === 'reserved' ? (
+                    <a href={appUrl(`/payment/initiate/${ticket.uuid}`)} className="h-10 px-5 text-sm inline-flex items-center gap-2 rounded-xl bg-amber-500 text-white hover:bg-amber-400 font-medium transition-all">
+                      💳 Pay Now
+                    </a>
+                  ) : (
+                    <a href={appUrl(`/tickets/${ticket.uuid}/download`)} className="btn-green h-10 px-5 text-sm inline-flex items-center gap-2 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20 font-medium transition-all">
+                      📄 Download PDF
+                    </a>
+                  )}
                   <Link href={appUrl(`/tickets/${ticket.uuid}/print`)} className="btn-ghost h-10 px-5 text-sm inline-flex items-center gap-2">
                     🖨️ Print Ticket
                   </Link>
                 </div>
+                {ticket.status === 'reserved' && (
+                  <p className="text-xs text-amber-400 mt-3 text-center">Payment pending — complete payment to book your ticket and unlock the QR code.</p>
+                )}
               </div>
             </motion.div>
 

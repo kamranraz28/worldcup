@@ -23,6 +23,8 @@ class Event extends Model
         'venue_lng',
         'max_capacity',
         'ticket_price',
+        'early_booking_price',
+        'early_booking_deadline',
         'start_date',
         'end_date',
         'registration_deadline',
@@ -42,6 +44,8 @@ class Event extends Model
         return 'uuid';
     }
 
+    protected $appends = ['current_price', 'is_early_booking'];
+
     protected function casts(): array
     {
         return [
@@ -49,9 +53,11 @@ class Event extends Model
             'venue_lng' => 'decimal:7',
             'max_capacity' => 'integer',
             'ticket_price' => 'decimal:2',
+            'early_booking_price' => 'decimal:2',
             'start_date' => 'datetime',
             'end_date' => 'datetime',
             'registration_deadline' => 'datetime',
+            'early_booking_deadline' => 'datetime',
             'requires_verification' => 'boolean',
             'qr_x' => 'decimal:2',
             'qr_y' => 'decimal:2',
@@ -133,13 +139,46 @@ class Event extends Model
     }
 
     public function isFull(): bool
-    {
-        return $this->tickets()->whereIn('status', ['confirmed', 'reserved'])->count() >= $this->max_capacity;
+    {        return $this->tickets()->whereIn('status', ['confirmed', 'reserved'])->count() >= $this->max_capacity;
     }
 
     public function availableSpots(): int
     {
         return $this->max_capacity - $this->tickets()->whereIn('status', ['confirmed', 'reserved'])->count();
+    }
+
+    public function hasEarlyBooking(): bool
+    {
+        return $this->early_booking_price !== null && $this->early_booking_deadline !== null;
+    }
+
+    public function isEarlyBookingActive(): bool
+    {
+        return $this->hasEarlyBooking() && now()->lte($this->early_booking_deadline);
+    }
+
+    public function currentPrice(): float
+    {
+        if ($this->isEarlyBookingActive()) {
+            return (float) $this->early_booking_price;
+        }
+
+        return (float) ($this->ticket_price ?? 0);
+    }
+
+    public function isBookingOpen(): bool
+    {
+        return $this->registration_deadline === null || now()->lte($this->registration_deadline);
+    }
+
+    public function getCurrentPriceAttribute(): float
+    {
+        return $this->currentPrice();
+    }
+
+    public function getIsEarlyBookingAttribute(): bool
+    {
+        return $this->isEarlyBookingActive();
     }
 
     public function isUpcoming(): bool

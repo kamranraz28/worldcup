@@ -32,7 +32,8 @@ export default function Events({ events }) {
                                             {new Date(ev.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                         </p>
                                         <span className="text-xs font-semibold text-primary-500">
-                                            {ev.ticket_price > 0 ? `BDT ${Number(ev.ticket_price).toFixed(2)}` : 'Free'}
+                                            {ev.current_price > 0 ? `BDT ${Number(ev.current_price).toFixed(2)}` : 'Free'}
+                                            {ev.is_early_booking && <span className="ml-1.5 text-[10px] font-bold text-emerald-500">EARLY</span>}
                                         </span>
                                     </div>
                                     <button type="button" className="btn-primary h-9 w-full mt-3 text-sm inline-flex items-center justify-center">

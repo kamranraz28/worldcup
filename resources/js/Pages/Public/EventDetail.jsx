@@ -61,6 +61,8 @@ export default function EventDetail({ event, isFull, availableSpots, userRegiste
         }
     };
 
+    const bookingClosed = event.registration_deadline ? new Date(event.registration_deadline) < new Date() : false;
+
     return (
         <PublicLayout>
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20">
@@ -119,6 +121,15 @@ export default function EventDetail({ event, isFull, availableSpots, userRegiste
                             ) : (
                                 <p className="text-2xl font-bold text-green-400">Free</p>
                             )}
+                            {event.early_booking_price != null && (
+                                <p className="text-xs text-emerald-400 mt-1">
+                                    Early booking BDT {Number(event.early_booking_price).toLocaleString()}
+                                    {event.early_booking_deadline ? ` until ${fmtDate(event.early_booking_deadline)}` : ''}
+                                </p>
+                            )}
+                            {event.registration_deadline && (
+                                <p className="text-xs text-white/40 mt-1">Booking closes {fmtDate(event.registration_deadline)}</p>
+                            )}
                         </div>
                         <div className="flex items-center gap-3">
                             {userRegistered ? (
@@ -131,6 +142,10 @@ export default function EventDetail({ event, isFull, availableSpots, userRegiste
                             ) : isFull ? (
                                 <div className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 text-sm font-medium">
                                     Event is full
+                                </div>
+                            ) : bookingClosed ? (
+                                <div className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-neutral-500/10 text-neutral-400 border border-neutral-500/20 text-sm font-medium">
+                                    Booking closed
                                 </div>
                             ) : (
                                 <button onClick={handleRegister}

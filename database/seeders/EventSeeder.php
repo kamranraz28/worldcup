@@ -4,12 +4,15 @@ namespace Database\Seeders;
 
 use App\Models\Event;
 use App\Models\EventSession;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class EventSeeder extends Seeder
 {
     public function run(): void
     {
+        $superAdmin = User::where('email', 'superadmin@synergyinterface.com')->firstOrFail();
+
         $events = [
             [
                 'title' => 'Grand Opening Ceremony',
@@ -124,7 +127,9 @@ class EventSeeder extends Seeder
             $sessionsData = $eventData['sessions'] ?? [];
             unset($eventData['sessions']);
 
-            $event = Event::factory()->create($eventData);
+            $event = Event::factory()->create(array_merge($eventData, [
+                'created_by' => $superAdmin->id,
+            ]));
 
             foreach ($sessionsData as $sessionData) {
                 EventSession::factory()->create(array_merge($sessionData, [

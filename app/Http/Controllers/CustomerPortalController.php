@@ -87,7 +87,7 @@ class CustomerPortalController extends Controller
             })
             ->whereNotIn('id', $registeredEventIds)
             ->orderBy('start_date')
-            ->get(['id', 'uuid', 'title', 'start_date', 'end_date', 'venue_name', 'event_type', 'banner_image', 'ticket_price', 'max_capacity']);
+            ->get(['id', 'uuid', 'title', 'start_date', 'end_date', 'venue_name', 'event_type', 'banner_image', 'ticket_price', 'early_booking_price', 'early_booking_deadline', 'registration_deadline', 'max_capacity']);
 
         return Inertia::render('Customer/Events', [
             'events' => $events,
@@ -100,6 +100,11 @@ class CustomerPortalController extends Controller
             ->with('sessions')
             ->where('uuid', $uuid)
             ->firstOrFail();
+
+        if (!$event->isBookingOpen()) {
+            return redirect()->route('customer.dashboard')
+                ->with('flash', ['error' => 'Booking for this event has closed.']);
+        }
 
         $user = $request->user();
 
@@ -121,7 +126,13 @@ class CustomerPortalController extends Controller
                 'end_date' => $event->end_date,
                 'venue_name' => $event->venue_name,
                 'venue_address' => $event->venue_address,
-                'ticket_price' => $event->ticket_price,
+                'ticket_price' => $event->currentPrice(),
+                'regular_price' => (float) ($event->ticket_price ?? 0),
+                'early_booking_price' => $event->early_booking_price !== null ? (float) $event->early_booking_price : null,
+                'early_booking_deadline' => $event->early_booking_deadline,
+                'is_early_booking' => $event->isEarlyBookingActive(),
+                'is_booking_open' => $event->isBookingOpen(),
+                'registration_deadline' => $event->registration_deadline,
                 'max_capacity' => $event->max_capacity,
                 'event_type' => $event->event_type,
                 'banner_image' => $event->banner_image,
@@ -140,6 +151,10 @@ class CustomerPortalController extends Controller
             return back()->with('flash', ['error' => 'This event is fully booked.']);
         }
 
+        if (!$event->isBookingOpen()) {
+            return back()->with('flash', ['error' => 'Booking for this event has closed.']);
+        }
+
         $user = $request->user();
         $customer = $user->customer;
 
@@ -155,10 +170,13 @@ class CustomerPortalController extends Controller
         $validated = $request->validate([
             'ticket_type' => 'required|in:general,vip,vvip',
             'event_session_id' => 'nullable|exists:event_sessions,id',
+            'phone' => ['nullable', 'string', 'max:20', 'regex:/^[0-9+\-\s()]{6,20}$/'],
         ]);
 
         try {
             $result = DB::transaction(function () use ($event, $user, $customer, $request, $validated) {
+                $phone = $validated['phone'] ?? $user->phone ?? '';
+
                 if (!$customer) {
                     $customer = Customer::create([
                         'uuid' => (string) Str::uuid(),
@@ -166,17 +184,26 @@ class CustomerPortalController extends Controller
                         'first_name' => $user->name,
                         'last_name' => '',
                         'email' => $user->email,
-                        'phone' => '',
+                        'phone' => $phone,
                     ]);
+                } elseif ($phone !== '' && $customer->phone !== $phone) {
+                    $customer->fill(['phone' => $phone])->save();
                 }
+
+                $price = $event->currentPrice();
+                $paid = $price > 0;
 
                 $ticketData = [
                     'ticket_type' => $validated['ticket_type'],
-                    'price' => $event->ticket_price ?? 0,
+                    'price' => $price,
                     'currency' => 'BDT',
-                    'status' => 'pending_approval',
+                    'status' => $paid ? 'reserved' : 'pending_approval',
                     'event_session_id' => $validated['event_session_id'] ?? null,
                     'user_id' => $user->id,
+                    'reserved_until' => $paid ? now()->addHours(2) : null,
+                    'metadata' => $event->isEarlyBookingActive()
+                        ? ['pricing' => ['early_booking' => true, 'regular_price' => (float) ($event->ticket_price ?? 0)]]
+                        : null,
                 ];
 
                 $ticket = $this->registrationService->register($event, $ticketData, $customer);
@@ -185,6 +212,11 @@ class CustomerPortalController extends Controller
 
                 return $ticket;
             });
+
+            if ($result->price > 0) {
+                return redirect()->route('payment.initiate', ['uuid' => $result->uuid])
+                    ->with('flash', ['success' => 'Redirecting to payment gateway...']);
+            }
 
             $msg = 'Registration submitted! It requires admin approval.';
 

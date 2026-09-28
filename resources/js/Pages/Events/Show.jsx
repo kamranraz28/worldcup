@@ -307,8 +307,14 @@ export default function Show({ event }) {
               <div className="space-y-1">
                 <DetailRow icon="📅" label="Start Date" value={`${formatDate(event.start_date)} at ${formatTime(event.start_date)}`} />
                 <DetailRow icon="⏰" label="End Date" value={`${formatDate(event.end_date)} at ${formatTime(event.end_date)}`} />
-                <DetailRow icon="🔔" label="Registration Deadline" value={event.registration_deadline ? formatDate(event.registration_deadline) : 'None'} />
-                <DetailRow icon="🎫" label="Ticket Price" value={event.ticket_price > 0 ? `$${Number(event.ticket_price).toFixed(2)}` : 'Free'} highlight={event.ticket_price > 0} />
+                <DetailRow icon="🔔" label="Booking Last Date" value={event.registration_deadline ? formatDate(event.registration_deadline) : 'None'} />
+                <DetailRow icon="🎫" label="Regular Ticket Price" value={event.ticket_price > 0 ? `BDT ${Number(event.ticket_price).toFixed(2)}` : 'Free'} highlight={event.ticket_price > 0} />
+                {event.early_booking_price != null && (
+                  <DetailRow icon="⚡" label="Early Booking Price" value={`BDT ${Number(event.early_booking_price).toFixed(2)}`} />
+                )}
+                {event.early_booking_deadline && (
+                  <DetailRow icon="📆" label="Early Booking Deadline" value={formatDate(event.early_booking_deadline)} />
+                )}
                 <DetailRow icon="📍" label="Event Type" value={event.event_type?.charAt(0).toUpperCase() + event.event_type?.slice(1)} />
                 <DetailRow icon="🏛️" label="Venue" value={event.venue_name} />
                 <DetailRow icon="📮" label="Address" value={event.venue_address} />

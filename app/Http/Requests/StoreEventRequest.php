@@ -24,6 +24,8 @@ class StoreEventRequest extends FormRequest
             'venue_lng' => ['nullable', 'numeric', 'between:-180,180'],
             'max_capacity' => ['nullable', 'integer', 'min:1', 'max:1000000'],
             'ticket_price' => ['nullable', 'numeric', 'min:0', 'max:999999.99'],
+            'early_booking_price' => ['nullable', 'numeric', 'min:0', 'max:999999.99', 'required_with:early_booking_deadline'],
+            'early_booking_deadline' => ['nullable', 'date', 'after:now', 'before_or_equal:registration_deadline', 'required_with:early_booking_price'],
             'start_date' => ['required', 'date', 'after:now'],
             'end_date' => ['required', 'date', 'after:start_date'],
             'registration_deadline' => ['nullable', 'date', 'before_or_equal:start_date', 'after:now'],
@@ -44,6 +46,10 @@ class StoreEventRequest extends FormRequest
             'start_date.after' => 'The event start date must be in the future.',
             'end_date.after' => 'The end date must be after the start date.',
             'registration_deadline.before_or_equal' => 'The registration deadline must be on or before the start date.',
+            'early_booking_deadline.before_or_equal' => 'The early booking deadline must be on or before the registration deadline.',
+            'early_booking_deadline.after' => 'The early booking deadline must be in the future.',
+            'early_booking_price.required_with' => 'Please provide an early booking price for the early booking deadline.',
+            'early_booking_deadline.required_with' => 'Please provide an early booking deadline for the early booking price.',
             'banner_image.max' => 'The banner image must not be larger than 2MB.',
         ];
     }

@@ -14,6 +14,8 @@ export default function Edit({ event }) {
     venue_lng: event.venue_lng || '',
     max_capacity: event.max_capacity || '',
     ticket_price: event.ticket_price || '',
+    early_booking_price: event.early_booking_price || '',
+    early_booking_deadline: event.early_booking_deadline ? event.early_booking_deadline.slice(0, 16) : '',
     start_date: event.start_date ? event.start_date.slice(0, 16) : '',
     end_date: event.end_date ? event.end_date.slice(0, 16) : '',
     registration_deadline: event.registration_deadline ? event.registration_deadline.slice(0, 16) : '',

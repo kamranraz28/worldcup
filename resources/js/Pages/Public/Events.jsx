@@ -136,10 +136,18 @@ export default function Events({ events, filters, eventTypes }) {
                                             <span>{fmtDate(event.start_date)}</span>
                                             {event.venue_name && <span className="truncate">{event.venue_name}</span>}
                                         </div>
-                                        {event.ticket_price > 0 && (
-                                            <p className="text-sm font-semibold text-primary-400 mt-2">BDT {Number(event.ticket_price).toLocaleString()}</p>
-                                        )}
-                                        {event.ticket_price == 0 && (
+                                        {event.ticket_price > 0 ? (
+                                            <>
+                                                <p className="text-sm font-semibold text-primary-400 mt-2">
+                                                    {event.early_booking_price != null && event.is_early_booking
+                                                        ? <>BDT {Number(event.early_booking_price).toLocaleString()} <span className="text-[10px] font-bold text-emerald-400">EARLY</span></>
+                                                        : <>BDT {Number(event.ticket_price).toLocaleString()}</>}
+                                                </p>
+                                                {event.early_booking_price != null && event.is_early_booking && (
+                                                    <p className="text-xs text-white/30 line-through">BDT {Number(event.ticket_price).toLocaleString()}</p>
+                                                )}
+                                            </>
+                                        ) : (
                                             <p className="text-sm font-medium text-green-400 mt-2">Free</p>
                                         )}
                                     </div>

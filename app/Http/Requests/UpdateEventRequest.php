@@ -24,6 +24,8 @@ class UpdateEventRequest extends FormRequest
             'venue_lng' => ['nullable', 'numeric', 'between:-180,180'],
             'max_capacity' => ['nullable', 'integer', 'min:1', 'max:1000000'],
             'ticket_price' => ['nullable', 'numeric', 'min:0', 'max:999999.99'],
+            'early_booking_price' => ['nullable', 'numeric', 'min:0', 'max:999999.99'],
+            'early_booking_deadline' => ['nullable', 'date', 'before_or_equal:registration_deadline'],
             'start_date' => ['sometimes', 'required', 'date'],
             'end_date' => ['sometimes', 'required', 'date', 'after:start_date'],
             'registration_deadline' => ['nullable', 'date', 'before_or_equal:start_date'],
@@ -39,6 +41,7 @@ class UpdateEventRequest extends FormRequest
         return [
             'end_date.after' => 'The end date must be after the start date.',
             'registration_deadline.before_or_equal' => 'The registration deadline must be on or before the start date.',
+            'early_booking_deadline.before_or_equal' => 'The early booking deadline must be on or before the registration deadline.',
             'banner_image.max' => 'The banner image must not be larger than 2MB.',
         ];
     }

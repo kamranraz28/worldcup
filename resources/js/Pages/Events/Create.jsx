@@ -14,6 +14,8 @@ export default function Create() {
     venue_lng: '',
     max_capacity: '',
     ticket_price: '',
+    early_booking_price: '',
+    early_booking_deadline: '',
     start_date: '',
     end_date: '',
     registration_deadline: '',
