@@ -16,8 +16,10 @@ class Ticket extends Model
         'event_session_id',
         'customer_id',
         'user_id',
+        'voucher_id',
         'ticket_type',
         'price',
+        'discount_amount',
         'currency',
         'status',
         'qr_code',
@@ -38,6 +40,7 @@ class Ticket extends Model
     {
         return [
             'price' => 'decimal:2',
+            'discount_amount' => 'decimal:2',
             'checked_in_at' => 'datetime',
             'approved_at' => 'datetime',
             'rejected_at' => 'datetime',
@@ -65,6 +68,11 @@ class Ticket extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function voucher()
+    {
+        return $this->belongsTo(Voucher::class);
     }
 
     public function checkIn()

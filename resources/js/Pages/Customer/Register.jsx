@@ -8,6 +8,7 @@ export default function Register({ event, ticketTypes }) {
     const [ticketType, setTicketType] = useState('general');
     const [sessionId, setSessionId] = useState('');
     const [phone, setPhone] = useState(auth?.user?.phone || '');
+    const [voucherCode, setVoucherCode] = useState('');
     const [submitting, setSubmitting] = useState(false);
 
     const fmtDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) : '';
@@ -20,6 +21,7 @@ export default function Register({ event, ticketTypes }) {
             ticket_type: ticketType,
             event_session_id: sessionId || undefined,
             phone: phone || undefined,
+            voucher_code: voucherCode || undefined,
         }, {
             onFinish: () => setSubmitting(false),
         });
@@ -96,6 +98,18 @@ export default function Register({ event, ticketTypes }) {
                             />
                             {errors?.phone && <p className="text-xs text-red-500">{errors.phone}</p>}
                             <p className="text-xs text-neutral-500 dark:text-dark-text-secondary mt-1">Confirm your contact number for the ticket.</p>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-neutral-900 dark:text-white mb-1.5">Voucher Code <span className="text-neutral-400 font-normal">(optional)</span></label>
+                            <input
+                                type="text"
+                                value={voucherCode}
+                                onChange={(e) => setVoucherCode(e.target.value.toUpperCase())}
+                                placeholder="e.g. EARLY15"
+                                className="input-field w-full font-mono"
+                            />
+                            {errors?.voucher_code && <p className="text-xs text-red-500">{errors.voucher_code}</p>}
+                            <p className="text-xs text-neutral-500 dark:text-dark-text-secondary mt-1">Enter a valid voucher to get a discount.</p>
                         </div>
                     </div>
 

@@ -114,6 +114,7 @@ class TicketController extends Controller
             'uuid' => $ticket->uuid,
             'ticket_type' => $ticket->ticket_type,
             'price' => $ticket->price,
+            'discount_amount' => $ticket->discount_amount,
             'currency' => $ticket->currency,
             'status' => $ticket->status,
             'qr_code' => $ticket->qr_code,

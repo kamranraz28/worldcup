@@ -165,6 +165,9 @@ export default function Show({ ticket, history, qrSvg, pdfExists }) {
               <h2 className="text-xs font-semibold text-neutral-500 dark:text-dark-text-secondary uppercase tracking-wider mb-4">Details</h2>
               <DetailRow icon="🎟️" label="Type" value={ticket.ticket_type} />
               <DetailRow icon="💰" label="Price" value={ticket.price > 0 ? `${ticket.currency} ${Number(ticket.price).toFixed(2)}` : 'Free'} />
+              {ticket.discount_amount > 0 && (
+                <DetailRow icon="🏷️" label="Discount" value={`- ${ticket.currency} ${Number(ticket.discount_amount).toFixed(2)}${ticket.metadata?.voucher?.code ? ` (${ticket.metadata.voucher.code})` : ''}`} />
+              )}
               <DetailRow icon="📋" label="Status" value={<StatusBadge status={ticket.status} />} />
               <DetailRow icon="📅" label="Registered" value={fmtDate(ticket.registered_at)} />
               <DetailRow icon="✅" label="Approved" value={fmtDate(ticket.approved_at)} />

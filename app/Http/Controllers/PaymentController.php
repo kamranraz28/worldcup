@@ -30,7 +30,7 @@ class PaymentController extends Controller
         }
 
         if ($ticket->status === 'confirmed' && data_get($ticket->metadata, 'payment.verified')) {
-            return redirect()->route('tickets.show', ['ticket' => $ticket->uuid])
+            return redirect()->route('tickets.show', ['uuid' => $ticket->uuid])
                 ->with('flash', ['success' => 'Your ticket is already confirmed and paid.']);
         }
 
@@ -99,7 +99,7 @@ class PaymentController extends Controller
 
     protected function paidResponse(Ticket $ticket)
     {
-        return redirect()->route('tickets.show', ['ticket' => $ticket->uuid])
+        return redirect()->route('tickets.show', ['uuid' => $ticket->uuid])
             ->with('flash', ['success' => 'Payment successful! Your event ticket is booked.']);
     }
 }

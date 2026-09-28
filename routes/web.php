@@ -20,6 +20,7 @@ use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\CustomerPortalController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
@@ -93,10 +94,12 @@ Route::middleware(['auth', 'verified', 'is_active'])->group(function () {
     Route::delete('events/{uuid}/ticket-template', [EventController::class, 'deleteTicketTemplate'])->name('events.ticket-template.destroy');
     Route::post('events/{uuid}/qr-position', [EventController::class, 'updateQrPosition'])->name('events.qr-position.update');
 
-    Route::resource('customers', CustomerController::class)->parameters(['customers' => 'uuid']);
-    Route::post('customers/{uuid}/blacklist', [CustomerController::class, 'blacklist'])->name('customers.blacklist');
+    Route::resource('customers', CustomerController::class)->parameters(['customers' => 'uuid']);    Route::post('customers/{uuid}/blacklist', [CustomerController::class, 'blacklist'])->name('customers.blacklist');
     Route::delete('customers/{uuid}/blacklist', [CustomerController::class, 'removeBlacklist'])->name('customers.blacklist.remove');
     Route::get('customers/{uuid}/eligibility', [CustomerController::class, 'eligibility'])->name('customers.eligibility');
+
+    Route::resource('vouchers', VoucherController::class)->except(['show']);
+    Route::post('vouchers/{voucher}/toggle', [VoucherController::class, 'toggle'])->name('vouchers.toggle');
 
     Route::get('verifications', [CustomerVerificationController::class, 'index'])->name('verifications.index');
     Route::get('verifications/{uuid}', [CustomerVerificationController::class, 'show'])->name('verifications.show');

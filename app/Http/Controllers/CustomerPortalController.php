@@ -6,8 +6,10 @@ use App\Http\Requests\SubmitVerificationRequest;
 use App\Models\Customer;
 use App\Models\Event;
 use App\Models\Ticket;
+use App\Models\TicketAction;
 use App\Services\CustomerVerificationService;
 use App\Services\RegistrationService;
+use App\Services\VoucherService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -17,13 +19,16 @@ class CustomerPortalController extends Controller
 {
     private $registrationService;
     private $verificationService;
+    private $voucherService;
 
     public function __construct(
         RegistrationService $registrationService,
         CustomerVerificationService $verificationService,
+        VoucherService $voucherService,
     ) {
         $this->registrationService = $registrationService;
         $this->verificationService = $verificationService;
+        $this->voucherService = $voucherService;
     }
 
     public function dashboard(Request $request)
@@ -171,10 +176,11 @@ class CustomerPortalController extends Controller
             'ticket_type' => 'required|in:general,vip,vvip',
             'event_session_id' => 'nullable|exists:event_sessions,id',
             'phone' => ['nullable', 'string', 'max:20', 'regex:/^[0-9+\-\s()]{6,20}$/'],
+            'voucher_code' => ['nullable', 'string', 'max:50'],
         ]);
 
         try {
-            $result = DB::transaction(function () use ($event, $user, $customer, $request, $validated) {
+            $result = DB::transaction(function () use ($event, $user, $customer, $validated) {
                 $phone = $validated['phone'] ?? $user->phone ?? '';
 
                 if (!$customer) {
@@ -190,25 +196,69 @@ class CustomerPortalController extends Controller
                     $customer->fill(['phone' => $phone])->save();
                 }
 
-                $price = $event->currentPrice();
+                $basePrice = $event->currentPrice();
+
+                $voucher = null;
+                $discount = 0.0;
+                $voucherCode = trim((string) ($validated['voucher_code'] ?? ''));
+                if ($voucherCode !== '') {
+                    $voucher = $this->voucherService->findUsable($voucherCode);
+                    $discount = $this->voucherService->calculateDiscount($voucher, $basePrice);
+                }
+
+                $price = max(0, round($basePrice - $discount, 2));
                 $paid = $price > 0;
+                $fullyDiscounted = !$paid && $voucher !== null;
+
+                $metadata = [];
+                if ($event->isEarlyBookingActive()) {
+                    $metadata['pricing'] = ['early_booking' => true, 'regular_price' => (float) ($event->ticket_price ?? 0)];
+                }
+                if ($voucher) {
+                    $metadata['voucher'] = [
+                        'code' => $voucher->code,
+                        'percent' => (float) $voucher->discount_percent,
+                        'discount' => $discount,
+                        'original_price' => $basePrice,
+                    ];
+                }
 
                 $ticketData = [
                     'ticket_type' => $validated['ticket_type'],
                     'price' => $price,
+                    'discount_amount' => $discount,
+                    'voucher_id' => $voucher?->id,
                     'currency' => 'BDT',
                     'status' => $paid ? 'reserved' : 'pending_approval',
                     'event_session_id' => $validated['event_session_id'] ?? null,
                     'user_id' => $user->id,
                     'reserved_until' => $paid ? now()->addHours(2) : null,
-                    'metadata' => $event->isEarlyBookingActive()
-                        ? ['pricing' => ['early_booking' => true, 'regular_price' => (float) ($event->ticket_price ?? 0)]]
-                        : null,
+                    'metadata' => $metadata ?: null,
                 ];
+
+                if ($voucher) {
+                    $this->voucherService->redeem($voucher);
+                }
 
                 $ticket = $this->registrationService->register($event, $ticketData, $customer);
 
                 $ticket->update(['user_id' => $user->id]);
+
+                if ($fullyDiscounted) {
+                    $ticket->update(['status' => 'confirmed', 'approved_at' => now()]);
+                    TicketAction::create([
+                        'ticket_id' => $ticket->id,
+                        'event_id' => $ticket->event_id,
+                        'customer_id' => $ticket->customer_id,
+                        'action' => 'paid',
+                        'status_from' => 'pending_approval',
+                        'status_to' => 'confirmed',
+                        'actor_id' => null,
+                        'notes' => "Fully covered by voucher {$voucher->code} ({$voucher->discount_percent}% discount)",
+                        'ip_address' => request()->ip(),
+                        'user_agent' => request()->userAgent(),
+                    ]);
+                }
 
                 return $ticket;
             });
@@ -218,12 +268,26 @@ class CustomerPortalController extends Controller
                     ->with('flash', ['success' => 'Redirecting to payment gateway...']);
             }
 
+            if ($result->status === 'confirmed') {
+                try {
+                    app(\App\Services\TicketService::class)->sendEmail($result->fresh());
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::error('Failed to send voucher ticket email', [
+                        'ticket_uuid' => $result->uuid,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+
+                return redirect()->route('tickets.show', ['uuid' => $result->uuid])
+                    ->with('flash', ['success' => 'Voucher applied — your ticket is booked!']);
+            }
+
             $msg = 'Registration submitted! It requires admin approval.';
 
             return redirect()->route('customer.dashboard')
                 ->with('flash', ['success' => $msg]);
         } catch (\RuntimeException $e) {
-            return back()->with('flash', ['error' => $e->getMessage()]);
+            return back()->withInput()->with('flash', ['error' => $e->getMessage()]);
         }
     }
 
