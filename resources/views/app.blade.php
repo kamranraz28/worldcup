@@ -8,6 +8,16 @@
         <title inertia>{{ config('app.name', 'TicketClub') }}</title>
         <link rel="icon" href="{{ asset('ticketclub-favicon.ico') }}" type="image/x-icon">
         <link rel="shortcut icon" href="{{ asset('ticketclub-favicon.ico') }}" type="image/x-icon">
+        <script>
+            // Apply the saved theme before first paint to avoid a flash.
+            (function () {
+                try {
+                    var stored = localStorage.getItem('theme');
+                    var dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (dark) document.documentElement.classList.add('dark');
+                } catch (e) {}
+            })();
+        </script>
         @vite(['resources/js/app.jsx'])
         @routes
         @inertiaHead

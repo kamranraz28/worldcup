@@ -31,12 +31,12 @@ export default function PublicEventCard({ event, index = 0, showDescription = tr
         >
             <Link
                 href={appUrl(`/browse/${event.uuid}`)}
-                className="group block bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden
-                    hover:bg-white/[0.05] hover:border-white/[0.1] hover:-translate-y-0.5 hover:shadow-2xl
+                className="group block bg-white dark:bg-white/[0.03] border border-neutral-200 dark:border-white/[0.06] rounded-2xl overflow-hidden
+                    hover:bg-neutral-100 dark:hover:bg-white/[0.05] hover:border-neutral-300 dark:border-white/[0.1] hover:-translate-y-0.5 hover:shadow-2xl
                     active:translate-y-0 active:scale-[0.98]
                     transition-all duration-300"
             >
-                <div className="aspect-[16/9] bg-white/[0.02] relative overflow-hidden">
+                <div className="aspect-[16/9] bg-neutral-50 dark:bg-white/[0.02] relative overflow-hidden">
                     <EventCover
                         event={event}
                         className="group-hover:scale-105 transition-transform duration-500"
@@ -44,7 +44,7 @@ export default function PublicEventCard({ event, index = 0, showDescription = tr
                     <div className="absolute inset-0 bg-gradient-to-t from-dark-bg/85 via-transparent to-transparent" />
 
                     <div className="absolute top-3 left-3 flex flex-wrap items-center gap-2">
-                        <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-sm text-white/80 border border-white/10">
+                        <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-neutral-900/50 dark:bg-black/40 backdrop-blur-sm text-white/80 border border-white/10">
                             {eventTypeLabel(event.event_type)}
                         </span>
                     </div>
@@ -65,25 +65,25 @@ export default function PublicEventCard({ event, index = 0, showDescription = tr
                 </div>
 
                 <div className="p-5">
-                    <h3 className="text-base font-semibold text-white group-hover:text-primary-400 transition-colors line-clamp-1">
+                    <h3 className="text-base font-semibold text-neutral-900 dark:text-white group-hover:text-primary-400 transition-colors line-clamp-1">
                         {event.title}
                     </h3>
 
                     {showDescription && event.description && (
-                        <p className="text-sm text-white/30 mt-1.5 line-clamp-2">{event.description}</p>
+                        <p className="text-sm text-neutral-400 dark:text-white/30 mt-1.5 line-clamp-2">{event.description}</p>
                     )}
 
-                    <div className="flex items-center gap-2 mt-3 text-xs text-white/30">
+                    <div className="flex items-center gap-2 mt-3 text-xs text-neutral-400 dark:text-white/30">
                         <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                         <span>{formatEventDate(event.start_date)}</span>
-                        <span className="text-white/15">·</span>
+                        <span className="text-neutral-300 dark:text-white/15">·</span>
                         <span>{formatEventTime(event.start_date)}</span>
                     </div>
 
                     {event.venue_name && (
-                        <div className="flex items-center gap-2 mt-1.5 text-xs text-white/30">
+                        <div className="flex items-center gap-2 mt-1.5 text-xs text-neutral-400 dark:text-white/30">
                             <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -92,13 +92,13 @@ export default function PublicEventCard({ event, index = 0, showDescription = tr
                         </div>
                     )}
 
-                    <div className="flex items-end justify-between gap-3 mt-4 pt-4 border-t border-white/[0.06]">
+                    <div className="flex items-end justify-between gap-3 mt-4 pt-4 border-t border-neutral-200 dark:border-white/[0.06]">
                         <div>
                             {price > 0 ? (
                                 <>
                                     <p className="text-base font-bold text-primary-400">BDT {price.toLocaleString()}</p>
                                     {isEarly && (
-                                        <p className="text-[11px] text-white/30 line-through">BDT {Number(event.ticket_price).toLocaleString()}</p>
+                                        <p className="text-[11px] text-neutral-400 dark:text-white/30 line-through">BDT {Number(event.ticket_price).toLocaleString()}</p>
                                     )}
                                 </>
                             ) : (
@@ -106,7 +106,7 @@ export default function PublicEventCard({ event, index = 0, showDescription = tr
                             )}
                         </div>
 
-                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/50 group-hover:text-primary-400 transition-colors">
+                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-neutral-500 dark:text-white/50 group-hover:text-primary-400 transition-colors">
                             Get Tickets
                             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />

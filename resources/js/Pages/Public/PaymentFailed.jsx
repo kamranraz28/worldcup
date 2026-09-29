@@ -21,11 +21,11 @@ export default function PaymentFailed() {
                         </svg>
                     </motion.div>
 
-                    <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Payment not completed</h1>
-                    <p className="mt-3 text-white/40">
+                    <h1 className="text-3xl sm:text-4xl font-extrabold text-neutral-900 dark:text-white tracking-tight">Payment not completed</h1>
+                    <p className="mt-3 text-neutral-500 dark:text-white/40">
                         {flash?.error || 'Your payment could not be completed. As promised, no reservation was kept.'}
                     </p>
-                    <p className="mt-2 text-sm text-white/25">
+                    <p className="mt-2 text-sm text-neutral-400 dark:text-white/25">
                         You can simply try again — nothing from this attempt remains in the system.
                     </p>
 
@@ -33,7 +33,7 @@ export default function PaymentFailed() {
                         <Link href={appUrl('/browse')} className="btn-primary px-7 py-3 text-sm">
                             Browse events
                         </Link>
-                        <Link href={appUrl('/track-tickets')} className="px-6 py-3 rounded-2xl bg-white/[0.04] border border-white/[0.08] text-sm font-medium text-white/70 hover:text-white hover:bg-white/[0.08] transition-all">
+                        <Link href={appUrl('/track-tickets')} className="px-6 py-3 rounded-2xl bg-white dark:bg-white/[0.04] border border-neutral-200 dark:border-white/[0.08] text-sm font-medium text-neutral-700 dark:text-white/70 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-white/[0.08] transition-all">
                             Track tickets
                         </Link>
                     </div>

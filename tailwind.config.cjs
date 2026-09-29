@@ -124,11 +124,21 @@ module.exports = {
                 'scale-in': 'scale-in 0.2s ease-out',
                 'slide-up': 'slide-up 0.3s ease-out',
                 'glow-pulse': 'glow-pulse 2s ease-in-out infinite',
+                'marquee': 'marquee 32s linear infinite',
+                'gradient-x': 'gradient-x 6s ease infinite',
             },
             keyframes: {
                 shimmer: {
                     '0%': { backgroundPosition: '-200% 0' },
                     '100%': { backgroundPosition: '200% 0' },
+                },
+                marquee: {
+                    '0%': { transform: 'translateX(0)' },
+                    '100%': { transform: 'translateX(-50%)' },
+                },
+                'gradient-x': {
+                    '0%, 100%': { backgroundPosition: '0% 50%' },
+                    '50%': { backgroundPosition: '100% 50%' },
                 },
                 float: {
                     '0%, 100%': { transform: 'translateY(0px)' },

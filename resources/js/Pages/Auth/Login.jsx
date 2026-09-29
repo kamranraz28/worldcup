@@ -1,12 +1,16 @@
 import { useEffect } from 'react';
-import { Link, useForm } from '@inertiajs/react';
+import { Link, Head, useForm } from '@inertiajs/react';
+import { motion } from 'framer-motion';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
-import PrimaryButton from '@/Components/PrimaryButton';
 import FlashMessage from '@/Components/FlashMessage';
+import PublicLayout from '../../Components/Layout/PublicLayout';
 
-const STADIUM_BG = 'https://images.unsplash.com/photo-1459865264687-595d652de67e?auto=format&fit=crop&w=1920&q=80';
+const easeOut = [0.22, 1, 0.36, 1];
+
+// The public site is dark by default, so fields carry explicit dark colours.
+const FIELD_CLASSES = '!bg-white !border-neutral-300 !text-neutral-900 !placeholder-neutral-400 dark:!bg-dark-surface dark:!border-dark-border dark:!text-dark-text dark:!placeholder-dark-text-secondary';
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -25,156 +29,129 @@ export default function Login({ status, canResetPassword }) {
     };
 
     return (
-        <div className="min-h-screen flex">
-            <FlashMessage />
+        <PublicLayout>
+            <Head title="Staff Sign In" />
+            <div className="relative mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 pb-20 pt-28 sm:px-6 sm:pt-32">
+                <FlashMessage />
 
-            {/* Left - Hero / Branding */}
-            <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden bg-dark-bg">
-                {/* Stadium background image */}
-                <div className="absolute inset-0">
-                    <img
-                        src={STADIUM_BG}
-                        alt=""
-                        className="w-full h-full object-cover opacity-40"
-                        onError={(e) => { e.target.style.display = 'none'; }}
-                    />
-                </div>
+                <motion.div
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, ease: easeOut }}
+                    className="text-center mb-8"
+                >
+                    <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.1, type: 'spring', stiffness: 240, damping: 18 }}
+                        className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-neutral-200 dark:border-white/10 bg-gradient-to-br from-primary-500/15 to-gold-400/10 shadow-glow-primary"
+                    >
+                        <svg className="h-8 w-8 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                        </svg>
+                    </motion.div>
 
-                {/* Gradient overlays */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary-500/30 via-dark-bg/95 to-dark-bg" />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-bg via-transparent to-dark-bg/50" />
-                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary-500/15 rounded-full blur-[200px]" />
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gold-500/10 rounded-full blur-[180px]" />
-                <div className="absolute top-1/2 left-1/3 w-[300px] h-[300px] bg-blue-500/8 rounded-full blur-[150px]" />
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.15, duration: 0.5, ease: easeOut }}
+                        className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-neutral-200 dark:border-white/10 bg-white dark:bg-white/[0.05] px-4 py-1.5 backdrop-blur"
+                    >
+                        <span className="h-1.5 w-1.5 rounded-full bg-gold-400 animate-pulse" />
+                        <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-neutral-600 dark:text-white/60">Staff sign in</span>
+                    </motion.div>
 
-                <div className="relative z-10 flex flex-col w-full h-full">
-                    {/* Top header - Synergy Interface Ltd logo */}
-                    <div className="flex items-center justify-between px-10 py-8">
-                        <Link href={appUrl("/")} className="flex items-center gap-2.5 group w-fit">
-                            <img src={appUrl("/ticketclub.png")} alt="TicketClub"
-                                className="h-8 w-auto group-hover:scale-105 transition-transform duration-300" />
-                            <span className="text-xl font-extrabold tracking-tight text-white">TicketClub</span>
-                        </Link>
+                    <motion.h1
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2, duration: 0.6, ease: easeOut }}
+                        className="text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-white sm:text-4xl"
+                    >
+                        Welcome{' '}
+                        <span className="bg-gradient-to-r from-primary-400 via-gold-400 to-blue-400 bg-[length:200%_auto] animate-gradient-x bg-clip-text text-transparent">
+                            back
+                        </span>
+                    </motion.h1>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3, duration: 0.6 }}
+                        className="mt-2 text-sm text-neutral-500 dark:text-white/40"
+                    >
+                        Sign in to the TicketClub control panel
+                    </motion.p>
+                </motion.div>
 
-                        <div className="flex items-center gap-3">
-                            <span className="text-[10px] font-semibold tracking-widest uppercase text-white/30">Powered by</span>
-                            <span className="text-xs font-semibold tracking-wide text-white/50">Synergy Interface Ltd.</span>
-                        </div>
-                    </div>
+                <motion.div
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.35, duration: 0.6, ease: easeOut }}
+                    className="relative rounded-3xl p-px"
+                >
+                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-primary-500/40 via-white/10 to-gold-400/30" />
 
-                    {/* Hero content */}
-                    <div className="flex-1 flex flex-col items-center justify-center px-10 -mt-16">
-                        <div className="mb-8 text-center">
-                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06] mb-4">
-                                <span className="w-1.5 h-1.5 rounded-full bg-gold-500 animate-pulse" />
-                                <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-gold-500/80">All-In-One Platform</span>
+                    <div className="relative rounded-[calc(1.5rem-1px)] bg-white/95 dark:bg-dark-surface/90 p-6 sm:p-8 backdrop-blur-2xl">
+                        {status && (
+                            <div className="mb-4 rounded-xl border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm text-green-300">
+                                {status}
                             </div>
-                            <h2 className="text-2xl font-bold text-white/90 mb-1">Manage every event with confidence</h2>
-                            <p className="text-xs text-white/30 tracking-wide">From registration to check-in, all in one place</p>
-                        </div>
+                        )}
 
-                        {/* Divider */}
-                        <div className="w-32 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-8" />
-
-                        {/* Tagline */}
-                        <div className="text-center">
-                            <h2 className="text-3xl font-bold text-white mb-3">One Platform. Every Event.</h2>
-                            <p className="text-white/40 max-w-md leading-relaxed text-sm">
-                                Registrations, verifications, ticketing and check-ins — the complete event ticketing platform.
-                            </p>
-                        </div>
-
-                        {/* Stats */}
-                        <div className="mt-8 grid grid-cols-3 gap-10">
-                            {[
-                                { value: '50+', label: 'Events' },
-                                { value: '10K+', label: 'Guests' },
-                                { value: '4.5K+', label: 'Seats' },
-                            ].map((stat) => (
-                                <div key={stat.label} className="text-center">
-                                    <p className="text-2xl font-bold bg-gradient-to-b from-white to-white/60 bg-clip-text text-transparent">{stat.value}</p>
-                                    <p className="text-xs text-white/20 mt-1 tracking-wide uppercase">{stat.label}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    <p className="text-xs text-white/15 text-center pb-8">
-                        &copy; {new Date().getFullYear()} Synergy Interface Ltd. All rights reserved.
-                    </p>
-                </div>
-            </div>
-
-            {/* Right - Login Form */}
-            <div className="flex-1 flex items-center justify-center px-6 py-12 bg-dark-bg dark">
-                <div className="w-full max-w-md">
-                    <div className="lg:hidden text-center mb-8">
-                        <Link href={appUrl("/")} className="inline-flex items-center gap-2.5 group">
-                            <img src={appUrl("/ticketclub.png")} alt="TicketClub" className="h-8 w-auto" />
-                            <div className="text-left">
-                                <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-primary-500 to-primary-400 bg-clip-text text-transparent block leading-none">TicketClub</span>
-                                <span className="text-[9px] font-semibold tracking-widest uppercase text-neutral-400 dark:text-dark-text-secondary">By Synergy Interface Ltd.</span>
+                        <form onSubmit={submit} className="space-y-5">
+                            <div>
+                                <InputLabel value="Email" className="!text-neutral-800 dark:!text-dark-text !text-sm" />
+                                <TextInput id="email" type="email" value={data.email} onChange={(e) => setData('email', e.target.value)} autoComplete="username" isFocused className={FIELD_CLASSES} />
+                                <InputError message={errors.email} className="!text-red-400" />
                             </div>
-                        </Link>
+
+                            <div>
+                                <InputLabel value="Password" className="!text-neutral-800 dark:!text-dark-text !text-sm" />
+                                <TextInput id="password" type="password" value={data.password} onChange={(e) => setData('password', e.target.value)} autoComplete="current-password" className={FIELD_CLASSES} />
+                                <InputError message={errors.password} className="!text-red-400" />
+                            </div>
+
+                            <div className="flex items-center justify-between">
+                                <label className="group flex cursor-pointer items-center gap-2">
+                                    <input
+                                        type="checkbox"
+                                        checked={data.remember}
+                                        onChange={(e) => setData('remember', e.target.checked)}
+                                        className="h-4 w-4 rounded border-dark-border bg-white dark:bg-dark-elevated text-primary-500 focus:ring-primary-500/30 focus:ring-offset-0"
+                                    />
+                                    <span className="text-sm text-neutral-500 dark:text-white/50 transition-colors group-hover:text-neutral-900 dark:hover:text-white/80">Remember me</span>
+                                </label>
+
+                                {canResetPassword && (
+                                    <Link href={route('password.request')} className="text-sm font-medium text-primary-400 transition-colors hover:text-primary-300">
+                                        Forgot password?
+                                    </Link>
+                                )}
+                            </div>
+
+                            <motion.button
+                                type="submit"
+                                disabled={processing}
+                                whileTap={{ scale: 0.98 }}
+                                className="btn-primary w-full h-12 justify-center disabled:opacity-50"
+                            >
+                                {processing ? (
+                                    <span className="inline-flex items-center gap-2">
+                                        <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                                        </svg>
+                                        Signing in…
+                                    </span>
+                                ) : 'Sign in'}
+                            </motion.button>
+                        </form>
+
+                        <p className="mt-6 text-center text-xs text-neutral-400 dark:text-white/25">
+                            This area is for event staff and administrators.
+                        </p>
                     </div>
-
-                    <div className="text-center mb-8">
-                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500/15 to-primary-500/5 border border-primary-500/20 flex items-center justify-center mx-auto mb-4">
-                            <svg className="w-8 h-8 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                            </svg>
-                        </div>
-                        <h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white">Welcome back</h1>
-                        <p className="text-sm text-neutral-500 dark:text-dark-text-secondary mt-1">Sign in to your TicketClub account</p>
-                    </div>
-
-                    {status && (
-                        <div className="mb-4 px-4 py-3 rounded-xl bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 text-sm text-green-700 dark:text-green-300">
-                            {status}
-                        </div>
-                    )}
-
-                    <form onSubmit={submit} className="space-y-5">
-                        <div>
-                            <InputLabel value="Email" />
-                            <TextInput id="email" type="email" value={data.email} onChange={(e) => setData('email', e.target.value)} autoComplete="username" isFocused />
-                            <InputError message={errors.email} />
-                        </div>
-
-                        <div>
-                            <InputLabel value="Password" />
-                            <TextInput id="password" type="password" value={data.password} onChange={(e) => setData('password', e.target.value)} autoComplete="current-password" />
-                            <InputError message={errors.password} />
-                        </div>
-
-                        <div className="flex items-center justify-between">
-                            <label className="flex items-center gap-2 cursor-pointer group">
-                                <input type="checkbox" checked={data.remember} onChange={(e) => setData('remember', e.target.checked)}
-                                    className="w-4 h-4 rounded border-neutral-300 dark:border-dark-border text-primary-500 focus:ring-primary-500/30 focus:ring-offset-0" />
-                                <span className="text-sm text-neutral-600 dark:text-dark-text-secondary group-hover:text-neutral-700 dark:group-hover:text-dark-text transition-colors">Remember me</span>
-                            </label>
-
-                            {canResetPassword && (
-                                <Link href={route('password.request')} className="text-sm font-medium text-primary-500 hover:text-primary-400 transition-colors">
-                                    Forgot password?
-                                </Link>
-                            )}
-                        </div>
-
-                        <PrimaryButton className="w-full justify-center" disabled={processing}>
-                            {processing ? (
-                                <span className="flex items-center gap-2">
-                                    <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                                    </svg>
-                                    Signing in...
-                                </span>
-                            ) : 'Sign in'}
-                        </PrimaryButton>
-                    </form>
-                </div>
+                </motion.div>
             </div>
-        </div>
+        </PublicLayout>
     );
 }
