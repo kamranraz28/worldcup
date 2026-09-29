@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             EventSeeder::class,
             RegistrationSeeder::class,
+            NotificationSeeder::class,
             SystemConfigSeeder::class,
         ]);
     }

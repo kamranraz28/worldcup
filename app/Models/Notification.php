@@ -48,6 +48,29 @@ class Notification extends Model
         return $query->where('channel', $channel);
     }
 
+    /**
+     * Scope to a single recipient. The table stores one row per
+     * (notification, channel), so callers must also narrow by channel.
+     */
+    public function scopeForNotifiable($query, $notifiable)
+    {
+        return $query->where('notifiable_type', $notifiable->getMorphClass())
+            ->where('notifiable_id', $notifiable->getKey());
+    }
+
+    /**
+     * The in-app feed — only 'database' channel rows surface in the bell.
+     */
+    public function scopeInApp($query)
+    {
+        return $query->where('channel', 'database');
+    }
+
+    public function isRead(): bool
+    {
+        return $this->read_at !== null;
+    }
+
     public function markAsRead(): void
     {
         if (is_null($this->read_at)) {

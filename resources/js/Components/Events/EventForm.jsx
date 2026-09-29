@@ -35,6 +35,19 @@ export default function EventForm({ form, event, isEdit }) {
     ? (typeof data.banner_image === 'string' ? appUrl(`/storage/${data.banner_image}`) : URL.createObjectURL(data.banner_image))
     : null;
 
+  const toggleFree = (e) => {
+    const checked = e.target.checked;
+    setData('free_event', checked);
+    if (checked) {
+      // A free event cannot carry a charge — clear every price field.
+      setData({
+        ticket_price: '0',
+        early_booking_price: '',
+        early_booking_deadline: '',
+      });
+    }
+  };
+
   // PDF preview URL: blob URL for new upload, or storage URL for existing template
   const templatePdfUrl = useMemo(() => {
     if (!isEdit && data.ticket_template) {
@@ -155,16 +168,29 @@ export default function EventForm({ form, event, isEdit }) {
               <div>
                 <label className={labelClass}>Regular Ticket Price (BDT)</label>
                 <input type="number" step="0.01" value={data.ticket_price || ''} onChange={(e) => setData('ticket_price', e.target.value)}
-                  className={`${fieldClass} ${errors.ticket_price ? errorClass : ''}`} placeholder="0.00 for free" min="0" />
+                  className={`${fieldClass} ${errors.ticket_price ? errorClass : ''} ${data.free_event ? 'opacity-50' : ''}`}
+                  placeholder="0.00 for free" min="0" disabled={data.free_event} />
                 {errors.ticket_price && <p className="mt-1 text-xs text-red-400">{errors.ticket_price}</p>}
                 <p className="mt-1 text-xs text-neutral-400 dark:text-dark-text-secondary">Price charged after the early booking deadline.</p>
               </div>
               <div>
                 <label className={labelClass}>Early Booking Price (BDT)</label>
                 <input type="number" step="0.01" value={data.early_booking_price || ''} onChange={(e) => setData('early_booking_price', e.target.value)}
-                  className={`${fieldClass} ${errors.early_booking_price ? errorClass : ''}`} placeholder="Optional — lower price before the early deadline" min="0" />
+                  className={`${fieldClass} ${errors.early_booking_price ? errorClass : ''} ${data.free_event ? 'opacity-50' : ''}`}
+                  placeholder="Optional — lower price before the early deadline" min="0" disabled={data.free_event} />
                 {errors.early_booking_price && <p className="mt-1 text-xs text-red-400">{errors.early_booking_price}</p>}
               </div>
+            </div>
+
+            <div className="mt-5 pt-5 border-t border-neutral-100 dark:border-white/[0.06]">
+              <label className="flex items-center gap-3 cursor-pointer group">
+                <input type="checkbox" checked={data.free_event ?? false} onChange={toggleFree}
+                  className="w-4 h-4 rounded border-neutral-300 dark:border-white/20 bg-transparent text-primary-500 focus:ring-primary-500/40" />
+                <div>
+                  <span className="block text-sm font-medium text-neutral-700 dark:text-dark-text group-hover:text-primary-500 transition-colors">Free Event</span>
+                  <span className="text-xs text-neutral-500 dark:text-dark-text-secondary">No amount is charged — tickets confirm instantly on registration, no payment required.</span>
+                </div>
+              </label>
             </div>
           </motion.div>
         </div>

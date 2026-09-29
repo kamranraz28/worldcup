@@ -32,7 +32,8 @@ class AuthenticatedSessionController extends Controller
         $role = $request->user()->role?->name;
 
         if ($role === 'customer') {
-            return redirect()->intended('/customer/dashboard');
+            // Customer accounts no longer have a portal — land on the public site.
+            return redirect('/');
         }
 
         if ($role === 'checkin-staff') {

@@ -1,6 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { navItems, adminNavItems, customerNavItems } from './navigation';
+import { navItems, adminNavItems } from './navigation';
 
 const drawerVariants = {
     hidden: { x: '-100%', transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } },
@@ -11,13 +11,12 @@ export default function MobileMenu({ open, onClose }) {
     const { url } = usePage();
     const { auth } = usePage().props;
     const permissions = auth.user?.permissions ?? [];
-    const isCustomer = auth.user?.role?.name === 'customer';
 
     const filteredNav = navItems.filter(
         (item) => !item.permission || permissions.includes(item.permission)
     );
 
-    const sideItems = isCustomer ? customerNavItems : filteredNav;
+    const sideItems = filteredNav;
 
     const isActive = (href) => {
         if (href === '/dashboard') return url === '/dashboard';
@@ -51,10 +50,10 @@ export default function MobileMenu({ open, onClose }) {
                     >
                         <div className="flex-shrink-0 h-16 flex items-center justify-between px-5 border-b border-neutral-100 dark:border-white/[0.04]">
                             <Link href={appUrl("/dashboard")} className="flex items-center gap-2.5" onClick={onClose}>
-                                {!isCustomer && <img src={appUrl("/images/logo.png")} alt="Synergy Interface Ltd" className="h-10 w-auto dark:brightness-0 dark:invert" />}
+                                <img src={appUrl("/ticketclub.png")} alt="TicketClub" className="h-8 w-auto invert dark:invert-0" />
                                 <div>
                                     <span className="text-lg font-extrabold tracking-tight bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-white/80 bg-clip-text text-transparent">
-                                        Event Management System
+                                        TicketClub
                                     </span>
                                 </div>
                             </Link>

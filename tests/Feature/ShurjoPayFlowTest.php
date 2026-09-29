@@ -3,9 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Event;
-use App\Models\Role;
 use App\Models\Ticket;
-use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
@@ -23,12 +21,12 @@ class ShurjoPayFlowTest extends TestCase
 
     public function test_paid_registration_redirects_through_payment_gateway(): void
     {
-        $user = User::factory()->create(['email_verified_at' => now(), 'is_active' => true]);
-
         $event = Event::factory()->create([
             'status' => 'published',
             'ticket_price' => 100,
-            'requires_verification' => true,
+            'registration_deadline' => now()->addDays(2),
+            'start_date' => now()->addDays(5),
+            'end_date' => now()->addDays(6),
         ]);
 
         Http::fake([
@@ -45,21 +43,19 @@ class ShurjoPayFlowTest extends TestCase
             ], 200),
         ]);
 
-        $this->actingAs($user)
-            ->post(route('customer.events.register.store', $event->uuid), [
-                'ticket_type' => 'general',
-                'phone' => '01712345678',
-            ])
-            ->assertRedirect();
+        $this->post(route('events.public.register.store', $event->uuid), [
+            'name' => 'Guest User',
+            'email' => 'guest@example.com',
+            'phone' => '01712345678',
+        ])->assertRedirect();
 
         $ticket = Ticket::where('event_id', $event->id)->firstOrFail();
         $this->assertSame('reserved', $ticket->status);
 
-        $this->actingAs($user)
-            ->withHeaders([
-                'X-Inertia' => 'true',
-                'X-Inertia-Version' => \Inertia\Inertia::getVersion(),
-            ])
+        $this->withHeaders([
+            'X-Inertia' => 'true',
+            'X-Inertia-Version' => \Inertia\Inertia::getVersion(),
+        ])
             ->get(route('payment.initiate', $ticket->uuid))
             ->assertStatus(409)
             ->assertHeader('X-Inertia-Location', 'https://securepay.shurjopayment.com/spaycheckout?token=abc');

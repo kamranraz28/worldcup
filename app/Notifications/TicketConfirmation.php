@@ -31,8 +31,8 @@ class TicketConfirmation extends Notification
         $customer = $this->ticket->customer;
 
         $mail = (new MailMessage)
-            ->subject('Your Ticket for ' . ($event->title ?? 'Event') . ' — Confirmed')
-            ->greeting('Hello ' . ($customer->first_name ?? 'Valued Customer') . '!')
+            ->subject('[TicketClub] Your Ticket for ' . ($event->title ?? 'Event') . ' — Confirmed')
+            ->greeting('Hello ' . ($customer->full_name ?: 'Valued Customer') . '!')
             ->line('Your ticket has been confirmed for the following event:')
             ->line('**' . $event->title . '**')
             ->line('')
@@ -42,11 +42,10 @@ class TicketConfirmation extends Notification
             ->line('🎫 **Ticket Type:** ' . ucfirst($this->ticket->ticket_type))
             ->line('🆔 **Ticket Code:** ' . $this->ticket->qr_code)
             ->line('')
-            ->line('Please find your e-ticket attached. You can also download it anytime from your dashboard.')
-            ->action('View Ticket', url('/tickets/' . $this->ticket->uuid))
+            ->line('Your e-ticket PDF is attached to this email — keep it handy and present the QR code at the gate.')
             ->line('')
-            ->line('Thank you for choosing Event Management System!')
-            ->salutation('— Event Management System Team');
+            ->line('Thank you for choosing TicketClub!')
+            ->salutation('— TicketClub Team');
 
         if ($this->pdfPath) {
             $mail->attach(storage_path('app/public/' . $this->pdfPath), [

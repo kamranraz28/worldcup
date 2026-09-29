@@ -109,6 +109,40 @@ class PdfTicketService
         return $filename;
     }
 
+    /**
+     * Merge several tickets (each possibly template- or default-styled, with
+     * different page sizes) into a single PDF.
+     *
+     * @param \Illuminate\Support\Collection<int, Ticket> $tickets
+     */
+    public function generateCombined($tickets): string
+    {
+        $pdf = new Fpdi();
+
+        foreach ($tickets as $ticket) {
+            $content = $this->generate($ticket);
+            $tmpFile = tempnam(sys_get_temp_dir(), 'tix') . '.pdf';
+            file_put_contents($tmpFile, $content);
+
+            $pageCount = $pdf->setSourceFile($tmpFile);
+            for ($page = 1; $page <= $pageCount; $page++) {
+                $templateId = $pdf->importPage($page);
+                $size = $pdf->getTemplateSize($templateId);
+                $orientation = ($size['width'] > $size['height']) ? 'L' : 'P';
+                $pdf->AddPage($orientation, [$size['width'], $size['height']]);
+                $pdf->useTemplate($templateId);
+            }
+
+            @unlink($tmpFile);
+        }
+
+        if ($tickets->isEmpty()) {
+            $pdf->AddPage();
+        }
+
+        return $pdf->Output('S');
+    }
+
     public function getFilename(Ticket $ticket): string
     {
         $eventName = str_replace(' ', '-', $ticket->event->title ?? 'Event');

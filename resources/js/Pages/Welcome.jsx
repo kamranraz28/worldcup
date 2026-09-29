@@ -1,6 +1,7 @@
 import { Link, Head } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import PublicEventCard from '../Components/Events/PublicEventCard';
+import SiteFooter from '../Components/Layout/SiteFooter';
 
 const features = [
     {
@@ -85,18 +86,22 @@ export default function Welcome({ featuredEvents = [], stats = {} }) {
                 {/* Nav */}
                 <nav className="relative z-10 flex items-center justify-between px-6 py-5 max-w-7xl mx-auto">
                     <Link href={appUrl("/")} className="flex items-center gap-2.5 group">
-                        <div>
-                            <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">EVENT MANAGEMENT SYSTEM</span>
-                        </div>
+                        <img src={appUrl("/ticketclub.png")} alt="TicketClub"
+                            className="h-8 w-auto flex-shrink-0 group-hover:scale-105 transition-transform duration-300" />
+                        <span className="text-xl font-extrabold tracking-tight text-white">TicketClub</span>
                     </Link>
                     <div className="flex items-center gap-3">
-                        <Link href={route('login')}
+                        <Link href={appUrl("/browse")}
                             className="px-4 py-2 text-sm font-medium text-white/60 hover:text-white transition-colors">
-                            Sign in
+                            Events
                         </Link>
-                        <Link href={route('register')}
+                        <Link href={appUrl("/track-tickets")}
+                            className="px-4 py-2 text-sm font-medium text-white/60 hover:text-white transition-colors">
+                            Track Tickets
+                        </Link>
+                        <Link href={appUrl("/browse")}
                             className="btn-primary px-5 py-2 text-sm">
-                            Get started
+                            Book now
                         </Link>
                     </div>
                 </nav>
@@ -112,7 +117,7 @@ export default function Welcome({ featuredEvents = [], stats = {} }) {
                         <motion.div variants={fadeUp} custom={0}
                             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06] mb-8">
                             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                            <span className="text-xs font-medium text-white/50 tracking-wide uppercase">Event Management System</span>
+                            <span className="text-xs font-medium text-white/50 tracking-wide uppercase">TicketClub</span>
                         </motion.div>
 
                         <motion.h1 variants={fadeUp} custom={1}
@@ -133,13 +138,13 @@ export default function Welcome({ featuredEvents = [], stats = {} }) {
                                 className="btn-primary px-8 py-3.5 text-base">
                                 Browse Events
                             </Link>
-                            <Link href={route('register')}
+                            <Link href={appUrl("/track-tickets")}
                                 className="px-8 py-3.5 text-base font-medium text-white/70
                                     bg-white/[0.04] border border-white/[0.08] rounded-2xl
                                     hover:bg-white/[0.08] hover:text-white hover:-translate-y-0.5
                                     active:translate-y-0 active:scale-[0.98]
                                     transition-all duration-200">
-                                Verify Now
+                                Track My Tickets
                             </Link>
                         </motion.div>
                     </motion.div>
@@ -246,35 +251,25 @@ export default function Welcome({ featuredEvents = [], stats = {} }) {
                             The stadium is calling.
                         </h2>
                         <p className="text-white/30 max-w-lg mx-auto mb-8">
-                            Create an account to track your tickets, get reminders and check in with a single scan.
+                            Book your ticket in seconds — no account needed. Your pass lands in your inbox and you can track it anytime by phone.
                         </p>
                         <div className="flex items-center justify-center gap-4 flex-wrap">
                             <Link href={appUrl("/browse")} className="btn-primary px-7 py-3 text-sm">
                                 Browse Events
                             </Link>
-                            <Link href={route('register')}
+                            <Link href={appUrl("/track-tickets")}
                                 className="px-7 py-3 text-sm font-medium text-white/70
                                     bg-white/[0.04] border border-white/[0.08] rounded-2xl
                                     hover:bg-white/[0.08] hover:text-white hover:-translate-y-0.5
                                     active:translate-y-0 active:scale-[0.98] transition-all duration-200">
-                                Create account
+                                Track tickets
                             </Link>
                         </div>
                     </motion.div>
                 </section>
 
                 {/* Footer */}
-                <footer className="relative z-10 border-t border-white/[0.06]">
-                    <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <span className="text-sm font-bold tracking-tight text-white/70">EVENT MANAGEMENT SYSTEM</span>
-                        <div className="flex items-center gap-6 text-sm text-white/30">
-                            <Link href={appUrl("/browse")} className="hover:text-white transition-colors">Events</Link>
-                            <Link href={route('login')} className="hover:text-white transition-colors">Sign in</Link>
-                            <Link href={route('register')} className="hover:text-white transition-colors">Register</Link>
-                        </div>
-                        <p className="text-xs text-white/20">&copy; {new Date().getFullYear()} Event Management System</p>
-                    </div>
-                </footer>
+                <SiteFooter />
 
                 {/* Stadium curve divider */}
                 <div className="relative h-40 overflow-hidden">

@@ -67,10 +67,6 @@ class PublicController extends Controller
             'event' => $event,
             'isFull' => $event->isFull(),
             'availableSpots' => $event->availableSpots(),
-            'userRegistered' => auth()->check() && auth()->user()->tickets()
-                ->where('event_id', $event->id)
-                ->whereNotIn('status', ['cancelled', 'rejected'])
-                ->exists(),
         ]);
     }
 }

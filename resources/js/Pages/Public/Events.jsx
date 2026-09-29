@@ -1,50 +1,8 @@
-import { Link, usePage, router } from '@inertiajs/react';
+import { Link, Head, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import PublicEventCard, { formatEventDate, eventTypeLabel } from '../../Components/Events/PublicEventCard';
-
-function PublicLayout({ children }) {
-    const { auth } = usePage().props;
-    return (
-        <div className="relative min-h-screen bg-gradient-to-b from-dark-bg via-[#0F0F1A] to-dark-bg overflow-hidden">
-            {/* Ambient glow */}
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-primary-500/[0.06] rounded-full blur-[180px]" />
-            <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-gold-500/[0.04] rounded-full blur-[150px]" />
-            <div className="absolute bottom-1/4 left-1/3 w-[400px] h-[400px] bg-green-500/[0.03] rounded-full blur-[120px]" />
-            <div className="absolute top-2/3 right-1/3 w-[300px] h-[300px] bg-blue-500/[0.02] rounded-full blur-[100px]" />
-
-            {Array.from({ length: 30 }).map((_, i) => (
-                <motion.div key={i} className="absolute rounded-full bg-white/10"
-                    style={{ width: Math.random() * 4 + 1, height: Math.random() * 4 + 1, left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }}
-                    animate={{ y: [0, -30, 0], opacity: [0, 0.08, 0] }}
-                    transition={{ duration: 12 + Math.random() * 15, repeat: Infinity, ease: 'easeInOut', delay: Math.random() * 8 }}
-                />
-            ))}
-
-            <nav className="relative z-10 flex items-center justify-between px-6 py-5 max-w-7xl mx-auto">
-                <Link href={appUrl("/")} className="flex items-center gap-2.5 group">
-                    <div>
-                        <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">EVENT MANAGEMENT SYSTEM</span>
-                    </div>
-                </Link>
-                <div className="flex items-center gap-3">
-                    <Link href={appUrl("/browse")} className="px-4 py-2 text-sm font-medium text-primary-400 hover:text-primary-300 transition-colors">Events</Link>
-                    {auth?.user ? (
-                        <Link href={route('customer.dashboard')} className="px-4 py-2 text-sm font-medium text-white/60 hover:text-white transition-colors">
-                            My Dashboard
-                        </Link>
-                    ) : (
-                        <Link href={route('login')} className="px-4 py-2 text-sm font-medium text-white/60 hover:text-white transition-colors">
-                            Sign In
-                        </Link>
-                    )}
-                </div>
-            </nav>
-
-            <main className="relative z-10">{children}</main>
-        </div>
-    );
-}
+import PublicEventCard from '../../Components/Events/PublicEventCard';
+import PublicLayout from '../../Components/Layout/PublicLayout';
 
 const eventTypeLabels = {
     live_screening: 'Live Screening',
@@ -63,16 +21,17 @@ export default function Events({ events, filters, eventTypes }) {
     const [typeFilter, setTypeFilter] = useState(filters?.event_type || '');
 
     const applyFilters = () => {
-        router.get(route('events.public'), { search, event_type: typeFilter }, { preserveState: true, replace: true });
+        router.get(appUrl('/browse'), { search, event_type: typeFilter }, { preserveState: true, replace: true });
     };
 
     return (
         <PublicLayout>
+            <Head title="Browse Events" />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20">
                 <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06] mb-6">
                         <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                        <span className="text-xs font-medium text-white/50 tracking-wide uppercase">Event Management System</span>
+                        <span className="text-xs font-medium text-white/50 tracking-wide uppercase">TicketClub</span>
                     </div>
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight">
                         Upcoming Events

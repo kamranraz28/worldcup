@@ -17,10 +17,12 @@ export default function GuestLayout({ children }) {
             <div className="flex-1 flex items-center justify-center px-4 py-12 relative z-10">
                 <div className="w-full max-w-md">
                     <div className="text-center mb-8">
-                        <Link href={appUrl("/")} className="inline-flex items-center gap-3 group">
+                        <Link href={appUrl("/")} className="inline-flex items-center gap-2.5 group">
+                            <img src={appUrl("/ticketclub.png")} alt="TicketClub"
+                                className="h-7 w-auto group-hover:scale-105 transition-transform duration-300" />
                             <div className="text-left">
                                 <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-primary-500 to-primary-400 bg-clip-text text-transparent block leading-none">
-                                    Event Management System
+                                    TicketClub
                                 </span>
                                 <span className="text-[9px] font-semibold tracking-widest uppercase text-neutral-400 dark:text-dark-text-secondary">
                                     By Synergy Interface Ltd.

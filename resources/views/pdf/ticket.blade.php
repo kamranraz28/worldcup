@@ -125,10 +125,10 @@
     </style>
 </head>
 <body>
-    @php($logoBase64 = base64_encode(file_get_contents(public_path('images/logo.png'))))
+    @php($logoBase64 = base64_encode(file_get_contents(public_path('synergy.png'))))
     <div class="ticket-container">
         <div class="ticket-header">
-            <div class="subtitle">Event Management System</div>
+            <div class="subtitle">TicketClub</div>
             <h1>{{ $ticket->event->title ?? 'Event Ticket' }}</h1>
             <span class="status-badge">{{ ucfirst($ticket->status) }}</span>
         </div>

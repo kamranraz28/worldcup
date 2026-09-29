@@ -20,7 +20,7 @@ class DashboardController extends Controller
         $role = auth()->user()?->role?->name;
 
         if ($role === 'customer') {
-            return redirect('/customer/dashboard');
+            return redirect('/');
         }
 
         if ($role === 'checkin-staff') {
@@ -251,7 +251,7 @@ class DashboardController extends Controller
 
         if (empty($activities)) {
             $activities = [
-                ['type' => 'system', 'action' => 'started', 'subject' => 'Platform', 'detail' => 'Event Management System platform is live', 'time' => 'just now', 'icon' => 'system'],
+                ['type' => 'system', 'action' => 'started', 'subject' => 'Platform', 'detail' => 'TicketClub platform is live', 'time' => 'just now', 'icon' => 'system'],
             ];
         }
 

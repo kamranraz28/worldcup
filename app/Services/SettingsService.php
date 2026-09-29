@@ -118,7 +118,7 @@ class SettingsService
     private function getGeneralFields(): array
     {
         return [
-            'app_name' => ['label' => 'Application Name', 'type' => 'text', 'default' => 'Event Management System', 'description' => 'The name displayed throughout the application'],
+            'app_name' => ['label' => 'Application Name', 'type' => 'text', 'default' => 'TicketClub', 'description' => 'The name displayed throughout the application'],
             'app_url' => ['label' => 'Application URL', 'type' => 'text', 'default' => url('/'), 'description' => 'Base URL of the application'],
             'timezone' => ['label' => 'Timezone', 'type' => 'select', 'default' => 'Asia/Dhaka', 'options' => ['UTC', 'Asia/Dhaka', 'Asia/Dubai', 'Asia/Riyadh', 'America/New_York', 'Europe/London'], 'description' => 'Default timezone for the application'],
             'locale' => ['label' => 'Locale', 'type' => 'select', 'default' => 'en', 'options' => ['en' => 'English', 'ar' => 'Arabic', 'ur' => 'Urdu'], 'description' => 'Default language'],
@@ -138,7 +138,7 @@ class SettingsService
             'company_name' => ['label' => 'Company Name', 'type' => 'text', 'default' => 'Synergy Interface Ltd.', 'description' => 'Your company or organization name'],
             'company_logo' => ['label' => 'Company Logo URL', 'type' => 'text', 'default' => '', 'description' => 'URL or path to your logo image'],
             'favicon' => ['label' => 'Favicon URL', 'type' => 'text', 'default' => '', 'description' => 'URL to favicon image'],
-            'footer_text' => ['label' => 'Footer Text', 'type' => 'text', 'default' => 'Event Management System — Powered by Synergy Interface Ltd.', 'description' => 'Text displayed in page footers'],
+            'footer_text' => ['label' => 'Footer Text', 'type' => 'text', 'default' => 'TicketClub — Powered by Synergy Interface Ltd.', 'description' => 'Text displayed in page footers'],
             'copyright' => ['label' => 'Copyright', 'type' => 'text', 'default' => '© ' . date('Y') . ' Synergy Interface Ltd. All rights reserved.', 'description' => 'Copyright notice'],
         ];
     }
@@ -153,7 +153,7 @@ class SettingsService
             'mail_password' => ['label' => 'SMTP Password', 'type' => 'password', 'default' => '', 'description' => 'SMTP authentication password'],
             'mail_encryption' => ['label' => 'Encryption', 'type' => 'select', 'default' => 'tls', 'options' => ['tls' => 'TLS', 'ssl' => 'SSL', '' => 'None'], 'description' => 'SMTP encryption protocol'],
             'mail_from_address' => ['label' => 'From Address', 'type' => 'email', 'default' => 'noreply@example.com', 'description' => 'Default sender email address'],
-            'mail_from_name' => ['label' => 'From Name', 'type' => 'text', 'default' => 'Event Management System', 'description' => 'Default sender name'],
+            'mail_from_name' => ['label' => 'From Name', 'type' => 'text', 'default' => 'TicketClub', 'description' => 'Default sender name'],
         ];
     }
 

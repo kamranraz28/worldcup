@@ -17,6 +17,8 @@
         "picqer/php-barcode-generator": "^3.3",
         "setasign/fpdi": "^2.6",
         "setasign/fpdi-fpdf": "^2.3",
+        "symfony/http-client": "^7.4",
+        "symfony/mailgun-mailer": "^7.4",
         "tightenco/ziggy": "*"
     },
     "require-dev": {

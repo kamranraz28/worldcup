@@ -16,6 +16,7 @@ export default function Edit({ event }) {
     ticket_price: event.ticket_price || '',
     early_booking_price: event.early_booking_price || '',
     early_booking_deadline: event.early_booking_deadline ? event.early_booking_deadline.slice(0, 16) : '',
+    free_event: Number(event.ticket_price || 0) === 0 && Number(event.early_booking_price || 0) === 0,
     start_date: event.start_date ? event.start_date.slice(0, 16) : '',
     end_date: event.end_date ? event.end_date.slice(0, 16) : '',
     registration_deadline: event.registration_deadline ? event.registration_deadline.slice(0, 16) : '',

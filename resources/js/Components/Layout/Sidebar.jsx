@@ -1,6 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { navItems, adminNavItems, customerNavItems } from './navigation';
+import { navItems, adminNavItems } from './navigation';
 
 const sidebarVariants = {
     open: { width: 280, transition: { duration: 0.35, ease: [0.25, 1, 0.5, 1] } },
@@ -13,7 +13,6 @@ export default function Sidebar({ collapsed, onToggle, onMobileClose }) {
     const permissions = auth.user?.permissions ?? [];
     const roleName = auth.user?.role?.name;
     const isAdmin = roleName === 'super-admin' || roleName === 'admin';
-    const isCustomer = roleName === 'customer';
     const isScanningStaff = roleName === 'checkin-staff';
 
     const filteredNav = navItems.filter(
@@ -27,9 +26,7 @@ export default function Sidebar({ collapsed, onToggle, onMobileClose }) {
     );
 
     let sideItems;
-    if (isCustomer) {
-        sideItems = customerNavItems;
-    } else if (isScanningStaff) {
+    if (isScanningStaff) {
         sideItems = filteredNav.filter(item => item.key === 'checkin');
     } else {
         sideItems = filteredNav;
@@ -60,10 +57,8 @@ export default function Sidebar({ collapsed, onToggle, onMobileClose }) {
                 {/* Logo */}
                 <div className="flex-shrink-0 h-16 flex items-center px-5 border-b border-neutral-100/60 dark:border-white/[0.04]">
                     <Link href={appUrl("/dashboard")} className="flex items-center gap-2.5 min-w-0 group">
-                        {!isCustomer && (
-                            <img src={appUrl("/images/logo.png")} alt="Synergy Interface Ltd"
-                                className="h-11 w-auto flex-shrink-0 dark:brightness-0 dark:invert group-hover:scale-105 transition-transform duration-300" />
-                        )}
+                        <img src={appUrl("/ticketclub.png")} alt="TicketClub"
+                            className="h-9 w-auto flex-shrink-0 invert dark:invert-0 group-hover:scale-105 transition-transform duration-300" />
                         <AnimatePresence mode="wait">
                             {!collapsed && (
                                 <motion.div
@@ -73,7 +68,7 @@ export default function Sidebar({ collapsed, onToggle, onMobileClose }) {
                                     className="flex items-center gap-2 min-w-0"
                                 >
                                     <span className="text-sm font-extrabold tracking-tight bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-white/80 bg-clip-text text-transparent truncate">
-                                        Event Management System
+                                        TicketClub
                                     </span>
                                 </motion.div>
                             )}

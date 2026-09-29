@@ -50,10 +50,10 @@ export default function Login({ status, canResetPassword }) {
                 <div className="relative z-10 flex flex-col w-full h-full">
                     {/* Top header - Synergy Interface Ltd logo */}
                     <div className="flex items-center justify-between px-10 py-8">
-                        <Link href={appUrl("/")} className="flex items-center gap-3 group w-fit">
-                            <div>
-                                <span className="text-xl font-extrabold tracking-tight text-white">Event Management System</span>
-                            </div>
+                        <Link href={appUrl("/")} className="flex items-center gap-2.5 group w-fit">
+                            <img src={appUrl("/ticketclub.png")} alt="TicketClub"
+                                className="h-8 w-auto group-hover:scale-105 transition-transform duration-300" />
+                            <span className="text-xl font-extrabold tracking-tight text-white">TicketClub</span>
                         </Link>
 
                         <div className="flex items-center gap-3">
@@ -80,7 +80,7 @@ export default function Login({ status, canResetPassword }) {
                         <div className="text-center">
                             <h2 className="text-3xl font-bold text-white mb-3">One Platform. Every Event.</h2>
                             <p className="text-white/40 max-w-md leading-relaxed text-sm">
-                                Registrations, verifications, ticketing and check-ins — the complete Event Management System.
+                                Registrations, verifications, ticketing and check-ins — the complete event ticketing platform.
                             </p>
                         </div>
 
@@ -109,9 +109,10 @@ export default function Login({ status, canResetPassword }) {
             <div className="flex-1 flex items-center justify-center px-6 py-12 bg-dark-bg dark">
                 <div className="w-full max-w-md">
                     <div className="lg:hidden text-center mb-8">
-                        <Link href={appUrl("/")} className="inline-flex items-center gap-3 group">
+                        <Link href={appUrl("/")} className="inline-flex items-center gap-2.5 group">
+                            <img src={appUrl("/ticketclub.png")} alt="TicketClub" className="h-8 w-auto" />
                             <div className="text-left">
-                                <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-primary-500 to-primary-400 bg-clip-text text-transparent block leading-none">Event Management System</span>
+                                <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-primary-500 to-primary-400 bg-clip-text text-transparent block leading-none">TicketClub</span>
                                 <span className="text-[9px] font-semibold tracking-widest uppercase text-neutral-400 dark:text-dark-text-secondary">By Synergy Interface Ltd.</span>
                             </div>
                         </Link>
@@ -124,7 +125,7 @@ export default function Login({ status, canResetPassword }) {
                             </svg>
                         </div>
                         <h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white">Welcome back</h1>
-                        <p className="text-sm text-neutral-500 dark:text-dark-text-secondary mt-1">Sign in to your Event Management System account</p>
+                        <p className="text-sm text-neutral-500 dark:text-dark-text-secondary mt-1">Sign in to your TicketClub account</p>
                     </div>
 
                     {status && (
@@ -171,17 +172,6 @@ export default function Login({ status, canResetPassword }) {
                                 </span>
                             ) : 'Sign in'}
                         </PrimaryButton>
-
-                        <div className="relative">
-                            <div className="divider" />
-                        </div>
-
-                        <p className="text-center text-sm text-neutral-500 dark:text-dark-text-secondary">
-                            Don't have an account?{' '}
-                            <Link href={route('register')} className="font-medium text-primary-500 hover:text-primary-400 transition-colors">
-                                Sign up
-                            </Link>
-                        </p>
                     </form>
                 </div>
             </div>

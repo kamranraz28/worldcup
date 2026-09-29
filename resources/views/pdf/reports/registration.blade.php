@@ -28,7 +28,7 @@
 <body>
     <div class="header">
         <div>
-            <div class="subtitle">Event Management System</div>
+            <div class="subtitle">TicketClub</div>
             <h1>Registration Report</h1>
         </div>
         <div class="meta">
@@ -76,7 +76,7 @@
     </table>
 
     <div class="footer">
-        <p style="color:#38bdf8;font-weight:700;font-size:11px;">EVENT MANAGEMENT SYSTEM — Powered by Synergy Interface Ltd.</p>
+        <p style="color:#38bdf8;font-weight:700;font-size:11px;">TICKETCLUB — Powered by Synergy Interface Ltd.</p>
     </div>
 </body>
 </html>

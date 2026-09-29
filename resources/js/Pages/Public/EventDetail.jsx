@@ -1,62 +1,21 @@
-import { Link, usePage, router } from '@inertiajs/react';
+import { Link, Head, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import EventCover, { eventTypeLabel } from '../../Components/Events/EventCover';
+import PublicLayout from '../../Components/Layout/PublicLayout';
 
-function PublicLayout({ children }) {
-    const { auth } = usePage().props;
-    return (
-        <div className="relative min-h-screen bg-gradient-to-b from-dark-bg via-[#0F0F1A] to-dark-bg overflow-hidden">
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-primary-500/[0.06] rounded-full blur-[180px]" />
-            <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-gold-500/[0.04] rounded-full blur-[150px]" />
-            <div className="absolute bottom-1/4 left-1/3 w-[400px] h-[400px] bg-green-500/[0.03] rounded-full blur-[120px]" />
-            <div className="absolute top-2/3 right-1/3 w-[300px] h-[300px] bg-blue-500/[0.02] rounded-full blur-[100px]" />
-
-            {Array.from({ length: 30 }).map((_, i) => (
-                <motion.div key={i} className="absolute rounded-full bg-white/10"
-                    style={{ width: Math.random() * 4 + 1, height: Math.random() * 4 + 1, left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }}
-                    animate={{ y: [0, -30, 0], opacity: [0, 0.08, 0] }}
-                    transition={{ duration: 12 + Math.random() * 15, repeat: Infinity, ease: 'easeInOut', delay: Math.random() * 8 }}
-                />
-            ))}
-
-            <nav className="relative z-10 flex items-center justify-between px-6 py-5 max-w-7xl mx-auto">
-                <Link href={appUrl("/")} className="flex items-center gap-2.5 group">
-                    <div>
-                        <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">EVENT MANAGEMENT SYSTEM</span>
-                    </div>
-                </Link>
-                <div className="flex items-center gap-3">
-                    <Link href={appUrl("/browse")} className="px-4 py-2 text-sm font-medium text-primary-400 hover:text-primary-300 transition-colors">Events</Link>
-                    {auth?.user ? (
-                        <Link href={route('customer.dashboard')} className="px-4 py-2 text-sm font-medium text-white/60 hover:text-white transition-colors">My Dashboard</Link>
-                    ) : (
-                        <Link href={route('login')} className="px-4 py-2 text-sm font-medium text-white/60 hover:text-white transition-colors">Sign In</Link>
-                    )}
-                </div>
-            </nav>
-
-            <main className="relative z-10">{children}</main>
-        </div>
-    );
-}
-
-export default function EventDetail({ event, isFull, availableSpots, userRegistered }) {
-    const { auth } = usePage().props;
+export default function EventDetail({ event, isFull, availableSpots }) {
     const fmtDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) : '';
     const fmtTime = (d) => d ? new Date(d).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : '';
 
     const handleRegister = () => {
-        if (!auth?.user) {
-            router.get(route('login'));
-        } else {
-            router.get(route('customer.events.register', event.uuid));
-        }
+        router.get(appUrl(`/browse/${event.uuid}/register`));
     };
 
     const bookingClosed = event.registration_deadline ? new Date(event.registration_deadline) < new Date() : false;
 
     return (
         <PublicLayout>
+            <Head title={event?.title ?? 'Event'} />
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20">
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                     <Link href={appUrl("/browse")} className="inline-flex items-center gap-1.5 text-sm text-white/40 hover:text-white/70 transition-colors mb-6">
@@ -116,14 +75,7 @@ export default function EventDetail({ event, isFull, availableSpots, userRegiste
                             )}
                         </div>
                         <div className="flex items-center gap-3">
-                            {userRegistered ? (
-                                <div className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-green-500/10 text-green-400 border border-green-500/20 text-sm font-medium">
-                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    You're registered!
-                                </div>
-                            ) : isFull ? (
+                            {isFull ? (
                                 <div className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 text-sm font-medium">
                                     Event is full
                                 </div>

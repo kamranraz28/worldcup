@@ -29,8 +29,8 @@ class TicketReceipt extends Notification
         $customer = $this->ticket->customer;
 
         return (new MailMessage)
-            ->subject('Payment Receipt — ' . ($event->title ?? 'Event'))
-            ->greeting('Hi ' . ($customer->first_name ?? 'there') . ',')
+            ->subject('[TicketClub] Payment Receipt — ' . ($event->title ?? 'Event'))
+            ->greeting('Hi ' . ($customer->full_name ?: 'there') . ',')
             ->line('Here is your payment receipt for:')
             ->line('**' . $event->title . '**')
             ->line('')
@@ -40,6 +40,6 @@ class TicketReceipt extends Notification
             ->line('📅 **Date:** ' . now()->format('F j, Y'))
             ->line('')
             ->line('Thank you for your purchase!')
-            ->salutation('— Event Management System Team');
+            ->salutation('— TicketClub Team');
     }
 }

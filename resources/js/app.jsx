@@ -20,7 +20,7 @@ const appBase = (() => {
 window.APP_BASE = appBase;
 window.appUrl = (path = '') => `${appBase}${path}`;
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = 'TicketClub';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

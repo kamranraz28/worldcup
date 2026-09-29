@@ -16,6 +16,7 @@ export default function Create() {
     ticket_price: '',
     early_booking_price: '',
     early_booking_deadline: '',
+    free_event: false,
     start_date: '',
     end_date: '',
     registration_deadline: '',

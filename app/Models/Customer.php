@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\PhoneNumber;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +19,7 @@ class Customer extends Model
         'last_name',
         'email',
         'phone',
+        'phone_normalized',
         'date_of_birth',
         'nationality',
         'document_type',
@@ -94,7 +96,7 @@ class Customer extends Model
 
     public function getFullNameAttribute(): string
     {
-        return "{$this->first_name} {$this->last_name}";
+        return trim("{$this->first_name} {$this->last_name}");
     }
 
     public function getInitialsAttribute(): string
@@ -143,5 +145,25 @@ class Customer extends Model
     public function scopeByNationality($query, string $nationality)
     {
         return $query->where('nationality', $nationality);
+    }
+
+    /**
+     * Find customers by phone, ignoring formatting differences
+     * ('+8801712345678', '8801712345678' and '01712 3456 78' all match).
+     */
+    public function scopeByPhone($query, ?string $phone)
+    {
+        $normalized = PhoneNumber::normalize($phone);
+
+        return $query->where('phone_normalized', $normalized);
+    }
+
+    /**
+     * Keep the derived lookup column in sync with the raw phone number.
+     */
+    public function setPhoneAttribute($value): void
+    {
+        $this->attributes['phone'] = $value;
+        $this->attributes['phone_normalized'] = PhoneNumber::normalize($value);
     }
 }

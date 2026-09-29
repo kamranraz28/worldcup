@@ -7,18 +7,20 @@ use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerVerificationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\CheckInController;
-use App\Http\Controllers\CustomerPortalController;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\PublicRegistrationController;
+use App\Http\Controllers\PublicTicketController;
+use App\Http\Controllers\TicketTrackingController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ScannerController;
 use App\Http\Controllers\VoucherController;
@@ -30,13 +32,38 @@ Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('browse', [PublicController::class, 'events'])->name('events.public');
 Route::get('browse/{uuid}', [PublicController::class, 'eventDetail'])->name('events.public.show');
 
+// Guest event checkout — no account required. Register with name/email/phone,
+// pay, get the ticket emailed. No payment = no registration (complete or nothing).
+Route::get('browse/{uuid}/register', [PublicRegistrationController::class, 'create'])->name('events.public.register');
+Route::post('browse/{uuid}/register', [PublicRegistrationController::class, 'store'])->name('events.public.register.store');
+
+// Ticket tracking — find every ticket bought with a phone number.
+Route::get('track-tickets', [TicketTrackingController::class, 'create'])->name('track-tickets');
+Route::post('track-tickets', [TicketTrackingController::class, 'search'])
+    ->middleware('throttle:10,1')
+    ->name('track-tickets.search');
+
+// Public ticket pages (downloads are short-lived signed URLs).
+Route::get('tickets/success/{uuid}', [PublicTicketController::class, 'success'])->name('tickets.public.success');
+Route::get('payment-failed', [PublicTicketController::class, 'failed'])->name('tickets.public.failed');
+Route::get('track-tickets/download/{uuid}', [PublicTicketController::class, 'download'])
+    ->middleware('signed')
+    ->name('tickets.public.download');
+Route::get('track-tickets/download-all', [PublicTicketController::class, 'downloadAll'])
+    ->middleware('signed')
+    ->name('tickets.public.download-all');
+
+// Payment (ShurjoPay) — public gateway round-trip.
+Route::get('payment/initiate/{uuid}', [PaymentController::class, 'initiate'])->name('payment.initiate');
+Route::get('payment/return', [PaymentController::class, 'return'])->name('payment.return');
+Route::get('payment/cancel/{uuid}', [PaymentController::class, 'cancel'])->name('payment.cancel');
+
+// Login stays reachable even when another account is signed in, so the
+// staff login page always opens and account switching keeps working.
+Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
 Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
-    Route::post('register', [RegisteredUserController::class, 'store']);
-
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
-
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
     Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
 
@@ -62,19 +89,11 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'verified', 'is_active'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
 
-    Route::prefix('customer')->name('customer.')->group(function () {
-        Route::get('dashboard', [CustomerPortalController::class, 'dashboard'])->name('dashboard');
-        Route::get('events', [CustomerPortalController::class, 'events'])->name('events');
-        Route::get('events/{uuid}/register', [CustomerPortalController::class, 'registerForm'])->name('events.register');
-        Route::post('events/{uuid}/register', [CustomerPortalController::class, 'register'])->name('events.register.store');
-        Route::get('verification', [CustomerPortalController::class, 'verificationForm'])->name('verification');
-        Route::post('verification', [CustomerPortalController::class, 'submitVerification'])->name('verification.store');
-    });
-
-    // Payment (ShurjoPay)
-    Route::get('payment/initiate/{uuid}', [PaymentController::class, 'initiate'])->name('payment.initiate');
-    Route::get('payment/return', [PaymentController::class, 'return'])->name('payment.return');
-    Route::get('payment/cancel/{uuid}', [PaymentController::class, 'cancel'])->name('payment.cancel');
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead'])
+        ->whereNumber('id')
+        ->name('notifications.read');
+    Route::post('notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
 
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -124,7 +143,6 @@ Route::middleware(['auth', 'verified', 'is_active'])->group(function () {
     Route::get('events/{eventUuid}/waiting-list', [RegistrationController::class, 'waitingList'])->name('registrations.waiting-list');
     Route::post('events/{eventUuid}/waiting-list/notify', [RegistrationController::class, 'notifyWaitingList'])->name('registrations.waiting-list.notify');
 
-    Route::get('my-tickets', [TicketController::class, 'myTickets'])->name('tickets.my');
     Route::get('tickets', [TicketController::class, 'index'])->name('tickets.index');
     Route::get('tickets/{uuid}', [TicketController::class, 'show'])->name('tickets.show');
     Route::get('tickets/{uuid}/download', [TicketController::class, 'downloadPdf'])->name('tickets.download');

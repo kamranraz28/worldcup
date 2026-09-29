@@ -93,6 +93,23 @@ class User extends Authenticatable
         return $this->hasMany(Report::class, 'generated_by');
     }
 
+    /**
+     * In-app notification feed. This intentionally overrides the relation of
+     * the same name from the Notifiable trait so reads go through this
+     * project's own Notification model (which carries subject/body/channel).
+     * Laravel's DatabaseChannel writes via routeNotificationFor() rather than
+     * this relation, so mail delivery is unaffected.
+     */
+    public function notifications()
+    {
+        return $this->morphMany(Notification::class, 'notifiable')->latest();
+    }
+
+    public function unreadNotifications()
+    {
+        return $this->notifications()->inApp()->unread();
+    }
+
     public function auditLogs()
     {
         return $this->hasMany(AuditLog::class);
