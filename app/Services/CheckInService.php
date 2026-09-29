@@ -6,6 +6,7 @@ use App\Models\CheckIn;
 use App\Models\Event;
 use App\Models\Ticket;
 use App\Models\TicketAction;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -343,14 +344,19 @@ class CheckInService
             ->count();
     }
 
-    public function getEventsForDropdown(): Collection
+    public function getEventsForDropdown(?User $user = null): Collection
     {
-        return Event::where('status', 'published')
+        $query = Event::where('status', 'published')
             ->where(function ($q) {
                 $q->where('end_date', '>=', now()->subDay())
                   ->orWhereNull('end_date');
-            })
-            ->orderBy('start_date')
+            });
+
+        if ($user && !$user->isAdmin()) {
+            $query->whereIn('id', $user->assignedEvents()->pluck('events.id'));
+        }
+
+        return $query->orderBy('start_date')
             ->get(['id', 'uuid', 'title', 'start_date', 'venue_name']);
     }
 

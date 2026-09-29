@@ -20,6 +20,7 @@ use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\CustomerPortalController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ScannerController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
@@ -100,6 +101,11 @@ Route::middleware(['auth', 'verified', 'is_active'])->group(function () {
 
     Route::resource('vouchers', VoucherController::class)->except(['show']);
     Route::post('vouchers/{voucher}/toggle', [VoucherController::class, 'toggle'])->name('vouchers.toggle');
+
+    Route::middleware('role:super-admin,admin')->group(function () {
+        Route::resource('scanners', ScannerController::class)->except(['show']);
+        Route::post('scanners/{scanner}/toggle', [ScannerController::class, 'toggle'])->name('scanners.toggle');
+    });
 
     Route::get('verifications', [CustomerVerificationController::class, 'index'])->name('verifications.index');
     Route::get('verifications/{uuid}', [CustomerVerificationController::class, 'show'])->name('verifications.show');

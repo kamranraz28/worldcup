@@ -59,6 +59,25 @@ class User extends Authenticatable
         return $this->hasMany(Event::class, 'created_by');
     }
 
+    public function assignedEvents()
+    {
+        return $this->belongsToMany(Event::class, 'event_scanner')->withTimestamps();
+    }
+
+    public function isScanner(): bool
+    {
+        return $this->role?->name === 'checkin-staff';
+    }
+
+    public function canScanEvent(int $eventId): bool
+    {
+        if ($this->isAdmin()) {
+            return true;
+        }
+
+        return $this->assignedEvents()->whereKey($eventId)->exists();
+    }
+
     public function tickets()
     {
         return $this->hasMany(Ticket::class, 'user_id');

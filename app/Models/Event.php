@@ -81,6 +81,11 @@ class Event extends Model
         return $this->hasMany(Ticket::class);
     }
 
+    public function scanners()
+    {
+        return $this->belongsToMany(User::class, 'event_scanner')->withTimestamps();
+    }
+
     public function checkIns()
     {
         return $this->hasMany(CheckIn::class);

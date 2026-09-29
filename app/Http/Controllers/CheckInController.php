@@ -20,7 +20,7 @@ class CheckInController extends Controller
 
     public function scanner(Request $request)
     {
-        $events = $this->checkInService->getEventsForDropdown();
+        $events = $this->checkInService->getEventsForDropdown($request->user());
         $stats = $this->checkInService->getDailyStats();
         $pendingSync = $this->checkInService->getPendingSyncCount();
 
@@ -49,6 +49,16 @@ class CheckInController extends Controller
             'event_id' => 'required|integer|exists:events,id',
         ]);
 
+        if (!$request->user()->canScanEvent((int) $validated['event_id'])) {
+            $result = ['success' => false, 'message' => 'You are not assigned to this event.', 'code' => 'EVENT_FORBIDDEN'];
+
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json($result, 403);
+            }
+
+            return redirect()->back()->with('error', $result['message']);
+        }
+
         $result = $this->checkInService->scan($validated['qr_code'], $validated['event_id']);
 
         Log::channel('stack')->info('SCAN_RESPONSE', [
@@ -74,6 +84,10 @@ class CheckInController extends Controller
             'event_id' => 'required|integer|exists:events,id',
         ]);
 
+        if (!$request->user()->canScanEvent((int) $validated['event_id'])) {
+            return response()->json(['success' => false, 'message' => 'You are not assigned to this event.', 'code' => 'EVENT_FORBIDDEN'], 403);
+        }
+
         $result = $this->checkInService->validateQrCode($validated['qr_code'], $validated['event_id']);
 
         return response()->json($result);
@@ -93,6 +107,10 @@ class CheckInController extends Controller
 
         if (!empty($filters['event_id'])) {
             $query->where('event_id', $filters['event_id']);
+        }
+
+        if (!$request->user()->isAdmin()) {
+            $query->whereIn('event_id', $request->user()->assignedEvents()->pluck('events.id'));
         }
         if (!empty($filters['customer_id'])) {
             $query->where('customer_id', $filters['customer_id']);
@@ -155,7 +173,7 @@ class CheckInController extends Controller
                 ];
             });
 
-        $events = $this->checkInService->getEventsForDropdown();
+        $events = $this->checkInService->getEventsForDropdown($request->user());
         $stats = $this->checkInService->getDailyStats();
 
         if ($request->wantsJson()) {
@@ -170,8 +188,12 @@ class CheckInController extends Controller
         ]);
     }
 
-    public function eventAttendance(int $eventId)
+    public function eventAttendance(Request $request, int $eventId)
     {
+        if (!$request->user()->canScanEvent($eventId)) {
+            abort(403);
+        }
+
         $attendance = $this->checkInService->getEventAttendance($eventId);
         $history = $this->checkInService->getHistory(['event_id' => $eventId]);
 
@@ -211,7 +233,15 @@ class CheckInController extends Controller
             'items.*.scanned_at' => 'nullable|date',
         ]);
 
-        $results = $this->checkInService->processOfflineQueue($validated['items']);
+        $results = [];
+
+        foreach ($validated['items'] as $item) {
+            if (!$request->user()->canScanEvent((int) $item['event_id'])) {
+                $results[] = ['success' => false, 'message' => 'You are not assigned to this event.', 'code' => 'EVENT_FORBIDDEN', 'offline_queue_id' => $item['offline_queue_id'] ?? null];
+            } else {
+                $results[] = $this->checkInService->processOfflineQueue([$item])[0];
+            }
+        }
 
         return response()->json([
             'synced' => count(array_filter($results, fn ($r) => $r['success'])),

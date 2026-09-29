@@ -18,6 +18,7 @@ export const navItems = [
     { key: 'events', label: 'Events', href: appUrl('/events'), icon: paths.events, permission: 'events.view' },
     { key: 'customers', label: 'Customers', href: appUrl('/customers'), icon: paths.customers, permission: 'customers.view' },
     { key: 'vouchers', label: 'Vouchers', href: appUrl('/vouchers'), icon: paths.tickets, permission: null },
+    { key: 'scanners', label: 'Scanners', href: appUrl('/scanners'), icon: paths.checkin, permission: null },
     { key: 'verifications', label: 'Verifications', href: appUrl('/verifications'), icon: paths.verifications, permission: 'verifications.view' },
     { key: 'checkin', label: 'Scan In', href: appUrl('/check-in'), icon: paths.checkin, permission: 'checkins.scan' },
     { key: 'tickets', label: 'Tickets', href: appUrl('/tickets'), icon: paths.tickets, permission: 'tickets.view' },
