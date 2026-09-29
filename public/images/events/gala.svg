@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="Elegant gala evening event">
+  <defs>
+    <linearGradient id="glBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#120E1C"/>
+      <stop offset="0.55" stop-color="#1A1024"/>
+      <stop offset="1" stop-color="#07050B"/>
+    </linearGradient>
+    <radialGradient id="glGlow" cx="0.5" cy="0.3" r="0.6">
+      <stop offset="0" stop-color="#FFD54F" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#FFD54F" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="glGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFF8E1"/>
+      <stop offset="0.5" stop-color="#FFD54F"/>
+      <stop offset="1" stop-color="#FFA000"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#glBg)"/>
+  <ellipse cx="600" cy="200" rx="620" ry="340" fill="url(#glGlow)"/>
+
+  <!-- bokeh -->
+  <g>
+    <circle cx="140" cy="140" r="40" fill="#FFD54F" opacity="0.10"/>
+    <circle cx="300" cy="90" r="26" fill="#FFE082" opacity="0.12"/>
+    <circle cx="1000" cy="120" r="46" fill="#FFD54F" opacity="0.08"/>
+    <circle cx="900" cy="200" r="22" fill="#FFE082" opacity="0.12"/>
+    <circle cx="620" cy="70" r="30" fill="#FFD54F" opacity="0.10"/>
+    <circle cx="60" cy="300" r="20" fill="#FFE082" opacity="0.10"/>
+    <circle cx="1150" cy="290" r="30" fill="#FFD54F" opacity="0.09"/>
+  </g>
+
+  <!-- backdrop drape -->
+  <g opacity="0.55">
+    <path d="M120 40 L120 470 M200 40 C180 180 240 320 200 470 M280 40 C260 180 320 320 280 470 M360 40 C340 180 400 320 360 470" stroke="#2A1F3A" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <path d="M840 40 C820 180 880 320 840 470 M920 40 C900 180 960 320 920 470 M1000 40 C980 180 1040 320 1000 470 M1080 40 L1080 470" stroke="#2A1F3A" stroke-width="10" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- arch frame -->
+  <path d="M420 500 L420 260 C420 150 500 80 600 80 C700 80 780 150 780 260 L780 500" fill="none" stroke="url(#glGold)" stroke-width="5" opacity="0.55"/>
+  <path d="M452 500 L452 268 C452 172 520 110 600 110 C680 110 748 172 748 268 L748 500" fill="none" stroke="url(#glGold)" stroke-width="2" opacity="0.3"/>
+
+  <!-- monogram -->
+  <g transform="translate(600 240)">
+    <circle r="66" fill="none" stroke="url(#glGold)" stroke-width="3" opacity="0.65"/>
+    <path d="M-26 30 L0 -34 L26 30 L0 12 Z" fill="url(#glGold)" opacity="0.9"/>
+    <circle cy="-34" r="5" fill="#FFF8E1"/>
+  </g>
+
+  <!-- floor -->
+  <rect x="0" y="500" width="1200" height="175" fill="#0A0710"/>
+  <g opacity="0.16" fill="#FFD54F"><ellipse cx="600" cy="512" rx="420" ry="26"/></g>
+  <g opacity="0.10" stroke="#FFD54F" stroke-width="2">
+    <path d="M0 560 L1200 560"/><path d="M0 620 L1200 620"/>
+  </g>
+
+  <!-- cocktail tables -->
+  <g>
+    <g transform="translate(220 470)">
+      <rect x="-4" y="0" width="8" height="96" fill="#241F35"/>
+      <ellipse cy="98" rx="42" ry="9" fill="#241F35"/>
+      <ellipse cy="0" rx="48" ry="12" fill="#FFF8E1" opacity="0.9"/>
+      <ellipse cy="-2" rx="40" ry="8" fill="#FFD54F" opacity="0.25"/>
+      <rect x="-6" y="-26" width="12" height="24" rx="4" fill="#E30613" opacity="0.8"/>
+    </g>
+    <g transform="translate(980 470)">
+      <rect x="-4" y="0" width="8" height="96" fill="#241F35"/>
+      <ellipse cy="98" rx="42" ry="9" fill="#241F35"/>
+      <ellipse cy="0" rx="48" ry="12" fill="#FFF8E1" opacity="0.9"/>
+      <ellipse cy="-2" rx="40" ry="8" fill="#FFD54F" opacity="0.25"/>
+      <rect x="-6" y="-26" width="12" height="24" rx="4" fill="#16A34A" opacity="0.8"/>
+    </g>
+  </g>
+
+  <!-- guests in formal wear -->
+  <g fill="#05050B">
+    <circle cx="440" cy="452" r="26"/>
+    <path d="M404 570 L404 500 C404 480 420 470 440 470 C460 470 476 480 476 500 L476 570 Z"/>
+    <circle cx="760" cy="452" r="26"/>
+    <path d="M724 570 L724 500 C724 480 740 470 760 470 C780 470 796 480 796 500 L796 570 Z"/>
+  </g>
+  <g fill="#FFD54F" opacity="0.35">
+    <path d="M436 472 L444 472 L448 500 L432 500 Z"/>
+    <path d="M756 472 L764 472 L768 500 L752 500 Z"/>
+  </g>
+  <g stroke="#05050B" stroke-width="10" stroke-linecap="round" fill="none">
+    <path d="M408 512 L380 480"/><path d="M472 512 L500 480"/>
+    <path d="M728 512 L700 480"/><path d="M792 512 L820 480"/>
+  </g>
+
+  <rect width="1200" height="675" fill="#050508" opacity="0.06"/>
+</svg>

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="Golden trophy celebration">
+  <defs>
+    <linearGradient id="trBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1A1206"/>
+      <stop offset="0.5" stop-color="#241705"/>
+      <stop offset="1" stop-color="#0A0705"/>
+    </linearGradient>
+    <radialGradient id="trGlow" cx="0.5" cy="0.45" r="0.55">
+      <stop offset="0" stop-color="#FFD54F" stop-opacity="0.40"/>
+      <stop offset="0.55" stop-color="#E30613" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#0A0705" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="trGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFF8E1"/>
+      <stop offset="0.35" stop-color="#FFD54F"/>
+      <stop offset="0.65" stop-color="#FFA000"/>
+      <stop offset="1" stop-color="#FFE082"/>
+    </linearGradient>
+    <linearGradient id="trGold2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFECB3"/>
+      <stop offset="1" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="trRay" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFD54F" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#FFD54F" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#trBg)"/>
+  <ellipse cx="600" cy="320" rx="560" ry="360" fill="url(#trGlow)"/>
+
+  <!-- light rays -->
+  <g>
+    <path d="M600 300 L470 -40 L560 -40 Z" fill="url(#trRay)"/>
+    <path d="M600 300 L700 -40 L790 -40 Z" fill="url(#trRay)"/>
+    <path d="M600 300 L330 40 L400 10 Z" fill="url(#trRay)"/>
+    <path d="M600 300 L870 40 L800 10 Z" fill="url(#trRay)"/>
+    <path d="M600 300 L250 220 L250 300 Z" fill="url(#trRay)"/>
+    <path d="M600 300 L950 220 L950 300 Z" fill="url(#trRay)"/>
+  </g>
+
+  <!-- confetti -->
+  <g opacity="0.9">
+    <rect x="140" y="120" width="12" height="24" rx="2" fill="#FFD54F" transform="rotate(30 146 132)"/>
+    <rect x="290" y="80" width="12" height="24" rx="2" fill="#E30613" transform="rotate(-20 296 92)"/>
+    <rect x="980" y="100" width="12" height="24" rx="2" fill="#FFD54F" transform="rotate(45 986 112)"/>
+    <rect x="1090" y="180" width="12" height="24" rx="2" fill="#16A34A" transform="rotate(-35 1096 192)"/>
+    <rect x="80" y="250" width="12" height="24" rx="2" fill="#3B82F6" transform="rotate(15 86 262)"/>
+    <rect x="1120" y="300" width="12" height="24" rx="2" fill="#E30613" transform="rotate(-12 1126 312)"/>
+    <circle cx="210" cy="330" r="7" fill="#FAFAFA" opacity="0.6"/>
+    <circle cx="1000" cy="350" r="7" fill="#FAFAFA" opacity="0.55"/>
+    <circle cx="420" cy="60" r="6" fill="#FFD54F" opacity="0.7"/>
+    <circle cx="800" cy="70" r="6" fill="#FFECB3" opacity="0.6"/>
+  </g>
+
+  <!-- podium -->
+  <g>
+    <rect x="470" y="560" width="260" height="26" rx="8" fill="#241F35"/>
+    <rect x="500" y="520" width="200" height="44" rx="8" fill="#1E1B2E"/>
+    <rect x="500" y="520" width="200" height="6" rx="3" fill="#FFD54F" opacity="0.5"/>
+  </g>
+
+  <!-- trophy -->
+  <g transform="translate(600 320)">
+    <!-- handles -->
+    <path d="M-88 -78 C-152 -66 -152 10 -74 26" fill="none" stroke="url(#trGold2)" stroke-width="16" stroke-linecap="round"/>
+    <path d="M88 -78 C152 -66 152 10 74 26" fill="none" stroke="url(#trGold2)" stroke-width="16" stroke-linecap="round"/>
+    <!-- cup body -->
+    <path d="M-96 -128 L96 -128 L82 -18 C80 22 44 44 0 44 C-44 44 -80 22 -82 -18 Z" fill="url(#trGold)"/>
+    <path d="M-96 -128 L96 -128 L94 -108 L-94 -108 Z" fill="#FFF8E1" opacity="0.65"/>
+    <!-- stem -->
+    <rect x="-16" y="40" width="32" height="52" rx="6" fill="url(#trGold2)"/>
+    <ellipse cx="0" cy="96" rx="62" ry="16" fill="url(#trGold)"/>
+    <ellipse cx="0" cy="92" rx="62" ry="16" fill="#FFF8E1" opacity="0.4"/>
+    <!-- star emblem -->
+    <path d="M0 -96 L11 -73 L36 -70 L18 -53 L22 -28 L0 -41 L-22 -28 L-18 -53 L-36 -70 L-11 -73 Z" fill="#8A000C" opacity="0.55"/>
+    <!-- highlight -->
+    <path d="M-66 -108 C-58 -70 -56 -30 -46 4" stroke="#FFFFFF" stroke-opacity="0.5" stroke-width="10" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <!-- ground reflection -->
+  <ellipse cx="600" cy="600" rx="300" ry="26" fill="#FFD54F" opacity="0.08"/>
+
+  <!-- stadium ribbon silhouette -->
+  <path d="M0 520 C220 470 980 470 1200 520 L1200 675 L0 675 Z" fill="#0A0705" opacity="0.6"/>
+  <g fill="#FFFFFF" opacity="0.12">
+    <rect x="120" y="512" width="70" height="10" rx="5"/><rect x="380" y="498" width="70" height="10" rx="5"/>
+    <rect x="750" y="498" width="70" height="10" rx="5"/><rect x="1010" y="512" width="70" height="10" rx="5"/>
+  </g>
+
+  <rect width="1200" height="675" fill="#050508" opacity="0.08"/>
+</svg>

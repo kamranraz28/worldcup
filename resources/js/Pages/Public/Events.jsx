@@ -1,6 +1,7 @@
 import { Link, usePage, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import PublicEventCard, { formatEventDate, eventTypeLabel } from '../../Components/Events/PublicEventCard';
 
 function PublicLayout({ children }) {
     const { auth } = usePage().props;
@@ -52,6 +53,9 @@ const eventTypeLabels = {
     fan_zone: 'Fan Zone',
     workshop: 'Workshop',
     other: 'Other',
+    live: 'Live',
+    virtual: 'Virtual',
+    hybrid: 'Hybrid',
 };
 
 export default function Events({ events, filters, eventTypes }) {
@@ -61,8 +65,6 @@ export default function Events({ events, filters, eventTypes }) {
     const applyFilters = () => {
         router.get(route('events.public'), { search, event_type: typeFilter }, { preserveState: true, replace: true });
     };
-
-    const fmtDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) : '';
 
     return (
         <PublicLayout>
@@ -101,58 +103,7 @@ export default function Events({ events, filters, eventTypes }) {
                 {events?.data?.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {events.data.map((event, i) => (
-                            <motion.div key={event.uuid} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
-                                <Link href={appUrl(`/browse/${event.uuid}`)}
-                                    className="group block bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden
-                                        hover:bg-white/[0.05] hover:border-white/[0.1] hover:-translate-y-0.5
-                                        active:translate-y-0 active:scale-[0.98]
-                                        transition-all duration-300"
-                                >
-                                    <div className="aspect-[16/9] bg-white/[0.02] relative overflow-hidden">
-                                        {event.banner_image ? (
-                                            <img src={appUrl(`/storage/${event.banner_image}`)} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center">
-                                                <svg className="w-12 h-12 text-white/5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                                </svg>
-                                            </div>
-                                        )}
-                                        <div className="absolute top-3 left-3">
-                                            <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-white/[0.08] text-white/70 border border-white/[0.06]">
-                                                {eventTypeLabels[event.event_type] || event.event_type}
-                                            </span>
-                                        </div>
-                                        {event.confirmed_count >= event.max_capacity && (
-                                            <div className="absolute top-3 right-3">
-                                                <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">Full</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="p-5">
-                                        <h3 className="text-base font-semibold text-white group-hover:text-primary-400 transition-colors line-clamp-1">{event.title}</h3>
-                                        <p className="text-sm text-white/30 mt-1.5 line-clamp-2">{event.description}</p>
-                                        <div className="flex items-center gap-3 mt-3 text-xs text-white/20">
-                                            <span>{fmtDate(event.start_date)}</span>
-                                            {event.venue_name && <span className="truncate">{event.venue_name}</span>}
-                                        </div>
-                                        {event.ticket_price > 0 ? (
-                                            <>
-                                                <p className="text-sm font-semibold text-primary-400 mt-2">
-                                                    {event.early_booking_price != null && event.is_early_booking
-                                                        ? <>BDT {Number(event.early_booking_price).toLocaleString()} <span className="text-[10px] font-bold text-emerald-400">EARLY</span></>
-                                                        : <>BDT {Number(event.ticket_price).toLocaleString()}</>}
-                                                </p>
-                                                {event.early_booking_price != null && event.is_early_booking && (
-                                                    <p className="text-xs text-white/30 line-through">BDT {Number(event.ticket_price).toLocaleString()}</p>
-                                                )}
-                                            </>
-                                        ) : (
-                                            <p className="text-sm font-medium text-green-400 mt-2">Free</p>
-                                        )}
-                                    </div>
-                                </Link>
-                            </motion.div>
+                            <PublicEventCard key={event.uuid} event={event} index={i} />
                         ))}
                     </div>
                 ) : (

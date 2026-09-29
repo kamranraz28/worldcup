@@ -8,6 +8,32 @@ use Inertia\Inertia;
 
 class PublicController extends Controller
 {
+    /**
+     * Landing page — hero plus a strip of upcoming published events.
+     */
+    public function home()
+    {
+        $events = Event::published()
+            ->withCount(['tickets as confirmed_count' => fn ($q) => $q->whereIn('status', ['confirmed', 'reserved'])])
+            ->where('start_date', '>=', now()->subDay())
+            ->orderBy('start_date')
+            ->limit(6)
+            ->get();
+
+        $stats = [
+            'events' => Event::published()->count(),
+            'guests' => (int) \Illuminate\Support\Facades\DB::table('tickets')
+                ->whereIn('status', ['confirmed', 'reserved'])
+                ->count(),
+            'seats' => (int) Event::published()->sum('max_capacity'),
+        ];
+
+        return Inertia::render('Welcome', [
+            'featuredEvents' => $events,
+            'stats' => $stats,
+        ]);
+    }
+
     public function events(Request $request)
     {
         $events = Event::published()

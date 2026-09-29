@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="Audience cheering with spotlights">
+  <defs>
+    <linearGradient id="acBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0C0A18"/>
+      <stop offset="0.5" stop-color="#16102A"/>
+      <stop offset="1" stop-color="#050508"/>
+    </linearGradient>
+    <radialGradient id="acGlow" cx="0.5" cy="0.25" r="0.6">
+      <stop offset="0" stop-color="#3B82F6" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#3B82F6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="acSpot" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EFF6FF" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#EFF6FF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="acSpotR" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E30613" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#E30613" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="acStage" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1E1B2E"/>
+      <stop offset="1" stop-color="#0A0A12"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#acBg)"/>
+  <ellipse cx="600" cy="150" rx="640" ry="300" fill="url(#acGlow)"/>
+
+  <!-- spotlight rigs -->
+  <g stroke="#1A1A26" stroke-width="6">
+    <path d="M300 0 L300 40"/><path d="M600 0 L600 40"/><path d="M900 0 L900 40"/>
+  </g>
+  <g fill="#241F35">
+    <rect x="272" y="36" width="56" height="24" rx="6"/><rect x="572" y="36" width="56" height="24" rx="6"/><rect x="872" y="36" width="56" height="24" rx="6"/>
+  </g>
+  <g fill="#FFF3C4" opacity="0.9">
+    <circle cx="288" cy="48" r="5"/><circle cx="306" cy="48" r="5"/><circle cx="324" cy="48" r="5"/>
+    <circle cx="588" cy="48" r="5"/><circle cx="606" cy="48" r="5"/><circle cx="624" cy="48" r="5"/>
+    <circle cx="888" cy="48" r="5"/><circle cx="906" cy="48" r="5"/><circle cx="924" cy="48" r="5"/>
+  </g>
+  <path d="M300 60 L120 470 L480 470 Z" fill="url(#acSpot)"/>
+  <path d="M600 60 L480 470 L720 470 Z" fill="url(#acSpot)"/>
+  <path d="M900 60 L720 470 L1080 470 Z" fill="url(#acSpotR)"/>
+
+  <!-- stage -->
+  <rect x="380" y="380" width="440" height="90" rx="12" fill="url(#acStage)"/>
+  <rect x="380" y="380" width="440" height="6" rx="3" fill="#E30613" opacity="0.5"/>
+  <ellipse cx="600" cy="470" rx="280" ry="30" fill="#050508"/>
+
+  <!-- performer silhouette on stage -->
+  <g fill="#04040A">
+    <circle cx="600" cy="300" r="26"/>
+    <path d="M566 380 L566 330 C566 312 582 300 600 300 C618 300 634 312 634 330 L634 380 Z"/>
+  </g>
+  <g stroke="#04040A" stroke-width="11" stroke-linecap="round" fill="none">
+    <path d="M572 322 L512 268"/><path d="M628 322 L688 268"/>
+  </g>
+
+  <!-- audience -->
+  <g fill="#05050B">
+    <!-- back row -->
+    <circle cx="80" cy="500" r="30"/><circle cx="230" cy="500" r="30"/><circle cx="380" cy="500" r="30"/>
+    <circle cx="820" cy="500" r="30"/><circle cx="970" cy="500" r="30"/><circle cx="1120" cy="500" r="30"/>
+    <!-- front row -->
+    <circle cx="150" cy="586" r="40"/><circle cx="320" cy="586" r="40"/><circle cx="490" cy="586" r="40"/>
+    <circle cx="710" cy="586" r="40"/><circle cx="880" cy="586" r="40"/><circle cx="1050" cy="586" r="40"/>
+  </g>
+  <g fill="#05050B">
+    <rect x="50" y="524" width="60" height="90" rx="28"/><rect x="200" y="524" width="60" height="90" rx="28"/>
+    <rect x="350" y="524" width="60" height="90" rx="28"/><rect x="790" y="524" width="60" height="90" rx="28"/>
+    <rect x="940" y="524" width="60" height="90" rx="28"/><rect x="1090" y="524" width="60" height="90" rx="28"/>
+    <rect x="110" y="620" width="80" height="90" rx="36"/><rect x="280" y="620" width="80" height="90" rx="36"/>
+    <rect x="450" y="620" width="80" height="90" rx="36"/><rect x="670" y="620" width="80" height="90" rx="36"/>
+    <rect x="840" y="620" width="80" height="90" rx="36"/><rect x="1010" y="620" width="80" height="90" rx="36"/>
+  </g>
+  <g stroke="#05050B" stroke-width="14" stroke-linecap="round" fill="none">
+    <path d="M62 480 L26 424"/><path d="M98 480 L134 424"/>
+    <path d="M212 480 L176 424"/><path d="M248 480 L284 424"/>
+    <path d="M362 480 L326 424"/><path d="M398 480 L434 424"/>
+    <path d="M802 480 L766 424"/><path d="M838 480 L874 424"/>
+    <path d="M952 480 L916 424"/><path d="M988 480 L1024 424"/>
+    <path d="M1102 480 L1066 424"/><path d="M1138 480 L1174 424"/>
+    <path d="M126 560 L92 500"/><path d="M174 560 L208 500"/>
+    <path d="M296 560 L262 500"/><path d="M344 560 L378 500"/>
+    <path d="M466 560 L432 500"/><path d="M514 560 L548 500"/>
+    <path d="M686 560 L652 500"/><path d="M734 560 L768 500"/>
+    <path d="M856 560 L822 500"/><path d="M904 560 L938 500"/>
+    <path d="M1026 560 L992 500"/><path d="M1074 560 L1108 500"/>
+  </g>
+
+  <!-- phone screens in the crowd -->
+  <g>
+    <rect x="272" y="424" width="14" height="24" rx="3" fill="#3B82F6" opacity="0.9" transform="rotate(-14 279 436)"/>
+    <rect x="640" y="430" width="14" height="24" rx="3" fill="#FFD54F" opacity="0.9" transform="rotate(12 647 442)"/>
+    <rect x="1050" y="426" width="14" height="24" rx="3" fill="#FAFAFA" opacity="0.85" transform="rotate(-8 1057 438)"/>
+  </g>
+
+  <rect width="1200" height="675" fill="#050508" opacity="0.06"/>
+</svg>

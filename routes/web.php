@@ -25,9 +25,7 @@ use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return inertia('Welcome');
-});
+Route::get('/', [PublicController::class, 'home'])->name('home');
 
 Route::get('browse', [PublicController::class, 'events'])->name('events.public');
 Route::get('browse/{uuid}', [PublicController::class, 'eventDetail'])->name('events.public.show');

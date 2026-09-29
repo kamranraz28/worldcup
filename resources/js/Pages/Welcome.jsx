@@ -1,7 +1,39 @@
 import { Link, Head } from '@inertiajs/react';
 import { motion } from 'framer-motion';
+import PublicEventCard from '../Components/Events/PublicEventCard';
 
-export default function Welcome() {
+const features = [
+    {
+        title: 'Live Events',
+        description: 'Experience the energy match day with thousands of fellow fans.',
+        icon: (
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 11.5a4.5 4.5 0 100-9 4.5 4.5 0 000 9z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 21a9 9 0 0118 0" />
+            </svg>
+        ),
+    },
+    {
+        title: 'Secure Tickets',
+        description: 'Book in two clicks and carry your QR pass straight to the gate.',
+        icon: (
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+            </svg>
+        ),
+    },
+    {
+        title: 'Instant Check-in',
+        description: 'One scan and you are in. No queues, no waiting, no fuss.',
+        icon: (
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+        ),
+    },
+];
+
+export default function Welcome({ featuredEvents = [], stats = {} }) {
     const fadeUp = {
         hidden: { opacity: 0, y: 30 },
         visible: (i) => ({
@@ -9,6 +41,14 @@ export default function Welcome() {
             transition: { delay: i * 0.1, duration: 0.5, ease: [0.25, 1, 0.5, 1] },
         }),
     };
+
+    const hasEvents = featuredEvents.length > 0;
+
+    const statValues = [
+        { value: stats.events != null ? `${stats.events}+` : '50+', label: 'Events' },
+        { value: stats.guests != null ? `${Number(stats.guests).toLocaleString()}+` : '10,000+', label: 'Guests' },
+        { value: stats.seats != null ? `${Number(stats.seats).toLocaleString()}+` : '4,500+', label: 'Seats' },
+    ];
 
     return (
         <>
@@ -110,11 +150,7 @@ export default function Welcome() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.8, duration: 0.6 }}
                         className="grid grid-cols-3 gap-8 sm:gap-20 mt-24">
-                        {[
-                            { value: '50+', label: 'Events' },
-                            { value: '10,000+', label: 'Guests' },
-                            { value: '4,500+', label: 'Seats' },
-                        ].map((stat) => (
+                        {statValues.map((stat) => (
                             <div key={stat.label} className="text-center">
                                 <p className="text-3xl sm:text-4xl font-bold bg-gradient-to-b from-white to-white/60 bg-clip-text text-transparent">{stat.value}</p>
                                 <p className="text-sm text-white/20 mt-1 tracking-wide">{stat.label}</p>
@@ -122,6 +158,123 @@ export default function Welcome() {
                         ))}
                     </motion.div>
                 </section>
+
+                {/* Features */}
+                <section className="relative z-10 max-w-7xl mx-auto px-6 pb-24">
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.3 }}
+                        variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
+                        className="grid grid-cols-1 sm:grid-cols-3 gap-5"
+                    >
+                        {features.map((feature, i) => (
+                            <motion.div key={feature.title} variants={fadeUp} custom={i}
+                                className="group p-7 rounded-2xl bg-white/[0.03] border border-white/[0.06]
+                                    hover:bg-white/[0.05] hover:border-white/[0.1] hover:-translate-y-0.5
+                                    transition-all duration-300"
+                            >
+                                <div className="w-12 h-12 rounded-xl bg-primary-500/10 border border-primary-500/20 text-primary-400 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                                    {feature.icon}
+                                </div>
+                                <h3 className="text-base font-semibold text-white mb-1.5">{feature.title}</h3>
+                                <p className="text-sm text-white/30 leading-relaxed">{feature.description}</p>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                </section>
+
+                {/* Featured events */}
+                {hasEvents && (
+                    <section className="relative z-10 max-w-7xl mx-auto px-6 pb-32">
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.2 }}
+                            transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
+                            className="flex items-end justify-between gap-6 mb-10"
+                        >
+                            <div>
+                                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.06] mb-5">
+                                    <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse" />
+                                    <span className="text-xs font-medium text-white/50 tracking-wide uppercase">Happening Soon</span>
+                                </div>
+                                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+                                    Featured <span className="text-gradient-primary">Events</span>
+                                </h2>
+                                <p className="mt-3 text-white/30 max-w-xl">
+                                    Upcoming screenings, fan zones and meetups. Secure your seat before it sells out.
+                                </p>
+                            </div>
+                            <Link href={appUrl("/browse")}
+                                className="hidden sm:inline-flex items-center gap-2 px-5 py-3 text-sm font-medium text-white/70
+                                    bg-white/[0.04] border border-white/[0.08] rounded-2xl
+                                    hover:bg-white/[0.08] hover:text-white hover:-translate-y-0.5
+                                    active:translate-y-0 active:scale-[0.98] transition-all duration-200 shrink-0"
+                            >
+                                View all events
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                </svg>
+                            </Link>
+                        </motion.div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {featuredEvents.map((event, i) => (
+                                <PublicEventCard key={event.uuid} event={event} index={i} />
+                            ))}
+                        </div>
+
+                        <div className="flex justify-center mt-10 sm:hidden">
+                            <Link href={appUrl("/browse")} className="btn-primary px-6 py-3 text-sm">
+                                View all events
+                            </Link>
+                        </div>
+                    </section>
+                )}
+
+                {/* Final CTA */}
+                <section className="relative z-10 max-w-4xl mx-auto px-6 pb-32 text-center">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
+                        className="p-10 sm:p-14 rounded-3xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm"
+                    >
+                        <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-3">
+                            The stadium is calling.
+                        </h2>
+                        <p className="text-white/30 max-w-lg mx-auto mb-8">
+                            Create an account to track your tickets, get reminders and check in with a single scan.
+                        </p>
+                        <div className="flex items-center justify-center gap-4 flex-wrap">
+                            <Link href={appUrl("/browse")} className="btn-primary px-7 py-3 text-sm">
+                                Browse Events
+                            </Link>
+                            <Link href={route('register')}
+                                className="px-7 py-3 text-sm font-medium text-white/70
+                                    bg-white/[0.04] border border-white/[0.08] rounded-2xl
+                                    hover:bg-white/[0.08] hover:text-white hover:-translate-y-0.5
+                                    active:translate-y-0 active:scale-[0.98] transition-all duration-200">
+                                Create account
+                            </Link>
+                        </div>
+                    </motion.div>
+                </section>
+
+                {/* Footer */}
+                <footer className="relative z-10 border-t border-white/[0.06]">
+                    <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <span className="text-sm font-bold tracking-tight text-white/70">EVENT MANAGEMENT SYSTEM</span>
+                        <div className="flex items-center gap-6 text-sm text-white/30">
+                            <Link href={appUrl("/browse")} className="hover:text-white transition-colors">Events</Link>
+                            <Link href={route('login')} className="hover:text-white transition-colors">Sign in</Link>
+                            <Link href={route('register')} className="hover:text-white transition-colors">Register</Link>
+                        </div>
+                        <p className="text-xs text-white/20">&copy; {new Date().getFullYear()} Event Management System</p>
+                    </div>
+                </footer>
 
                 {/* Stadium curve divider */}
                 <div className="relative h-40 overflow-hidden">

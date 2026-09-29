@@ -1,5 +1,6 @@
 import { Link, usePage, router } from '@inertiajs/react';
 import { motion } from 'framer-motion';
+import EventCover, { eventTypeLabel } from '../../Components/Events/EventCover';
 
 function PublicLayout({ children }) {
     const { auth } = usePage().props;
@@ -39,15 +40,6 @@ function PublicLayout({ children }) {
     );
 }
 
-const eventTypeLabels = {
-    live_screening: 'Live Screening',
-    viewing_party: 'Viewing Party',
-    meet_greet: 'Meet & Greet',
-    fan_zone: 'Fan Zone',
-    workshop: 'Workshop',
-    other: 'Other',
-};
-
 export default function EventDetail({ event, isFull, availableSpots, userRegistered }) {
     const { auth } = usePage().props;
     const fmtDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) : '';
@@ -75,20 +67,12 @@ export default function EventDetail({ event, isFull, availableSpots, userRegiste
                     </Link>
 
                     <div className="aspect-[21/9] bg-white/[0.02] border border-white/[0.06] rounded-2xl overflow-hidden relative mb-8">
-                        {event.banner_image ? (
-                            <img src={appUrl(`/storage/${event.banner_image}`)} alt={event.title} className="w-full h-full object-cover" />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                                <svg className="w-24 h-24 text-white/5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                </svg>
-                            </div>
-                        )}
+                        <EventCover event={event} />
                         <div className="absolute inset-0 bg-gradient-to-t from-dark-bg via-dark-bg/20 to-transparent" />
                         <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
                             <div className="flex items-center gap-2 mb-2">
                                 <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-white/[0.08] text-white/70 border border-white/[0.06]">
-                                    {eventTypeLabels[event.event_type] || event.event_type}
+                                    {eventTypeLabel(event.event_type)}
                                 </span>
                                 {event.requires_verification && (
                                     <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
