@@ -15,13 +15,6 @@ class NotificationSeeder extends Seeder
      */
     private const FEED = [
         [
-            'type' => 'verification_approved',
-            'subject' => 'Verification Approved',
-            'body' => "Ahmed Khan's identity verification was approved.",
-            'minutes_ago' => 2,
-            'read' => false,
-        ],
-        [
             'type' => 'ticket_confirmed',
             'subject' => 'Ticket Confirmed',
             'body' => 'Your Semi-Final viewing party ticket is confirmed.',

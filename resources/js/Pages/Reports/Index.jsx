@@ -20,9 +20,7 @@ export default function ReportsIndex({ analytics, events, recentReports }) {
         <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
           <StatCard label="Registrations Today" value={at('registrations_today')} icon="M12 4v16m8-8H4" color="blue" />
           <StatCard label="Check-Ins Today" value={at('checkins_today')} icon="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" color="green" />
-          <StatCard label="Verifications Today" value={at('verifications_today')} icon="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" color="amber" />
           <StatCard label="Revenue Today" value={at('revenue_today')} suffix={at('revenue_today') > 0 ? ' BDT' : ''} icon="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" color="green" />
-          <StatCard label="Pending Verifications" value={at('pending_verifications')} icon="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" color="amber" />
           <StatCard label="Upcoming Events" value={at('upcoming_events')} icon="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" color="blue" />
         </div>
 
@@ -88,16 +86,6 @@ export default function ReportsIndex({ analytics, events, recentReports }) {
             <h3 className="text-sm font-semibold text-neutral-700 dark:text-dark-text group-hover:text-green-400 transition-colors">Attendance Report</h3>
             <p className="text-xs text-neutral-500 mt-1">Check-ins by event, scan method, hourly distribution, daily trends</p>
             <span className="text-xs text-green-400 mt-2 inline-block group-hover:translate-x-1 transition-transform">View →</span>
-          </Link>
-          <Link href={appUrl("/reports/verification")} className="group glass-card p-5 hover:bg-white/[0.06] transition-all">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-3">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h3 className="text-sm font-semibold text-neutral-700 dark:text-dark-text group-hover:text-amber-400 transition-colors">Verification Report</h3>
-            <p className="text-xs text-neutral-500 mt-1">Verification funnel, reviewer performance, type breakdown, daily trends</p>
-            <span className="text-xs text-amber-400 mt-2 inline-block group-hover:translate-x-1 transition-transform">View →</span>
           </Link>
           <Link href={appUrl("/reports/scanner")} className="group glass-card p-5 hover:bg-white/[0.06] transition-all">
             <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-3">

@@ -279,18 +279,6 @@ export default function EventForm({ form, event, isEdit }) {
               />
             </div>
           </motion.div>
-
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className={sectionClass}>
-            <label className="flex items-center gap-3 cursor-pointer group">
-              <input type="checkbox" checked={data.requires_verification ?? true}
-                onChange={(e) => setData('requires_verification', e.target.checked)}
-                className="w-4 h-4 rounded border-neutral-300 dark:border-white/20 bg-transparent text-primary-500 focus:ring-primary-500/40" />
-              <div>
-                <span className="block text-sm font-medium text-neutral-700 dark:text-dark-text group-hover:text-primary-500 transition-colors">Require Identity Verification</span>
-                <span className="text-xs text-neutral-500">Attendees must verify before purchasing</span>
-              </div>
-            </label>
-          </motion.div>
         </div>
       </div>
 

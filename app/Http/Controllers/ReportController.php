@@ -68,19 +68,6 @@ class ReportController extends Controller
         ]);
     }
 
-    public function verification(Request $request)
-    {
-        $filters = $request->only(['status', 'verification_type', 'reviewer_id', 'date_from', 'date_to']);
-        $data = $this->reportService->verificationReport($filters);
-        $events = $this->reportService->getEventsForDropdown();
-
-        return Inertia::render('Reports/Verification', [
-            'report' => $data,
-            'filters' => $filters,
-            'events' => $events,
-        ]);
-    }
-
     public function scanner(Request $request)
     {
         $filters = $request->only(['event_id', 'scanner_id', 'date_from', 'date_to']);
@@ -106,10 +93,6 @@ class ReportController extends Controller
             case 'attendance':
                 $csv = $this->reportService->getAttendanceCsv($filters);
                 $filename = 'attendance-report-' . now()->format('Y-m-d') . '.csv';
-                break;
-            case 'verification':
-                $csv = $this->reportService->getVerificationCsv($filters);
-                $filename = 'verification-report-' . now()->format('Y-m-d') . '.csv';
                 break;
             case 'scanner':
                 $csv = $this->reportService->getScannerCsv($filters);
@@ -137,10 +120,6 @@ class ReportController extends Controller
                 $pdf = $this->reportService->getAttendancePdf($filters);
                 $filename = 'attendance-report-' . now()->format('Y-m-d') . '.pdf';
                 break;
-            case 'verification':
-                $pdf = $this->reportService->getVerificationPdf($filters);
-                $filename = 'verification-report-' . now()->format('Y-m-d') . '.pdf';
-                break;
             case 'scanner':
                 $pdf = $this->reportService->getScannerPdf($filters);
                 $filename = 'scanner-report-' . now()->format('Y-m-d') . '.pdf';
@@ -157,7 +136,7 @@ class ReportController extends Controller
     public function generate(Request $request)
     {
         $validated = $request->validate([
-            'type' => 'required|string|in:registration,attendance,verification,scanner',
+            'type' => 'required|string|in:registration,attendance,scanner',
             'file_type' => 'required|string|in:csv,pdf',
             'filters' => 'nullable|array',
             'name' => 'nullable|string|max:255',

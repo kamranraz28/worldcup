@@ -25,8 +25,6 @@ class Customer extends Model
         'document_type',
         'document_number',
         'metadata',
-        'is_verified',
-        'verified_at',
         'last_participated_at',
     ];
 
@@ -35,8 +33,6 @@ class Customer extends Model
         return [
             'date_of_birth' => 'date',
             'metadata' => 'json',
-            'is_verified' => 'boolean',
-            'verified_at' => 'datetime',
             'last_participated_at' => 'datetime',
         ];
     }
@@ -44,11 +40,6 @@ class Customer extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function verifications()
-    {
-        return $this->hasMany(CustomerVerification::class);
     }
 
     public function tickets()
@@ -74,26 +65,6 @@ class Customer extends Model
             ->withTimestamps();
     }
 
-    public function latestVerification()
-    {
-        return $this->hasOne(CustomerVerification::class)->latest();
-    }
-
-    public function verificationLogs()
-    {
-        return $this->hasMany(VerificationLog::class);
-    }
-
-    public function blacklistEntries()
-    {
-        return $this->hasMany(BlacklistedCustomer::class);
-    }
-
-    public function activeBlacklist()
-    {
-        return $this->hasOne(BlacklistedCustomer::class)->active();
-    }
-
     public function getFullNameAttribute(): string
     {
         return trim("{$this->first_name} {$this->last_name}");
@@ -102,28 +73,6 @@ class Customer extends Model
     public function getInitialsAttribute(): string
     {
         return strtoupper(substr($this->first_name, 0, 1) . substr($this->last_name, 0, 1));
-    }
-
-    public function isBlacklisted(): bool
-    {
-        return $this->activeBlacklist()->exists();
-    }
-
-    public function scopeVerified($query)
-    {
-        return $query->where('is_verified', true);
-    }
-
-    public function scopePendingVerification($query)
-    {
-        return $query->where('is_verified', false);
-    }
-
-    public function scopeBlacklisted($query)
-    {
-        return $query->whereHas('blacklistEntries', function ($q) {
-            $q->active();
-        });
     }
 
     public function scopeSearch($query, string $term)

@@ -41,7 +41,7 @@ class RegistrationController extends Controller
     public function create(): Response
     {
         return Inertia::render('Registrations/Create', [
-            'events' => \App\Models\Event::select('id', 'uuid', 'title', 'start_date', 'max_capacity', 'ticket_price', 'requires_verification')
+            'events' => \App\Models\Event::select('id', 'uuid', 'title', 'start_date', 'max_capacity', 'ticket_price')
                 ->published()
                 ->latest('start_date')
                 ->get(),

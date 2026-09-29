@@ -10,7 +10,6 @@ const iconPaths = {
 };
 
 const iconColors = {
-    verification: { verified: 'text-green-500 bg-green-50 dark:bg-green-500/10', rejected: 'text-red-500 bg-red-50 dark:bg-red-500/10', submitted: 'text-amber-500 bg-amber-50 dark:bg-amber-500/10' },
     ticket: { purchased: 'text-primary-500 bg-primary-50 dark:bg-primary-500/10' },
     checkin: { 'checked in': 'text-blue-500 bg-blue-50 dark:bg-blue-500/10' },
     system: { started: 'text-purple-500 bg-purple-50 dark:bg-purple-500/10' },

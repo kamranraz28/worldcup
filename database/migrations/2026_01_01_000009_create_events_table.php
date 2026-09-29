@@ -26,7 +26,6 @@ return new class extends Migration
             $table->dateTime('registration_deadline');
             $table->string('banner_image')->nullable();
             $table->string('status', 20)->default('draft')->index();
-            $table->boolean('requires_verification')->default(true);
             $table->json('metadata')->nullable();
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();

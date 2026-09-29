@@ -23,7 +23,6 @@ class RolePermissionSeeder extends Seeder
             'events' => ['view', 'create', 'edit', 'delete', 'publish', 'cancel'],
             'tickets' => ['view', 'create', 'edit', 'delete', 'redeem', 'transfer'],
             'customers' => ['view', 'create', 'edit', 'delete', 'export', 'import'],
-            'verifications' => ['view', 'review', 'approve', 'reject', 'flag', 're-request'],
             'campaigns' => ['view', 'create', 'edit', 'delete', 'activate', 'pause'],
             'checkins' => ['scan', 'view', 'override'],
             'reports' => ['view', 'generate', 'export', 'delete'],
@@ -63,7 +62,7 @@ class RolePermissionSeeder extends Seeder
 
         $admin->permissions()->sync(
             Permission::whereIn('group', [
-                'events', 'tickets', 'customers', 'verifications',
+                'events', 'tickets', 'customers',
                 'campaigns', 'checkins', 'reports', 'notifications', 'audit',
             ])->whereNotIn('name', [
                 'users.delete', 'users.impersonate',

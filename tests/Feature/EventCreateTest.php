@@ -28,7 +28,6 @@ class EventCreateTest extends TestCase
             'end_date' => '2026-10-01T22:00',
             'registration_deadline' => '2026-09-30T18:00',
             'status' => 'published',
-            'requires_verification' => '1',
         ]);
 
         $response->assertSessionHasNoErrors();

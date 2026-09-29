@@ -25,8 +25,6 @@ class CustomerFactory extends Factory
             'document_type' => fake()->randomElement(['passport', 'national_id', 'drivers_license']),
             'document_number' => fake()->unique()->regexify('[A-Z0-9]{10,15}'),
             'metadata' => null,
-            'is_verified' => false,
-            'verified_at' => null,
             'last_participated_at' => null,
         ];
     }
@@ -35,14 +33,6 @@ class CustomerFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'user_id' => User::factory(),
-        ]);
-    }
-
-    public function verified(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'is_verified' => true,
-            'verified_at' => now()->subDays(rand(1, 30)),
         ]);
     }
 }

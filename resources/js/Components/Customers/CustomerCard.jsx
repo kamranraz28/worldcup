@@ -1,5 +1,4 @@
 import { Link } from '@inertiajs/react';
-import StatusBadge from '@/Components/UI/StatusBadge';
 
 export default function CustomerCard({ customer }) {
   const initials = (customer.first_name?.charAt(0) || '') + (customer.last_name?.charAt(0) || '');
@@ -14,14 +13,12 @@ export default function CustomerCard({ customer }) {
           <h3 className="text-sm font-semibold text-neutral-900 dark:text-white truncate">{customer.first_name} {customer.last_name}</h3>
           <p className="text-xs text-neutral-500 truncate">{customer.email}</p>
         </div>
-        <StatusBadge status={customer.is_verified ? 'verified' : 'pending'} />
       </div>
 
       <div className="grid grid-cols-2 gap-3 text-xs">
         <div><span className="text-neutral-500">Phone</span><p className="text-neutral-700 dark:text-dark-text mt-0.5 truncate">{customer.phone || '—'}</p></div>
         <div><span className="text-neutral-500">Nationality</span><p className="text-neutral-700 dark:text-dark-text mt-0.5">{customer.nationality || '—'}</p></div>
         <div><span className="text-neutral-500">Document</span><p className="text-neutral-700 dark:text-dark-text mt-0.5 truncate">{customer.document_type || '—'}</p></div>
-        <div><span className="text-neutral-500">Verifications</span><p className="text-neutral-700 dark:text-dark-text mt-0.5">{customer.verification_count || 0}</p></div>
       </div>
 
       {customer.date_of_birth && (

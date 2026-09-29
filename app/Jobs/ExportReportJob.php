@@ -39,9 +39,6 @@ class ExportReportJob implements ShouldQueue
                     case 'attendance':
                         $content = $reportService->getAttendanceCsv($filters);
                         break;
-                    case 'verification':
-                        $content = $reportService->getVerificationCsv($filters);
-                        break;
                     case 'scanner':
                         $content = $reportService->getScannerCsv($filters);
                         break;
@@ -55,9 +52,6 @@ class ExportReportJob implements ShouldQueue
                         break;
                     case 'attendance':
                         $content = $reportService->getAttendancePdf($filters);
-                        break;
-                    case 'verification':
-                        $content = $reportService->getVerificationPdf($filters);
                         break;
                     case 'scanner':
                         $content = $reportService->getScannerPdf($filters);

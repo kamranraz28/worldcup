@@ -28,7 +28,6 @@ class ScannerAssignmentTest extends TestCase
             'ticket_price' => 0,
             'start_date' => now()->addDay(),
             'end_date' => now()->addDays(2),
-            'requires_verification' => false,
         ]);
     }
 

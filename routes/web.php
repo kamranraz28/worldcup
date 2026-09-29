@@ -9,7 +9,6 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\CustomerVerificationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\NotificationController;
@@ -112,9 +111,7 @@ Route::middleware(['auth', 'verified', 'is_active'])->group(function () {
     Route::delete('events/{uuid}/ticket-template', [EventController::class, 'deleteTicketTemplate'])->name('events.ticket-template.destroy');
     Route::post('events/{uuid}/qr-position', [EventController::class, 'updateQrPosition'])->name('events.qr-position.update');
 
-    Route::resource('customers', CustomerController::class)->parameters(['customers' => 'uuid']);    Route::post('customers/{uuid}/blacklist', [CustomerController::class, 'blacklist'])->name('customers.blacklist');
-    Route::delete('customers/{uuid}/blacklist', [CustomerController::class, 'removeBlacklist'])->name('customers.blacklist.remove');
-    Route::get('customers/{uuid}/eligibility', [CustomerController::class, 'eligibility'])->name('customers.eligibility');
+    Route::resource('customers', CustomerController::class)->parameters(['customers' => 'uuid']);
 
     Route::resource('vouchers', VoucherController::class)->except(['show']);
     Route::post('vouchers/{voucher}/toggle', [VoucherController::class, 'toggle'])->name('vouchers.toggle');
@@ -123,12 +120,6 @@ Route::middleware(['auth', 'verified', 'is_active'])->group(function () {
         Route::resource('scanners', ScannerController::class)->except(['show']);
         Route::post('scanners/{scanner}/toggle', [ScannerController::class, 'toggle'])->name('scanners.toggle');
     });
-
-    Route::get('verifications', [CustomerVerificationController::class, 'index'])->name('verifications.index');
-    Route::get('verifications/{uuid}', [CustomerVerificationController::class, 'show'])->name('verifications.show');
-    Route::post('verifications/{uuid}/review', [CustomerVerificationController::class, 'review'])->name('verifications.review');
-    Route::get('verifications-review', [CustomerVerificationController::class, 'pendingReview'])->name('verifications.pending');
-    Route::post('customers/{customerUuid}/verifications', [CustomerVerificationController::class, 'submit'])->name('verifications.submit');
 
     Route::get('registrations', [RegistrationController::class, 'index'])->name('registrations.index');
     Route::get('registrations/create', [RegistrationController::class, 'create'])->name('registrations.create');
@@ -163,7 +154,6 @@ Route::middleware(['auth', 'verified', 'is_active'])->group(function () {
     Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('reports/registration', [ReportController::class, 'registration'])->name('reports.registration');
     Route::get('reports/attendance', [ReportController::class, 'attendance'])->name('reports.attendance');
-    Route::get('reports/verification', [ReportController::class, 'verification'])->name('reports.verification');
     Route::get('reports/scanner', [ReportController::class, 'scanner'])->name('reports.scanner');
     Route::get('reports/export/{type}/csv', [ReportController::class, 'exportCsv'])->name('reports.export.csv');
     Route::get('reports/export/{type}/pdf', [ReportController::class, 'exportPdf'])->name('reports.export.pdf');

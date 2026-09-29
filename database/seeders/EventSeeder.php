@@ -25,7 +25,6 @@ class EventSeeder extends Seeder
                 'end_date' => now()->addMonths(2)->addHours(4),
                 'registration_deadline' => now()->addMonths(2)->subDays(3),
                 'status' => 'published',
-                'requires_verification' => true,
                 'sessions' => [
                     ['title' => 'Main Ceremony', 'start_time' => '2026-06-08 19:00:00', 'end_time' => '2026-06-08 23:00:00', 'location' => 'Main Stage'],
                 ],
@@ -41,7 +40,6 @@ class EventSeeder extends Seeder
                 'end_date' => now()->addMonths(2)->addDays(1)->addHours(6),
                 'registration_deadline' => now()->addMonths(2)->subDays(5),
                 'status' => 'published',
-                'requires_verification' => true,
             ],
             [
                 'title' => 'Live Watch Party: Semi-Finals',
@@ -54,7 +52,6 @@ class EventSeeder extends Seeder
                 'end_date' => now()->addMonths(3)->addHours(5),
                 'registration_deadline' => now()->addMonths(3)->subDays(1),
                 'status' => 'draft',
-                'requires_verification' => false,
             ],
             [
                 'title' => 'Virtual Fan Meet: Global Legends',
@@ -67,7 +64,6 @@ class EventSeeder extends Seeder
                 'end_date' => now()->addWeeks(3)->addHours(2),
                 'registration_deadline' => now()->addWeeks(3)->subDays(1),
                 'status' => 'published',
-                'requires_verification' => false,
             ],
             [
                 'title' => 'Championship Finals',
@@ -80,7 +76,6 @@ class EventSeeder extends Seeder
                 'end_date' => now()->addMonths(4)->addDays(1),
                 'registration_deadline' => now()->addMonths(4)->subWeeks(2),
                 'status' => 'published',
-                'requires_verification' => true,
             ],
             [
                 'title' => 'Hybrid Workshop: Football Analytics',
@@ -93,7 +88,6 @@ class EventSeeder extends Seeder
                 'end_date' => now()->addWeeks(1)->addHours(4),
                 'registration_deadline' => now()->addWeeks(1)->subHours(12),
                 'status' => 'published',
-                'requires_verification' => false,
             ],
             [
                 'title' => 'Past Tournament Highlights',
@@ -106,7 +100,6 @@ class EventSeeder extends Seeder
                 'end_date' => now()->subMonth()->addHours(3),
                 'registration_deadline' => now()->subMonth()->subDays(1),
                 'status' => 'published',
-                'requires_verification' => false,
             ],
             [
                 'title' => 'Cancelled: Beach Football Festival',
@@ -119,7 +112,6 @@ class EventSeeder extends Seeder
                 'end_date' => now()->addMonths(5)->addDays(2),
                 'registration_deadline' => now()->addMonths(5)->subWeeks(1),
                 'status' => 'cancelled',
-                'requires_verification' => false,
             ],
         ];
 

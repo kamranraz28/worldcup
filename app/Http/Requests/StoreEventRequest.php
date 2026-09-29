@@ -34,7 +34,6 @@ class StoreEventRequest extends FormRequest
             'qr_x' => ['nullable', 'numeric', 'min:0', 'max:500'],
             'qr_y' => ['nullable', 'numeric', 'min:0', 'max:500'],
             'qr_size' => ['nullable', 'numeric', 'min:10', 'max:150'],
-            'requires_verification' => ['nullable', 'boolean'],
             'metadata' => ['nullable', 'json'],
             'status' => ['nullable', Rule::in(['draft', 'published'])],
         ];

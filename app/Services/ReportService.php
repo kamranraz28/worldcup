@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\CheckIn;
 use App\Models\Customer;
-use App\Models\CustomerVerification;
 use App\Models\Event;
 use App\Models\Ticket;
 use App\Models\TicketAction;
@@ -192,95 +191,6 @@ class ReportService
         ];
     }
 
-    public function verificationReport(array $filters = []): array
-    {
-        $query = CustomerVerification::with([
-            'customer:id,first_name,last_name,email,nationality',
-            'reviewer:id,name',
-        ]);
-
-        if (!empty($filters['status'])) {
-            $query->where('status', $filters['status']);
-        }
-        if (!empty($filters['verification_type'])) {
-            $query->where('verification_type', $filters['verification_type']);
-        }
-        if (!empty($filters['reviewer_id'])) {
-            $query->where('reviewed_by', (int) $filters['reviewer_id']);
-        }
-        if (!empty($filters['date_from'])) {
-            $query->where('created_at', '>=', Carbon::parse($filters['date_from'])->startOfDay());
-        }
-        if (!empty($filters['date_to'])) {
-            $query->where('created_at', '<=', Carbon::parse($filters['date_to'])->endOfDay());
-        }
-
-        $verifications = $query->latest()->get();
-
-        $totalVerifications = $verifications->count();
-        $statusBreakdown = $verifications->groupBy('status')->map->count();
-        $typeBreakdown = $verifications->groupBy('verification_type')->map->count();
-        $reviewerBreakdown = $verifications->groupBy('reviewed_by')->map(function ($group) {
-            $reviewer = $group->first()->reviewer;
-            return [
-                'name' => $reviewer->name ?? 'Unassigned',
-                'count' => $group->count(),
-                'approved' => $group->where('status', 'verified')->count(),
-                'rejected' => $group->where('status', 'rejected')->count(),
-            ];
-        })->values();
-
-        $dailyTrend = $verifications->groupBy(function ($v) {
-            return $v->created_at->format('Y-m-d');
-        })->map->count()->sortKeys();
-
-        $avgReviewTime = $verifications->filter(function ($v) {
-            return $v->reviewed_at && $v->created_at;
-        })->avg(function ($v) {
-            return Carbon::parse($v->reviewed_at)->diffInHours(Carbon::parse($v->created_at));
-        });
-
-        return [
-            'summary' => [
-                'total_verifications' => $totalVerifications,
-                'verified' => $statusBreakdown->get('verified', 0),
-                'rejected' => $statusBreakdown->get('rejected', 0),
-                'pending' => $statusBreakdown->get('pending', 0),
-                'in_review' => $statusBreakdown->get('in_review', 0),
-                'flagged' => $statusBreakdown->get('flagged', 0),
-                'verification_rate' => $totalVerifications > 0 ? round(($statusBreakdown->get('verified', 0) / $totalVerifications) * 100, 1) : 0,
-                'avg_review_time_hours' => round($avgReviewTime ?: 0, 1),
-            ],
-            'by_status' => $statusBreakdown->map(function ($count, $status) {
-                return ['status' => $status, 'count' => $count];
-            })->values(),
-            'by_type' => $typeBreakdown->map(function ($count, $type) {
-                return ['type' => $type, 'count' => $count];
-            })->values(),
-            'by_reviewer' => $reviewerBreakdown,
-            'daily_trend' => $dailyTrend->map(function ($count, $date) {
-                return ['date' => $date, 'count' => $count];
-            })->values(),
-            'verifications' => $verifications->map(function ($v) {
-                return [
-                    'uuid' => $v->uuid,
-                    'status' => $v->status,
-                    'verification_type' => $v->verification_type,
-                    'submitted_at' => $v->created_at,
-                    'reviewed_at' => $v->reviewed_at,
-                    'notes' => $v->notes,
-                    'customer' => $v->customer ? [
-                        'first_name' => $v->customer->first_name,
-                        'last_name' => $v->customer->last_name,
-                        'email' => $v->customer->email,
-                        'nationality' => $v->customer->nationality,
-                    ] : null,
-                    'reviewer' => $v->reviewer ? $v->reviewer->name : 'Unassigned',
-                ];
-            }),
-        ];
-    }
-
     public function scannerReport(array $filters = []): array
     {
         $scannerQuery = CheckIn::with(['scanner:id,name', 'event:id,title']);
@@ -380,15 +290,6 @@ class ReportService
                 return ['date' => $row->date, 'count' => (int) $row->count];
             });
 
-        $verificationTrend = CustomerVerification::where('created_at', '>=', $startDate)
-            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
-            ->groupBy('date')
-            ->orderBy('date')
-            ->get()
-            ->map(function ($row) {
-                return ['date' => $row->date, 'count' => (int) $row->count];
-            });
-
         $revenueByType = Ticket::whereIn('status', ['confirmed', 'redeemed'])
             ->selectRaw('ticket_type, COUNT(*) as count, SUM(price) as revenue')
             ->groupBy('ticket_type')
@@ -413,20 +314,11 @@ class ReportService
                 ];
             });
 
-        $verificationFunnel = [
-            ['stage' => 'Submitted', 'count' => CustomerVerification::count()],
-            ['stage' => 'In Review', 'count' => CustomerVerification::where('status', 'in_review')->count()],
-            ['stage' => 'Verified', 'count' => CustomerVerification::where('status', 'verified')->count()],
-            ['stage' => 'Rejected', 'count' => CustomerVerification::where('status', 'rejected')->count()],
-        ];
-
         $todayStats = [
             'registrations_today' => Ticket::whereDate('created_at', $now)->count(),
             'checkins_today' => CheckIn::whereDate('scanned_at', $now)->count(),
-            'verifications_today' => CustomerVerification::whereDate('created_at', $now)->count(),
             'revenue_today' => Ticket::whereIn('status', ['confirmed', 'redeemed'])
                 ->whereDate('created_at', $now)->sum('price'),
-            'pending_verifications' => CustomerVerification::pending()->count(),
             'upcoming_events' => Event::published()->upcoming()->count(),
         ];
 
@@ -434,10 +326,8 @@ class ReportService
             'today_stats' => $todayStats,
             'registration_trend' => $registrationTrend,
             'attendance_trend' => $attendanceTrend,
-            'verification_trend' => $verificationTrend,
             'revenue_by_type' => $revenueByType,
             'top_events' => $topEvents,
-            'verification_funnel' => $verificationFunnel,
             'period_days' => $daysBack,
         ];
     }
@@ -468,18 +358,6 @@ class ReportService
                         $c['event']['title'] ?? '', $c['ticket']['ticket_type'] ?? '', $c['ticket']['status'] ?? '',
                         $c['scan_method'] ?? '', $c['scanner'] ?? '', $c['is_valid'] ? 'Yes' : 'No',
                         $c['scanned_at'] ?? '',
-                    ]);
-                }
-                break;
-
-            case 'verification':
-                fputcsv($output, ['Customer Name', 'Email', 'Nationality', 'Type', 'Status', 'Reviewer', 'Submitted At', 'Reviewed At', 'Notes']);
-                foreach ($data['verifications'] ?? [] as $v) {
-                    fputcsv($output, [
-                        ($v['customer']['first_name'] ?? '') . ' ' . ($v['customer']['last_name'] ?? ''),
-                        $v['customer']['email'] ?? '', $v['customer']['nationality'] ?? '',
-                        $v['verification_type'] ?? '', $v['status'] ?? '', $v['reviewer'] ?? '',
-                        $v['submitted_at'] ?? '', $v['reviewed_at'] ?? '', $v['notes'] ?? '',
                     ]);
                 }
                 break;
@@ -526,12 +404,6 @@ class ReportService
         return $this->toCsv($data, 'attendance');
     }
 
-    public function getVerificationCsv(array $filters = []): string
-    {
-        $data = $this->verificationReport($filters);
-        return $this->toCsv($data, 'verification');
-    }
-
     public function getScannerCsv(array $filters = []): string
     {
         $data = $this->scannerReport($filters);
@@ -550,12 +422,6 @@ class ReportService
         return $this->toPdf($data, 'attendance');
     }
 
-    public function getVerificationPdf(array $filters = []): string
-    {
-        $data = $this->verificationReport($filters);
-        return $this->toPdf($data, 'verification');
-    }
-
     public function getScannerPdf(array $filters = []): string
     {
         $data = $this->scannerReport($filters);
@@ -572,7 +438,6 @@ class ReportService
         $labels = [
             'registration' => 'Registration Report',
             'attendance' => 'Attendance Report',
-            'verification' => 'Verification Report',
             'scanner' => 'Scanner Report',
         ];
         return $labels[$type] ?? 'Report';

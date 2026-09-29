@@ -21,8 +21,6 @@ return new class extends Migration
             $table->string('document_type', 20)->nullable();
             $table->string('document_number', 50)->nullable()->index();
             $table->json('metadata')->nullable();
-            $table->boolean('is_verified')->default(false);
-            $table->timestamp('verified_at')->nullable();
             $table->timestamp('last_participated_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

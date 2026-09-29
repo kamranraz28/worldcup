@@ -47,11 +47,6 @@ export default function PublicEventCard({ event, index = 0, showDescription = tr
                         <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-sm text-white/80 border border-white/10">
                             {eventTypeLabel(event.event_type)}
                         </span>
-                        {event.requires_verification && (
-                            <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 backdrop-blur-sm">
-                                Verification
-                            </span>
-                        )}
                     </div>
 
                     {isFull && (

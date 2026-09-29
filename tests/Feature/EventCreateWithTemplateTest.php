@@ -35,7 +35,6 @@ class EventCreateWithTemplateTest extends TestCase
             'end_date' => '2026-10-01T22:00',
             'registration_deadline' => '2026-09-30T18:00',
             'status' => 'draft',
-            'requires_verification' => '1',
             'ticket_template' => new \Illuminate\Http\UploadedFile($tmp, 'template.pdf', 'application/pdf', null, true),
             'qr_x' => '140.5',
             'qr_y' => '180.2',

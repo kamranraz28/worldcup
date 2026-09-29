@@ -318,7 +318,6 @@ export default function Show({ event }) {
                 <DetailRow icon="📍" label="Event Type" value={event.event_type?.charAt(0).toUpperCase() + event.event_type?.slice(1)} />
                 <DetailRow icon="🏛️" label="Venue" value={event.venue_name} />
                 <DetailRow icon="📮" label="Address" value={event.venue_address} />
-                <DetailRow icon="🆔" label="Requires Verification" value={event.requires_verification ? 'Yes' : 'No'} />
               </div>
             </motion.div>
 

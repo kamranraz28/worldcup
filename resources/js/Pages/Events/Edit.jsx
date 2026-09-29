@@ -21,7 +21,6 @@ export default function Edit({ event }) {
     end_date: event.end_date ? event.end_date.slice(0, 16) : '',
     registration_deadline: event.registration_deadline ? event.registration_deadline.slice(0, 16) : '',
     banner_image: event.banner_image || null,
-    requires_verification: event.requires_verification ?? true,
     status: event.status,
   });
 

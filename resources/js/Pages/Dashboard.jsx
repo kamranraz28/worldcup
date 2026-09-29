@@ -31,7 +31,7 @@ const fadeUp = {
     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 1, 0.5, 1] } },
 };
 
-export default function Dashboard({ stats, chartData, recentActivity, upcomingEvents, pendingVerifications }) {
+export default function Dashboard({ stats, chartData, recentActivity, upcomingEvents }) {
     const { auth } = usePage().props;
     const [loaded] = useState(true);
     const [greeting] = useState(() => {
@@ -114,23 +114,19 @@ export default function Dashboard({ stats, chartData, recentActivity, upcomingEv
                         <div className="flex items-center justify-between mb-4">
                             <div>
                                 <h2 className="text-sm font-semibold text-neutral-900 dark:text-white">Registration Trends</h2>
-                                <p className="text-xs text-neutral-400 dark:text-dark-text-secondary mt-0.5">Daily sign-ups and verifications</p>
+                                <p className="text-xs text-neutral-400 dark:text-dark-text-secondary mt-0.5">Daily sign-ups</p>
                             </div>
                             <div className="flex items-center gap-3">
                                 <span className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-dark-text-secondary">
                                     <span className="w-2 h-2 rounded-full bg-primary-500" />
                                     Registrations
                                 </span>
-                                <span className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-dark-text-secondary">
-                                    <span className="w-2 h-2 rounded-full bg-gold-500" />
-                                    Verifications
-                                </span>
                             </div>
                         </div>
 
                         {chartData?.registrationTrend ? (
                             <div className="h-[220px]">
-                                <AreaChart data={chartData.registrationTrend} xKey="date" series={[{ key: 'registrations', label: 'Registrations' }, { key: 'verifications', label: 'Verifications' }]} height={220} />
+                                <AreaChart data={chartData.registrationTrend} xKey="date" series={[{ key: 'registrations', label: 'Registrations' }]} height={220} />
                             </div>
                         ) : (
                             <ChartSkeleton height="h-[220px]" />
@@ -160,7 +156,7 @@ export default function Dashboard({ stats, chartData, recentActivity, upcomingEv
                     </motion.div>
                 </div>
 
-                {/* Middle Row — Activity + Quick Actions + Verifications */}
+                {/* Middle Row — Activity + Quick Actions */}
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-5">
                     <motion.div variants={fadeUp} className="lg:col-span-2 glass-card-premium p-5 lg:p-6">
                         <div className="flex items-center justify-between mb-5">
@@ -179,31 +175,6 @@ export default function Dashboard({ stats, chartData, recentActivity, upcomingEv
                         <div className="glass-card-premium p-5 lg:p-6">
                             <h2 className="text-sm font-semibold text-neutral-900 dark:text-white mb-4">Quick Actions</h2>
                             <QuickActions />
-                        </div>
-
-                        <div className="glass-card-premium p-5 lg:p-6">
-                            <div className="flex items-center justify-between mb-4">
-                                <h2 className="text-sm font-semibold text-neutral-900 dark:text-white">Pending Verifications</h2>
-                                <span className="text-xs font-medium text-primary-500 hover:text-primary-400 cursor-pointer transition-colors">View all</span>
-                            </div>
-
-                            {pendingVerifications && pendingVerifications.length > 0 ? (
-                                <div className="space-y-2">
-                                    {pendingVerifications.map((v) => (
-                                        <div key={v.id}
-                                            className="flex items-center justify-between py-2.5 px-3 rounded-xl bg-amber-50/50 dark:bg-amber-500/[0.03] border border-amber-100/50 dark:border-amber-500/10
-                                                hover:bg-amber-50 dark:hover:bg-amber-500/[0.05] transition-colors cursor-pointer">
-                                            <div className="min-w-0">
-                                                <p className="text-sm font-medium text-neutral-900 dark:text-white truncate">{v.customer_name}</p>
-                                                <p className="text-xs text-neutral-400 dark:text-dark-text-secondary">{v.verification_type} &middot; {v.submitted_at}</p>
-                                            </div>
-                                            <span className="badge-sm bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 flex-shrink-0">Pending</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="text-xs text-neutral-400 dark:text-dark-text-secondary py-6 text-center">All verifications up to date</p>
-                            )}
                         </div>
                     </motion.div>
                 </div>

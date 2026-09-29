@@ -27,12 +27,6 @@ class ReportController extends Controller
         return response()->json($this->reportService->attendanceReport($filters));
     }
 
-    public function verification(Request $request)
-    {
-        $filters = $request->only(['status', 'verification_type', 'reviewer_id', 'date_from', 'date_to']);
-        return response()->json($this->reportService->verificationReport($filters));
-    }
-
     public function scanner(Request $request)
     {
         $filters = $request->only(['event_id', 'scanner_id', 'date_from', 'date_to']);
@@ -57,10 +51,6 @@ class ReportController extends Controller
             case 'attendance':
                 $csv = $this->reportService->getAttendanceCsv($filters);
                 $filename = 'attendance-report-' . now()->format('Y-m-d') . '.csv';
-                break;
-            case 'verification':
-                $csv = $this->reportService->getVerificationCsv($filters);
-                $filename = 'verification-report-' . now()->format('Y-m-d') . '.csv';
                 break;
             case 'scanner':
                 $csv = $this->reportService->getScannerCsv($filters);

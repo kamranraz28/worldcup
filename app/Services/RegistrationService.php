@@ -50,7 +50,7 @@ class RegistrationService
             $data['event_id'] = $event->id;
             $data['uuid'] = (string) Str::uuid();
             $data['qr_code'] = (string) Str::uuid();
-            $data['status'] = $data['status'] ?? ($event->requires_verification ? 'pending_approval' : 'confirmed');
+            $data['status'] = $data['status'] ?? 'confirmed';
             $data['registered_at'] = now();
 
             if ($customer) {

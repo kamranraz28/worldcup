@@ -68,7 +68,6 @@ class GuestRegistrationService
                 'last_name' => $lastName,
                 'email' => trim($input['email']),
                 'phone' => $phone,
-                'is_verified' => false,
             ]);
 
             return $customer;

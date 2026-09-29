@@ -30,7 +30,6 @@ class UpdateEventRequest extends FormRequest
             'end_date' => ['sometimes', 'required', 'date', 'after:start_date'],
             'registration_deadline' => ['nullable', 'date', 'before_or_equal:start_date'],
             'banner_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
-            'requires_verification' => ['nullable', 'boolean'],
             'metadata' => ['nullable', 'json'],
             'status' => ['nullable', Rule::in(['draft', 'published', 'cancelled'])],
         ];

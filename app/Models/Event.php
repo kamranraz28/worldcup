@@ -34,7 +34,6 @@ class Event extends Model
         'qr_y',
         'qr_size',
         'status',
-        'requires_verification',
         'metadata',
         'created_by',
     ];
@@ -58,7 +57,6 @@ class Event extends Model
             'end_date' => 'datetime',
             'registration_deadline' => 'datetime',
             'early_booking_deadline' => 'datetime',
-            'requires_verification' => 'boolean',
             'qr_x' => 'decimal:2',
             'qr_y' => 'decimal:2',
             'qr_size' => 'decimal:2',

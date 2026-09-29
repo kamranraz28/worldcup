@@ -45,7 +45,6 @@ class EventFactory extends Factory
             'registration_deadline' => (clone $start)->modify('-2 days'),
             'banner_image' => null,
             'status' => fake()->randomElement(['draft', 'published', 'cancelled', 'completed']),
-            'requires_verification' => fake()->boolean(80),
             'metadata' => json_encode([
                 'parking_available' => fake()->boolean(),
                 'food_allowed' => fake()->boolean(),

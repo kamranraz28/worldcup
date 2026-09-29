@@ -33,11 +33,6 @@ export default function EventDetail({ event, isFull, availableSpots }) {
                                 <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-white/[0.08] text-white/70 border border-white/[0.06]">
                                     {eventTypeLabel(event.event_type)}
                                 </span>
-                                {event.requires_verification && (
-                                    <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
-                                        Verification Required
-                                    </span>
-                                )}
                             </div>
                             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white">{event.title}</h1>
                         </div>

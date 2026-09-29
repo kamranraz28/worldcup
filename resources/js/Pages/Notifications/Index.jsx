@@ -5,8 +5,6 @@ import { motion } from 'framer-motion';
 import AppLayout from '@/Layouts/AppLayout';
 
 const ICONS = {
-  verification_approved: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
-  verification_rejected: 'M10 14l2-2m0 0l2-2m-2 2l-2 2m4-6a9 9 0 11-18 0 9 9 0 0118 0z',
   ticket_confirmed: 'M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z',
   event_reminder: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
   check_in: 'M5 12l5 5L20 7',
@@ -15,8 +13,6 @@ const ICONS = {
 };
 
 const TONES = {
-  verification_approved: 'bg-green-500/10 text-green-400',
-  verification_rejected: 'bg-red-500/10 text-red-400',
   ticket_confirmed: 'bg-primary-500/10 text-primary-500',
   event_reminder: 'bg-blue-500/10 text-blue-400',
   check_in: 'bg-purple-500/10 text-purple-400',

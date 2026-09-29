@@ -17,8 +17,5 @@ interface CustomerRepositoryInterface
     public function create(array $data): Customer;
     public function update(Customer $customer, array $data): Customer;
     public function delete(Customer $customer): bool;
-    public function countByVerificationStatus(): array;
     public function findDuplicates(Customer $customer): Collection;
-    public function findVerified(): Collection;
-    public function findPending(): Collection;
 }

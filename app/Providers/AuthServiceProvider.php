@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Models\Campaign;
 use App\Models\Customer;
-use App\Models\CustomerVerification;
 use App\Models\Event;
 use App\Models\Permission as PermissionModel;
 use App\Models\Report;
@@ -13,7 +12,6 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Policies\CampaignPolicy;
 use App\Policies\CustomerPolicy;
-use App\Policies\CustomerVerificationPolicy;
 use App\Policies\EventPolicy;
 use App\Policies\PermissionPolicy;
 use App\Policies\ReportPolicy;
@@ -33,7 +31,6 @@ class AuthServiceProvider extends ServiceProvider
         Event::class => EventPolicy::class,
         Ticket::class => TicketPolicy::class,
         Customer::class => CustomerPolicy::class,
-        CustomerVerification::class => CustomerVerificationPolicy::class,
         Campaign::class => CampaignPolicy::class,
         Report::class => ReportPolicy::class,
     ];

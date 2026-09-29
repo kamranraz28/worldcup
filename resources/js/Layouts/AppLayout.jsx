@@ -82,7 +82,6 @@ function generateBreadcrumbs(url) {
         dashboard: 'Dashboard',
         events: 'Events',
         customers: 'Customers',
-        verifications: 'Verifications',
         tickets: 'Tickets',
         reports: 'Reports',
         admin: 'Administration',

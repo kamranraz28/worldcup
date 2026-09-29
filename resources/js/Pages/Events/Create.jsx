@@ -25,7 +25,6 @@ export default function Create() {
     qr_x: '',
     qr_y: '',
     qr_size: 40,
-    requires_verification: true,
     status: 'draft',
   });
 

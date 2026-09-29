@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Campaign;
 use App\Models\CheckIn;
 use App\Models\Customer;
-use App\Models\CustomerVerification;
 use App\Models\Event;
 use App\Models\Ticket;
 use Carbon\Carbon;
@@ -89,7 +88,6 @@ class DashboardController extends Controller
             'chartData' => [
                 'registrationTrend' => $this->getRegistrationTrend(14),
                 'ticketSalesByType' => $this->getTicketSalesByType(),
-                'verificationStatus' => $this->getVerificationStatus(),
                 'weeklyCheckins' => $this->getWeeklyCheckins(),
                 'eventCapacity' => $this->getEventCapacity(),
             ],
@@ -118,18 +116,6 @@ class DashboardController extends Controller
                         ? round(($e->confirmed_count / $e->max_capacity) * 100)
                         : 0,
                 ]),
-            'pendingVerifications' => CustomerVerification::with('customer')
-                ->pending()
-                ->latest()
-                ->take(5)
-                ->get()
-                ->map(fn ($v) => [
-                    'id' => $v->id,
-                    'uuid' => $v->uuid,
-                    'customer_name' => $v->customer?->full_name ?? 'Unknown',
-                    'verification_type' => $v->verification_type,
-                    'submitted_at' => $v->created_at->diffForHumans(),
-                ]),
         ]);
     }
 
@@ -141,7 +127,6 @@ class DashboardController extends Controller
             $data[] = [
                 'date' => $date->format('M d'),
                 'registrations' => Customer::whereDate('created_at', $date)->count(),
-                'verifications' => CustomerVerification::whereDate('created_at', $date)->count(),
             ];
         }
         return $data;
@@ -159,16 +144,6 @@ class DashboardController extends Controller
                 'revenue' => (float) $t->revenue,
             ])
             ->toArray();
-    }
-
-    private function getVerificationStatus(): array
-    {
-        return [
-            ['status' => 'pending', 'count' => CustomerVerification::pending()->count()],
-            ['status' => 'in_review', 'count' => CustomerVerification::inReview()->count()],
-            ['status' => 'verified', 'count' => CustomerVerification::where('status', 'verified')->count()],
-            ['status' => 'rejected', 'count' => CustomerVerification::where('status', 'rejected')->count()],
-        ];
     }
 
     private function getWeeklyCheckins(): array
@@ -202,19 +177,6 @@ class DashboardController extends Controller
     {
         $activities = collect();
 
-        $recentVerifications = CustomerVerification::with('customer')
-            ->latest()
-            ->take(3)
-            ->get()
-            ->map(fn ($v) => [
-                'type' => 'verification',
-                'action' => $v->status === 'verified' ? 'verified' : ($v->status === 'rejected' ? 'rejected' : 'submitted'),
-                'subject' => $v->customer?->full_name ?? 'A customer',
-                'detail' => $v->verification_type . ' verification ' . $v->status,
-                'time' => $v->created_at->diffForHumans(),
-                'icon' => $v->status === 'verified' ? 'check' : ($v->status === 'rejected' ? 'x' : 'clock'),
-            ]);
-
         $recentTickets = Ticket::with('customer')
             ->latest()
             ->take(3)
@@ -241,8 +203,7 @@ class DashboardController extends Controller
                 'icon' => 'checkin',
             ]);
 
-        $activities = $recentVerifications
-            ->concat($recentTickets)
+        $activities = $recentTickets
             ->concat($recentCheckins)
             ->sortByDesc(fn ($a) => strtotime(str_replace([' seconds', ' minutes', ' hours', ' days', ' weeks', ' ago'], '', $a['time'])))
             ->take(8)

@@ -37,7 +37,6 @@ class CustomerRepository implements CustomerRepositoryInterface
     public function paginate(array $criteria = [], int $perPage = 15): LengthAwarePaginator
     {
         return $this->applyCriteria(Customer::query(), $criteria)
-            ->withCount(['verifications as verification_count'])
             ->latest()
             ->paginate($perPage)
             ->withQueryString();
@@ -59,16 +58,6 @@ class CustomerRepository implements CustomerRepositoryInterface
         return $customer->delete();
     }
 
-    public function countByVerificationStatus(): array
-    {
-        return [
-            'total' => Customer::count(),
-            'verified' => Customer::verified()->count(),
-            'pending' => Customer::pendingVerification()->count(),
-            'blacklisted' => Customer::blacklisted()->count(),
-        ];
-    }
-
     public function findDuplicates(Customer $customer): Collection
     {
         return Customer::where(function ($q) use ($customer) {
@@ -86,30 +75,10 @@ class CustomerRepository implements CustomerRepositoryInterface
             ->get();
     }
 
-    public function findVerified(): Collection
-    {
-        return Customer::verified()->latest()->get();
-    }
-
-    public function findPending(): Collection
-    {
-        return Customer::pendingVerification()->latest()->get();
-    }
-
     private function applyCriteria($query, array $criteria)
     {
         if (!empty($criteria['search'])) {
             $query->search($criteria['search']);
-        }
-
-        if (!empty($criteria['status'])) {
-            if ($criteria['status'] === 'verified') {
-                $query->verified();
-            } elseif ($criteria['status'] === 'pending') {
-                $query->pendingVerification();
-            } elseif ($criteria['status'] === 'blacklisted') {
-                $query->blacklisted();
-            }
         }
 
         if (!empty($criteria['document_type'])) {

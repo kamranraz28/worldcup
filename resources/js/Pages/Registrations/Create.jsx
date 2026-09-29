@@ -76,11 +76,6 @@ export default function Create({ events, customers }) {
                 <option value="reserved">Reserved</option>
               </select>
             </div>
-            {selectedEvent?.requires_verification && (
-              <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-400">
-                This event requires identity verification. Customer must be verified before check-in.
-              </div>
-            )}
           </motion.div>
 
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex items-center justify-end gap-4 pt-6 pb-8">

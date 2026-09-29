@@ -248,7 +248,7 @@ export default function Welcome({ featuredEvents = [], stats = {} }) {
                         className="p-10 sm:p-14 rounded-3xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm"
                     >
                         <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-3">
-                            The stadium is calling.
+                            The events are waiting for you.
                         </h2>
                         <p className="text-white/30 max-w-lg mx-auto mb-8">
                             Book your ticket in seconds — no account needed. Your pass lands in your inbox and you can track it anytime by phone.
